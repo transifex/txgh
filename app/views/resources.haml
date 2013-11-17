@@ -1,9 +1,0 @@
-!!! 5
-%html
-  %head
-    %title Resources
-  %body
-    - @resource_contents.keys.each do |name|
-      %p= name
-      %pre= @resource_contents[name]
-      %hr

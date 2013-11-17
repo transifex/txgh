@@ -34,6 +34,10 @@ module Strava
       def resources
         @resources
       end
+
+      def lang_map
+        @lang_map
+      end
     end
   end
 end
