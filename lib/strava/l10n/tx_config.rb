@@ -10,7 +10,10 @@ module Strava
         config.get_groups().each do |group|
           if group == 'main'
             main = config[group]
-            @lang_map = Strava::L10n::TxConfig.parse_lang_map(main['lang_map'])
+            @lang_map = {}
+            if main['lang_map']
+                @lang_map = Strava::L10n::TxConfig.parse_lang_map(main['lang_map'])
+            end
           else
             @resources.push(Strava::L10n::TxConfig.parse_resource(group, config[group]))
           end
