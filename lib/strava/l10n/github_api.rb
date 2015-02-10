@@ -27,7 +27,7 @@ module Strava
         tree = @client.create_tree repo,
                                    [{ path: path, mode: '100644', type: 'blob', sha: blob }],
                                    options = {base_tree: base_commit[:commit][:tree][:sha]}
-        commit = @client.create_commit repo, "Updating translations for #{path}", tree[:sha],
+        commit = @client.create_commit repo, "Updating translations for #{path} [skip ci]", tree[:sha],
                                        parents=master[:object][:sha]
         @client.update_ref repo, 'heads/master', commit[:sha]
       end
