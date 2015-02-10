@@ -62,7 +62,8 @@ module L10n
     end
 
     post '/github' do
-      hook_data = JSON.parse(params[:payload], symbolize_names: true)
+      # hook_data = JSON.parse(params[:payload], symbolize_names: true)
+      hook_data = JSON.parse(request.body.read, symbolize_names: true)
       # We only care about the master branch
       if hook_data[:ref] == 'refs/heads/master'
         github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
