@@ -30,8 +30,8 @@ module Strava
       def self.parse_resource(name, resource)
         id = name.split('.', 2)
         TxResource.new(id[0].strip, id[1].strip, resource['type'],
-                       resource['source_lang'],
-                       resource['source_file'], resource['file_filter'])
+                       resource['source_lang'], resource['source_file'], 
+                       resource['lang_map'], resource['file_filter'])
       end
 
       def resources
