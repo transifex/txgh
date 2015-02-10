@@ -36,7 +36,11 @@ module Strava
       end
 
       def lang_map(tx_lang)
-        @lang_map[tx_lang] if @lang_map.include?(tx_lang) else tx_lang
+        if @lang_map.include?(tx_lang)
+          @lang_map[tx_lang]
+        else
+          tx_lang
+		end
       end
 
       def self.parse_lang_map(lang_map)

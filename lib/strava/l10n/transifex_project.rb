@@ -33,7 +33,11 @@ module Strava
       end
 
       def lang_map(tx_lang)
-        @tx_config.lang_map[tx_lang] if @tx_config.lang_map.include?(tx_lang) else tx_lang
+        if @tx_config.lang_map.include?(tx_lang)
+          @tx_config.lang_map[tx_lang]
+        else
+          tx_lang
+		end
       end
     end
   end
