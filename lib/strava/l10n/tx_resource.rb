@@ -9,7 +9,7 @@ module Strava
         @source_lang = source_lang
         @source_file = source_file
         @lang_map = {}
-        if lang_map.length
+        if lang_map
           @lang_map = Strava::L10n::TxResource.parse_lang_map(lang_map)
         end
         @translation_file = translation_file
