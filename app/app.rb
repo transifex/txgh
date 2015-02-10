@@ -50,7 +50,11 @@ module L10n
         # Do not update the source
         unless request['language'] == tx_resource.source_lang
           translation = transifex_project.api.download(tx_resource, request['language'])
-          translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
+          if tx_resource.lang_map(request['language']) != request['language']
+            translation_path = tx_resource.translation_path(tx_resource.lang_map(request['language']))
+          else
+            translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
+          end
           transifex_project.github_repo.api.commit(
               transifex_project.github_repo.name, translation_path, translation)
         end
@@ -58,7 +62,8 @@ module L10n
     end
 
     post '/github' do
-      hook_data = JSON.parse(params[:payload], symbolize_names: true)
+      # hook_data = JSON.parse(params[:payload], symbolize_names: true)
+      hook_data = JSON.parse(request.body.read, symbolize_names: true)
       # We only care about the master branch
       if hook_data[:ref] == 'refs/heads/master'
         github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
