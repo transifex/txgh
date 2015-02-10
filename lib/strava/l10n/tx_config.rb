@@ -21,7 +21,8 @@ module Strava
       end
 
       def self.parse_lang_map(lang_map)
-        lang_map.split(',').inject({}) do |result, m|
+        result = {}
+        lang_map.split(',').each do |m|
           key_value = m.split(':', 2)
           result[key_value[0].strip] = key_value[1].strip
         end
