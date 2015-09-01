@@ -9,6 +9,7 @@ module Strava
       def initialize(project_name)
         @name = project_name
         @config = Strava::Config::KeyManager.transifex_project_config(project_name)
+        print @config
         @tx_config = Strava::L10n::TxConfig.new(@config['tx_config'])
       end
 
@@ -16,7 +17,7 @@ module Strava
         @github_repo = @github_repo ||
             Strava::L10n::GitHubRepo.new(@config['push_translations_to'])
       end
-
+      
       def resource(slug)
         @tx_config.resources.each do |resource|
           return resource if resource.resource_slug == slug

@@ -10,10 +10,15 @@ module Strava
       def initialize(name)
         @name = name
         @config = Strava::Config::KeyManager.github_repo_config(name)
+        @branch = @config['branch']
       end
 
       def name
         @name
+      end
+
+      def branch
+        @branch
       end
 
       def transifex_project

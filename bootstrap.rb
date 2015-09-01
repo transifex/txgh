@@ -3,15 +3,7 @@ $:.unshift "#{File::dirname(__FILE__)}/lib"
 $:.unshift "#{File::dirname(__FILE__)}/app"
 $:.unshift "#{File::dirname(__FILE__)}/config"
 
-require_relative 'bootstrap'
-require 'app/app'
+#require 'config_env'
 
-map '/' do
-  use L10n::Application
-  run Sinatra::Base
-end
-
-map '/hooks' do
-   use L10n::Hooks
-  run Sinatra::Base
-end
+# Specify path your `config_env.rb`
+#ConfigEnv.path_to_config("#{__dir__}/config/config_env.rb")
