@@ -35,16 +35,16 @@ txgh:
     github:
         repos:
             <your/full/repo/name>:
-                api_username: <your Github API username>
-                api_token: <your Github API token>
-                push_source_to: ios-transifex-demo
+                api_username: <%= ENV['GITHUB_USERNAME'] %>
+                api_token: <%= ENV['GITHUB_TOKEN'] %>
+                push_source_to: <%= ENV['GITHUB_PUSH_SOURCE_TO'] %>
     transifex:
         projects:
             <transifex project slug>:
-                tx_config: "/path/to/.tx/config, see below if you do not have any"
-                api_username: <Transifex API username>
-                api_password: <Transifex API password>
-                push_translations_to: <full/github/repo/name>
+                tx_config: <%= ENV['TX_CONFIG_PATH'] %>
+                api_username: <%= ENV['TX_USERNAME'] %>
+                api_password: <%= ENV['TX_PASSWORD'] %>
+                push_translations_to: <%= ENV['TX_PUSH_TRANSLATIONS_TO'] %>
 ```
 
 If your project uses Transifex already, and uses the Transifex client, you most likely have a .tx directory in your repo where the .tx config file mentioned above is located. If you do not have one, you can use this template to make your own:
