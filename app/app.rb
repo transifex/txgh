@@ -27,6 +27,9 @@ module L10n
     # This could implement the website for doing manual pushes,
     # check status of files on Transifex, etc...
 
+    get '/health_check' do
+      200
+    end
   end
 
   class Hooks < Sinatra::Base
