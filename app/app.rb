@@ -20,12 +20,13 @@ module L10n
       register Sinatra::Reloader
     end
 
-    def initialize(app)
+    def initialize(app = nil)
       super(app)
     end
 
-    # This could implement the website for doing manual pushes,
-    # check status of files on Transifex, etc...
+    get '/health_check' do
+      200
+    end
 
   end
 
@@ -37,67 +38,68 @@ module L10n
       register Sinatra::Reloader
     end
 
-    def initialize(app)
+    def initialize(app = nil)
       super(app)
     end
+
 
     post '/transifex' do
       # Only do something if the translation is complete
       if request['translated'] == '100'
         transifex_project = Strava::L10n::TransifexProject.new(request['project'])
         tx_resource = transifex_project.resource(request['resource'])
-
+        print request['resource']
         # Do not update the source
         unless request['language'] == tx_resource.source_lang
           translation = transifex_project.api.download(tx_resource, request['language'])
-          translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
+          if tx_resource.lang_map(request['language']) != request['language']
+            translation_path = tx_resource.translation_path(tx_resource.lang_map(request['language']))
+          else
+            translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
+          end
           transifex_project.github_repo.api.commit(
-              transifex_project.github_repo.name, translation_path, translation)
+          transifex_project.github_repo.name, translation_path, translation)
         end
       end
     end
 
     post '/github' do
-      hook_data = JSON.parse(params[:payload], symbolize_names: true)
-      # We only care about the master branch
-      if hook_data[:ref] == 'refs/heads/master'
-        github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
-        github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
-        transifex_project = github_repo.transifex_project
+      hook_data = JSON.parse(request.body.read, symbolize_names: true)
+      github_repo_branch = "#{hook_data[:ref]}"
+      github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
+      github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
+      transifex_project = github_repo.transifex_project
+      # Build an index of known Tx resources, by source file
+      tx_resources = {}
+      transifex_project.resources.each do |resource|
+        tx_resources[resource.source_file] = resource
+      end
 
-        # Build an index of known Tx resources, by source file
-        tx_resources = {}
-        transifex_project.resources.each do |resource|
-          tx_resources[resource.source_file] = resource
+      # Find the updated resources and maps the most recent commit in which
+      # each was modified
+      updated_resources = {}
+      hook_data[:commits].each do |commit|
+        commit[:modified].each do |modified|
+          updated_resources[tx_resources[modified]] = commit[:id] if tx_resources.include?(modified)
         end
+      end
 
-        puts tx_resources.inspect
+      # For each modified resource, get its content and updates the content
+      # in Transifex.
+      updated_resources.each do |tx_resource, commit_sha|
+        github_api = github_repo.api
+        tree_sha = github_api.get_commit(github_repo_name, commit_sha)[:commit][:tree][:sha]
+        tree = github_api.tree(github_repo_name, tree_sha)
 
-        # Find the updated resources and maps the most recent commit in which
-        # each was modified
-        updated_resources = {}
-        hook_data[:commits].each do |commit|
-          commit[:modified].each do |modified|
-            updated_resources[tx_resources[modified]] = commit[:id] if tx_resources.include?(modified)
-          end
-        end
-
-        # For each modified resource, get its content and updates the content
-        # in Transifex.
-        updated_resources.each do |tx_resource, commit_sha|
-          github_api = github_repo.api
-          tree_sha = github_api.get_commit(github_repo_name, commit_sha)[:commit][:tree][:sha]
-          tree = github_api.tree(github_repo_name, tree_sha)
-          tree[:tree].each do |file|
-            if tx_resource.source_file == file[:path]
-              blob = github_api.blob(github_repo_name, file[:sha])
-              content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
-              transifex_project.api.update(tx_resource, content)
-            end
+        tree[:tree].each do |file|
+          if tx_resource.source_file == file[:path]
+            blob = github_api.blob(github_repo_name, file[:sha])
+            content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
+            transifex_project.api.update(tx_resource, content)
           end
         end
       end
-      201
+      200
     end
   end
 end

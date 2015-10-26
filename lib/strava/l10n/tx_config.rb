@@ -21,7 +21,8 @@ module Strava
       end
 
       def self.parse_lang_map(lang_map)
-        lang_map.split(',').inject({}) do |result, m|
+        result = {}
+        lang_map.split(',').each do |m|
           key_value = m.split(':', 2)
           result[key_value[0].strip] = key_value[1].strip
         end
@@ -30,8 +31,8 @@ module Strava
       def self.parse_resource(name, resource)
         id = name.split('.', 2)
         TxResource.new(id[0].strip, id[1].strip, resource['type'],
-                       resource['source_lang'],
-                       resource['source_file'], resource['file_filter'])
+                       resource['source_lang'], resource['source_file'], 
+                       resource['lang_map'], resource['file_filter'])
       end
 
       def resources
