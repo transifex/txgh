@@ -1,4 +1,4 @@
-ruby '2.0.0'
+ruby '2.1.5'
 source 'https://rubygems.org'
 
 gem 'faraday'
@@ -16,3 +16,4 @@ gem 'parseconfig'
 gem 'shotgun'
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'config_env'
