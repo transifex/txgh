@@ -57,8 +57,9 @@ module L10n
           else
             translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
           end
+          github_branch = transifex_project.github_repo.config.fetch('branch','master');
           transifex_project.github_repo.api.commit(
-          transifex_project.github_repo.name, translation_path, translation)
+          transifex_project.github_repo.name, github_branch, translation_path, translation)
         end
       end
     end
@@ -73,37 +74,42 @@ module L10n
       github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
       github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
       transifex_project = github_repo.transifex_project
-      # Build an index of known Tx resources, by source file
-      tx_resources = {}
-      transifex_project.resources.each do |resource|
-        tx_resources[resource.source_file] = resource
-      end
-
-      # Find the updated resources and maps the most recent commit in which
-      # each was modified
-      updated_resources = {}
-      hook_data[:commits].each do |commit|
-        commit[:modified].each do |modified|
-          updated_resources[tx_resources[modified]] = commit[:id] if tx_resources.include?(modified)
+      github_config_branch = github_repo.config.fetch('branch', 'master');
+      
+      # Check if the branch in the hook data is the configured branch we want
+      if github_repo_branch == "refs/heads/#{github_config_branch}"
+        # Build an index of known Tx resources, by source file
+        tx_resources = {}
+        transifex_project.resources.each do |resource|
+          tx_resources[resource.source_file] = resource
         end
-      end
 
-      # For each modified resource, get its content and updates the content
-      # in Transifex.
-      updated_resources.each do |tx_resource, commit_sha|
-        github_api = github_repo.api
-        tree_sha = github_api.get_commit(github_repo_name, commit_sha)[:commit][:tree][:sha]
-        tree = github_api.tree(github_repo_name, tree_sha)
-
-        tree[:tree].each do |file|
-          if tx_resource.source_file == file[:path]
-            blob = github_api.blob(github_repo_name, file[:sha])
-            content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
-            transifex_project.api.update(tx_resource, content)
+        # Find the updated resources and maps the most recent commit in which
+        # each was modified
+        updated_resources = {}
+        hook_data[:commits].each do |commit|
+          commit[:modified].each do |modified|
+            updated_resources[tx_resources[modified]] = commit[:id] if tx_resources.include?(modified)
           end
         end
+       
+        # For each modified resource, get its content and updates the content
+        # in Transifex.
+        updated_resources.each do |tx_resource, commit_sha|
+          github_api = github_repo.api
+          tree_sha = github_api.get_commit(github_repo_name, commit_sha)[:commit][:tree][:sha]
+          tree = github_api.tree(github_repo_name, tree_sha)
+
+          tree[:tree].each do |file|
+            if tx_resource.source_file == file[:path]
+              blob = github_api.blob(github_repo_name, file[:sha])
+              content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
+              transifex_project.api.update(tx_resource, content)
+            end
+          end
+        end
+        200
       end
-      200
     end
   end
 end
