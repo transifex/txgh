@@ -20,16 +20,16 @@ module Strava
         @client.blob(repo, sha)
       end
 
-      def commit(repo, path, content, ref)
+      def commit(repo, branch, path, content)
         blob = @client.create_blob repo, content
-        master = @client.ref repo, ref
+        master = @client.ref repo, "heads/#{branch}"
         base_commit = @client.commit repo, master[:object][:sha]
         tree = @client.create_tree repo,
                                    [{ path: path, mode: '100644', type: 'blob', sha: blob }],
                                    options = {base_tree: base_commit[:commit][:tree][:sha]}
         commit = @client.create_commit repo, "Updating translations for #{path} [skip ci]", tree[:sha],
                                        parents=master[:object][:sha]
-        @client.update_ref repo, ref, commit[:sha]
+        @client.update_ref repo, "heads/#{branch}", commit[:sha]
       end
 
       def get_commit(repo, sha)
