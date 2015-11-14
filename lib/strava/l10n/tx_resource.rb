@@ -50,7 +50,7 @@ module Strava
 
       def translation_path(language)
         path = String.new(@translation_file)
-        path['<lang>'] = language
+        path.gsub! '<lang>', language
         path
       end
 
