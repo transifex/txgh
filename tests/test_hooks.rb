@@ -5,11 +5,9 @@ require 'test/unit'
 require 'rack/test'
 require 'tests/github_postbody'
 
-require 'config_env'
-
 set :environment, :test
 
-class MyAppTest < Test::Unit::TestCase
+class TxghTestCase < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app
