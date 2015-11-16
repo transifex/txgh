@@ -8,8 +8,8 @@ module Strava
     class TransifexProject
       def initialize(project_name)
         @name = project_name
-        @config = Strava::Config::KeyManager.transifex_project_config(project_name)
-        print @config
+        Strava::Config::KeyManager.load_yaml(nil,project_name)
+        @config = Strava::Config::KeyManager.transifex_project_config
         @tx_config = Strava::L10n::TxConfig.new(@config['tx_config'])
       end
 

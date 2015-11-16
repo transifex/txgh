@@ -65,7 +65,7 @@ module L10n
     end
 
     post '/github' do
-      if params[:payload] != nil 
+      if params[:payload] != nil
         hook_data = JSON.parse(params[:payload], symbolize_names: true)
       else
         hook_data = JSON.parse(request.body.read, symbolize_names: true)
@@ -74,9 +74,9 @@ module L10n
       github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
       github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
       transifex_project = github_repo.transifex_project
-      github_config_branch = github_repo.config.fetch('branch', 'master');
-      
+      github_config_branch = github_repo.config.fetch('branch', 'master')
       # Check if the branch in the hook data is the configured branch we want
+      puts github_repo_branch
       if github_repo_branch == "refs/heads/#{github_config_branch}"
         # Build an index of known Tx resources, by source file
         tx_resources = {}
@@ -105,6 +105,7 @@ module L10n
               blob = github_api.blob(github_repo_name, file[:sha])
               content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
               transifex_project.api.update(tx_resource, content)
+              puts 'updated tx_resource:'  + tx_resource.inspect
             end
           end
         end

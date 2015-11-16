@@ -7,9 +7,12 @@ module Strava
   module L10n
     class GitHubRepo
 
+      @config
+
       def initialize(name)
         @name = name
-        @config = Strava::Config::KeyManager.github_repo_config(name)
+        Strava::Config::KeyManager.load_yaml(name,nil)
+        @config = Strava::Config::KeyManager.github_repo_config
         @branch = @config['branch']
       end
 
@@ -19,6 +22,10 @@ module Strava
 
       def branch
         @branch
+      end
+
+      def config
+        @config
       end
 
       def transifex_project

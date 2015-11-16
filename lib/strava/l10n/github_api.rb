@@ -5,7 +5,7 @@ module Strava
     class GitHubApi
 
       def initialize(login, oauth_token)
-        @client = Octokit::Client.new(login: login, oauth_token: oauth_token)
+        @client = Octokit::Client.new(login: login, access_token: oauth_token)
       end
 
       def tags(repo)
