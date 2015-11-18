@@ -12,7 +12,7 @@ module Strava
             main = config[group]
             @lang_map = {}
             if main['lang_map']
-                @lang_map = Strava::L10n::TxConfig.parse_lang_map(main['lang_map'])
+              @lang_map = Strava::L10n::TxConfig.parse_lang_map(main['lang_map'])
             end
           else
             @resources.push(Strava::L10n::TxConfig.parse_resource(group, config[group]))
@@ -32,7 +32,7 @@ module Strava
       def self.parse_resource(name, resource)
         id = name.split('.', 2)
         TxResource.new(id[0].strip, id[1].strip, resource['type'],
-                       resource['source_lang'], resource['source_file'], 
+                       resource['source_lang'], resource['source_file'],
                        resource['lang_map'], resource['file_filter'])
       end
 

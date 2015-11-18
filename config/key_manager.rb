@@ -1,4 +1,6 @@
 require 'yaml'
+require 'etc'
+
 
 module Strava
   module Config
@@ -22,7 +24,10 @@ module Strava
       end
 
       def self.yaml
-        path = File.join(File.dirname(File.expand_path(__FILE__)), "txgh.yml")
+        puts File.join(Etc.getpwuid.dir, "txgh.yml")
+        path = File.file?File.join(Etc.getpwuid.dir, "txgh.yml")?
+          File.join(Etc.getpwuid.dir, "txgh.yml"):
+          File.join(File.dirname(File.expand_path(__FILE__)), "txgh.yml")
         YAML.load(ERB.new(File.read(path)).result)
       end
 
