@@ -74,7 +74,7 @@ module L10n
             translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
           end
           github_branch = transifex_project.github_repo.config.fetch('branch','master');
-          settings.logger.info "make github commit with params:"+transifex_project.github_repo.name + "||" + github_branch + "||" + translation_path + "||" + translation
+          settings.logger.info "make github commit for translation"
           transifex_project.github_repo.api.commit(
           transifex_project.github_repo.name, github_branch, translation_path, translation)
         end
@@ -83,7 +83,6 @@ module L10n
 
     post '/github' do
       settings.logger.info "Processing request at /hook/github"
-      settings.logger.info request.inspect
       if params[:payload] != nil
         settings.logger.info "processing payload from form"
         hook_data = JSON.parse(params[:payload], symbolize_names: true)

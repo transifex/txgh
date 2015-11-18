@@ -24,8 +24,7 @@ module Strava
       end
 
       def self.yaml
-        puts File.join(Etc.getpwuid.dir, "txgh.yml")
-        path = File.file?File.join(Etc.getpwuid.dir, "txgh.yml")?
+        path = File.file?(File.join(Etc.getpwuid.dir, "txgh.yml"))?
           File.join(Etc.getpwuid.dir, "txgh.yml"):
           File.join(File.dirname(File.expand_path(__FILE__)), "txgh.yml")
         YAML.load(ERB.new(File.read(path)).result)
