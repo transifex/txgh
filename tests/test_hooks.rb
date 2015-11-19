@@ -4,6 +4,7 @@ require 'app/app'
 require 'test/unit'
 require 'rack/test'
 require 'tests/github_postbody'
+require 'tests/github_postbody_release'
 
 set :environment, :test
 
@@ -43,6 +44,15 @@ class TxghTestCase < Test::Unit::TestCase
 
   def test_github_hook_endpoint
     data = GITHUB_POSTBODY
+    data = {"payload" => data}
+    header 'content-type', 'application/x-www-form-urlencoded'
+    post '/github', data
+    assert last_response.ok?, last_response.inspect
+    p "Success!"
+  end
+
+  def test_github_release_hook_endpoint
+    data = GITHUB_POSTBODY_RELEASE
     data = {"payload" => data}
     header 'content-type', 'application/x-www-form-urlencoded'
     post '/github', data
