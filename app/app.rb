@@ -139,7 +139,7 @@ module L10n
           tree[:tree].each do |file|
             settings.logger.info "process each tree entry:" + file[:path]
             if tx_resource.source_file == file[:path]
-              settings.logger.info "process resource file" + tx_resource.source_file
+              settings.logger.info "process resource file:" + tx_resource.source_file
               blob = github_api.blob(github_repo_name, file[:sha])
               content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
               transifex_project.api.update(tx_resource, content)
