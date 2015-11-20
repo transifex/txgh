@@ -2,6 +2,7 @@ ruby '2.1.5'
 source 'https://rubygems.org'
 
 gem 'faraday'
+gem 'faraday_middleware'
 gem 'haml'
 gem 'json'
 gem 'octokit'
