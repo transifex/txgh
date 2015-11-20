@@ -24,6 +24,10 @@ module Strava
         @project_slug
       end
 
+      def L10N_resource_slug
+        @resource_slug = "L10N" + @resource_slug
+        @resource_slug
+      end  
       def resource_slug
         @resource_slug
       end

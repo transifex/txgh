@@ -73,8 +73,11 @@ module L10n
             settings.logger.info "request language is in lang_map and is in request or is nil"
             translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
           end
-          github_branch = transifex_project.github_repo.config.fetch('branch','master');
-          settings.logger.info "make github commit for translation"
+          github_branch = transifex_project.github_repo.config.fetch('branch','master')
+          github_branch = github_branch.include?("tags/")?
+          github_branch:
+            "heads/#{github_branch}"
+          settings.logger.info "make github commit for branch:" + github_branch
           transifex_project.github_repo.api.commit(
           transifex_project.github_repo.name, github_branch, translation_path, translation)
         end
@@ -95,13 +98,15 @@ module L10n
       github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
       transifex_project = github_repo.transifex_project
       github_config_branch = github_repo.config.fetch('branch', 'master')
-      github_config_branch = github_config_branch.include?("refs/tags")?
+      github_config_branch = github_config_branch.include?("tags/")?
       github_config_branch:
-        "refs/heads/#{github_config_branch}"
+        "heads/#{github_config_branch}"
+
+
       # Check if the branch in the hook data is the configured branch we want
       settings.logger.info "request github branch:" + github_repo_branch
       settings.logger.info "config github branch:" + github_config_branch
-      if github_repo_branch.include?(github_config_branch)
+      if github_repo_branch.include?(github_config_branch)||github_repo_branch.include?('L10N')
         settings.logger.info "found branch in github request"
         # Build an index of known Tx resources, by source file
         tx_resources = {}
@@ -117,11 +122,26 @@ module L10n
           settings.logger.info "processing commit"
           commit[:modified].each do |modified|
             settings.logger.info "processing modified file:"+modified
+
             updated_resources[tx_resources[modified]] = commit[:id] if tx_resources.include?(modified)
           end
         end
 
-        if github_config_branch.include?("refs/tags")
+        # Handle DBZ 'L10N' special case
+        if github_repo_branch.include?("L10N")
+          settings.logger.info "processing L10N tag"
+          # Create a new branch off tag commit
+          if github_repo_branch.include?("refs/tags/L10N")
+            github_repo.api.create_ref(github_repo.name, "heads/L10N", hook_data[:head_commit][:id])
+          end
+          # Create new resources that include 'L10N'
+          hook_data[:head_commit][:modified].each do |modified|
+            settings.logger.info "setting new resource:"+ tx_resources[modified].L10N_resource_slug
+            updated_resources[tx_resources[modified]] = hook_data[:head_commit][:id] if tx_resources.include?(modified)
+          end
+        end
+
+        if github_config_branch.include?("tags/")
           hook_data[:head_commit][:modified].each do |modified|
             settings.logger.info "processing modified file:"+modified
             updated_resources[tx_resources[modified]] = hook_data[:head_commit][:id] if tx_resources.include?(modified)
