@@ -5,6 +5,25 @@ Transifex Txgh
 
 A Sinatra server that integrates Transifex with GitHub
 
++- app
+    |
+    +- app.rb # the main Sinatra app, includes both web service endpoints
+|
++- config
+    |
+    +- key_manager.rb # library responsible for loading config
+    |
+    +- tx.config # this is the Transifex flavored resource map file
+    |
+    +- txgh.yml # this is the main application configuration
+|
++- lib  # all the libraries
++- tests # rack/test integration tests
++- Rakefile # bootstrap for TravisCI
++- bootstrap.rb # includes for application paths
++- config.ru bootstrap for Sinatra
+
+
 How it works
 ---
 
