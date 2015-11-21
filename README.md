@@ -19,7 +19,9 @@ Currently there are 4 use cases that are supported:
 
 3) When a source file (configured in this service) is pushed to a specific Github tag (also configured in this service), the Txgh service will update the source resource (configured in this service) with the new file.
 
-4) EXPERIMENTAL - When a source file (configured in this service) is pushed to a specific Github tag called 'L10N', Txgh will create a new branch called 'L10N' and new resources where the slug is prefixed with 'L10N'. 
+4) EXPERIMENTAL - When a source file (configured in this service) is pushed to a specific Github tag called 'L10N', Txgh will create a new branch called 'L10N' and new resources where the slug is prefixed with 'L10N'.
+
+![Txgh Use Cases](https://www.gliffy.com/go/publish/image/9483799/L.png)
 
 
 How run it
