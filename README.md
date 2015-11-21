@@ -6,12 +6,13 @@ Transifex Txgh
 A Sinatra server that integrates Transifex with GitHub
 
 How it works
-====
+---
 
 You configure a service hook in Github and point it to this server. The URL path to the service hook endpoint: /hooks/github
 You do the same for Transifex, in your project settings page, and point it to the service hook endpoint: /hooks/transifex
 
 Currently there are 4 use cases that are supported:
+
 1) When a resource (configured in this service) in Transifex reaches 100% translated, the Txgh service will pull the translations and commit them to the target repository.
 
 2) When a source file (configured in this service) is pushed to a specific Github branch (also configured in this service), the Txgh service will update the source resource (configured in this service) with the new file.
@@ -22,7 +23,7 @@ Currently there are 4 use cases that are supported:
 
 
 How run it
-===
+---
 
 In order to run the server, you need to have Ruby 2.1.5 and bundler installed.
 
@@ -35,14 +36,15 @@ tx.config - This is a configuration which maps the source file, languages, and t
 
 
 AWS
-===
+---
 
 https://github.com/transifex/txgh/issues/14
 
 
 Heroku
-===
+---
 
+https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/
 
 
 
