@@ -5,6 +5,7 @@ Transifex Txgh
 
 A Sinatra server that integrates Transifex with GitHub
 
+```
 +- app
     |
     +- app.rb # the main Sinatra app, includes both web service endpoints
@@ -22,6 +23,7 @@ A Sinatra server that integrates Transifex with GitHub
 +- Rakefile # bootstrap for TravisCI
 +- bootstrap.rb # includes for application paths
 +- config.ru bootstrap for Sinatra
+```
 
 
 How it works
