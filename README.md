@@ -19,9 +19,16 @@ A Sinatra server that integrates Transifex with GitHub
     +- txgh.yml # this is the main application configuration
 |
 +- lib  # all the libraries
+    |
+    + ...
 +- tests # rack/test integration tests
+    |
+    + ...
+|
 +- Rakefile # bootstrap for TravisCI
+|
 +- bootstrap.rb # includes for application paths
+|
 +- config.ru bootstrap for Sinatra
 ```
 
