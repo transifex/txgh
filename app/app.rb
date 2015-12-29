@@ -56,31 +56,27 @@ module L10n
     post '/transifex' do
       settings.logger.info "Processing request at /hooks/transifex"
       settings.logger.info request.inspect
-      # Only do something if the translation is complete
-      if request['translated'] == '100'
-        settings.logger.info "Web hook has translated = 100"
-        transifex_project = Strava::L10n::TransifexProject.new(request['project'])
-        tx_resource = transifex_project.resource(request['resource'])
-        settings.logger.info request['resource']
-        # Do not update the source
-        unless request['language'] == tx_resource.source_lang
-          settings.logger.info "request language matches resource"
-          translation = transifex_project.api.download(tx_resource, request['language'])
-          if tx_resource.lang_map(request['language']) != request['language']
-            settings.logger.info "request language is in lang_map and is not in request"
-            translation_path = tx_resource.translation_path(tx_resource.lang_map(request['language']))
-          else
-            settings.logger.info "request language is in lang_map and is in request or is nil"
-            translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
-          end
-          github_branch = transifex_project.github_repo.config.fetch('branch','master')
-          github_branch = github_branch.include?("tags/")?
-          github_branch:
-            "heads/#{github_branch}"
-          settings.logger.info "make github commit for branch:" + github_branch
-          transifex_project.github_repo.api.commit(
-          transifex_project.github_repo.name, github_branch, translation_path, translation)
+      transifex_project = Strava::L10n::TransifexProject.new(request['project'])
+      tx_resource = transifex_project.resource(request['resource'])
+      settings.logger.info request['resource']
+      # Do not update the source
+      unless request['language'] == tx_resource.source_lang
+        settings.logger.info "request language matches resource"
+        translation = transifex_project.api.download(tx_resource, request['language'])
+        if tx_resource.lang_map(request['language']) != request['language']
+          settings.logger.info "request language is in lang_map and is not in request"
+          translation_path = tx_resource.translation_path(tx_resource.lang_map(request['language']))
+        else
+          settings.logger.info "request language is in lang_map and is in request or is nil"
+          translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
         end
+        github_branch = transifex_project.github_repo.config.fetch('branch','master')
+        github_branch = github_branch.include?("tags/")?
+        github_branch:
+          "heads/#{github_branch}"
+        settings.logger.info "make github commit for branch:" + github_branch
+        transifex_project.github_repo.api.commit(
+        transifex_project.github_repo.name, github_branch, translation_path, translation)
       end
     end
 
