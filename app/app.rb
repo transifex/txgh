@@ -54,7 +54,7 @@ module L10n
 
 
     post '/transifex' do
-      settings.logger.info "Processing request at /hook/transifex"
+      settings.logger.info "Processing request at /hooks/transifex"
       settings.logger.info request.inspect
       transifex_project = Strava::L10n::TransifexProject.new(request['project'])
       tx_resource = transifex_project.resource(request['resource'])
@@ -81,7 +81,7 @@ module L10n
     end
 
     post '/github' do
-      settings.logger.info "Processing request at /hook/github"
+      settings.logger.info "Processing request at /hooks/github"
       if params[:payload] != nil
         settings.logger.info "processing payload from form"
         hook_data = JSON.parse(params[:payload], symbolize_names: true)
