@@ -6,8 +6,7 @@ require 'strava/l10n/tx_config'
 module Strava
   module L10n
     class GitHubRepo
-
-      @config
+      attr_reader :name, :branch, :config
 
       def initialize(name)
         @name = name
@@ -16,28 +15,16 @@ module Strava
         @branch = @config['branch']
       end
 
-      def name
-        @name
-      end
-
-      def branch
-        @branch
-      end
-
-      def config
-        @config
-      end
-
       def transifex_project
-        @transifex_project = @transifex_project ||
-            Strava::L10n::TransifexProject.new(@config['push_source_to'])
+        @transifex_project ||=
+          Strava::L10n::TransifexProject.new(@config['push_source_to'])
       end
 
       def api
-        @api = @api || Strava::L10n::GitHubApi.new(
-            @config['api_username'], @config['api_token'])
+        @api ||= Strava::L10n::GitHubApi.new(
+          config['api_username'], config['api_token']
+        )
       end
-
     end
   end
 end

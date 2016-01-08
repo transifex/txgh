@@ -14,7 +14,7 @@ module L10n
   class Application < Sinatra::Base
 
     use Rack::Auth::Basic, 'Restricted Area' do |username, password|
-      username == 'foo' and password == 'bar'
+      username == 'foo' && password == 'bar'
     end
 
     configure :development do
@@ -71,12 +71,11 @@ module L10n
           translation_path = tx_resource.translation_path(transifex_project.lang_map(request['language']))
         end
         github_branch = transifex_project.github_repo.config.fetch('branch','master')
-        github_branch = github_branch.include?("tags/")?
-        github_branch:
-          "heads/#{github_branch}"
+        github_branch = github_branch.include?("tags/") ? github_branch : "heads/#{github_branch}"
         settings.logger.info "make github commit for branch:" + github_branch
         transifex_project.github_repo.api.commit(
-        transifex_project.github_repo.name, github_branch, translation_path, translation)
+          transifex_project.github_repo.name, github_branch, translation_path, translation
+        )
       end
     end
 
@@ -94,15 +93,13 @@ module L10n
       github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
       transifex_project = github_repo.transifex_project
       github_config_branch = github_repo.config.fetch('branch', 'master')
-      github_config_branch = github_config_branch.include?("tags/")?
-      github_config_branch:
-        "heads/#{github_config_branch}"
+      github_config_branch = github_config_branch.include?("tags/") ? github_config_branch : "heads/#{github_config_branch}"
 
 
       # Check if the branch in the hook data is the configured branch we want
       settings.logger.info "request github branch:" + github_repo_branch
       settings.logger.info "config github branch:" + github_config_branch
-      if github_repo_branch.include?(github_config_branch)||github_repo_branch.include?('L10N')
+      if github_repo_branch.include?(github_config_branch) || github_repo_branch.include?('L10N')
         settings.logger.info "found branch in github request"
         # Build an index of known Tx resources, by source file
         tx_resources = {}
@@ -117,7 +114,7 @@ module L10n
         hook_data[:commits].each do |commit|
           settings.logger.info "processing commit"
           commit[:modified].each do |modified|
-            settings.logger.info "processing modified file:"+modified
+            settings.logger.info "processing modified file:" + modified
 
             updated_resources[tx_resources[modified]] = commit[:id] if tx_resources.include?(modified)
           end
@@ -132,7 +129,7 @@ module L10n
           end
           # Create new resources that include 'L10N'
           hook_data[:head_commit][:modified].each do |modified|
-            settings.logger.info "setting new resource:"+ tx_resources[modified].L10N_resource_slug
+            settings.logger.info "setting new resource:" + tx_resources[modified].L10N_resource_slug
             updated_resources[tx_resources[modified]] = hook_data[:head_commit][:id] if tx_resources.include?(modified)
           end
         end
@@ -159,7 +156,7 @@ module L10n
               blob = github_api.blob(github_repo_name, file[:sha])
               content = blob[:encoding] == 'utf-8' ? blob[:content] : Base64.decode64(blob[:content])
               transifex_project.api.update(tx_resource, content)
-              settings.logger.info 'updated tx_resource:'  + tx_resource.inspect
+              settings.logger.info 'updated tx_resource:' + tx_resource.inspect
             end
           end
         end
