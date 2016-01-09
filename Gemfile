@@ -1,4 +1,3 @@
-ruby '2.1.5'
 source 'https://rubygems.org'
 
 gem 'faraday'
@@ -8,11 +7,15 @@ gem 'json'
 gem 'octokit'
 gem 'puma'
 gem 'rack'
-gem 'rack-test'
 gem 'rake'
-gem 'rspec'
-gem 'rspec-mocks'
 gem 'parseconfig'
-gem 'shotgun'
 gem 'sinatra'
 gem 'sinatra-contrib'
+
+group :development do
+  gem 'shotgun'
+end
+
+group :test do
+  gem 'rack-test'
+end

@@ -1,6 +1,9 @@
+$:.push('lib')
+
 ENV['RACK_ENV'] = 'test'
 require_relative '../bootstrap'
-require 'app/app'
+require 'txgh'
+require 'txgh/app'
 require 'test/unit'
 require 'rack/test'
 require 'tests/github_postbody'
@@ -13,14 +16,14 @@ class TxghTestCase < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app
-    @app ||= L10n::Hooks.new
+    @app ||= Txgh::Hooks.new
   end
 
   def test_tx_config_setup
     tx_name = 'txgh-test-1'
     gh_name = 'matthewjackowski/txgh-test-resources'
-    Strava::Config::KeyManager.load_yaml(gh_name,tx_name)
-    @config = Strava::Config::KeyManager.transifex_project_config
+    Txgh::KeyManager.load_yaml(gh_name,tx_name)
+    @config = Txgh::KeyManager.transifex_project_config
     assert_not_nil @config
     p @config.inspect
     p "Success!"
@@ -29,8 +32,8 @@ class TxghTestCase < Test::Unit::TestCase
   def test_gh_config_setup
     tx_name = 'txgh-test-1'
     gh_name = 'matthewjackowski/txgh-test-resources'
-    Strava::Config::KeyManager.load_yaml(gh_name,tx_name)
-    @config =  Strava::Config::KeyManager.github_repo_config
+    Txgh::KeyManager.load_yaml(gh_name,tx_name)
+    @config = Txgh::KeyManager.github_repo_config
     assert_not_nil @config
     p @config.inspect
     p "Success!"
@@ -69,6 +72,4 @@ class TxghTestCase < Test::Unit::TestCase
     assert last_response.ok?, last_response.inspect
     p "Success!"
   end
-
-
 end
