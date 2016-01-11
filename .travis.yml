@@ -4,6 +4,6 @@ rvm:
 before_install:
   - |
     if [ "$LUMOS" == "true" ]; then
-      GIST="https://gist.githubusercontent.com/camertron/c3386c9533e8ed32be35/raw/0e9e1c145c8144d6f95c91d11a340e09d22b89d3/txgh_lumos.patch"
+      GIST="https://gist.githubusercontent.com/camertron/c3386c9533e8ed32be35/raw/c212d6b6eb6ae463310d3ae187507a46f353b2af/txgh_lumos.patch"
       curl $GIST | git apply
     fi
