@@ -4,8 +4,6 @@ txgh:
             matthewjackowski/txgh-test-resources:
                 api_username: <%= ENV['GITHUB_USERNAME']  %>
                 api_token: <%= ENV['GITHUB_TOKEN'] %>
-                push_source_to: txgh-test-1
-                branch: master
                 push_source_to: <%= ENV['GITHUB_PUSH_SOURCE_TO'] %>
                 branch: <%= ENV['GITHUB_BRANCH'] %>
     transifex:
