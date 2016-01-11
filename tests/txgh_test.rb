@@ -2,6 +2,7 @@ $:.push('lib')
 
 ENV['RACK_ENV'] = 'test'
 require_relative '../bootstrap'
+require 'pry-nav'
 require 'txgh'
 require 'txgh/app'
 require 'test/unit'
@@ -20,8 +21,8 @@ class TxghTestCase < Test::Unit::TestCase
   end
 
   def test_tx_config_setup
-    tx_name = 'txgh-test-1'
-    gh_name = 'matthewjackowski/txgh-test-resources'
+    tx_name = 'testing-20'
+    gh_name = 'lumoslabs/txgh-test-resources'
     Txgh::KeyManager.load_yaml(gh_name,tx_name)
     @config = Txgh::KeyManager.transifex_project_config
     assert_not_nil @config
@@ -30,17 +31,17 @@ class TxghTestCase < Test::Unit::TestCase
   end
 
   def test_gh_config_setup
-    tx_name = 'txgh-test-1'
-    gh_name = 'matthewjackowski/txgh-test-resources'
+    tx_name = 'testing-20'
+    gh_name = 'lumoslabs/txgh-test-resources'
     Txgh::KeyManager.load_yaml(gh_name,tx_name)
-    @config = Txgh::KeyManager.github_repo_config
+    @config =  Txgh::KeyManager.github_repo_config
     assert_not_nil @config
     p @config.inspect
     p "Success!"
   end
 
   def test_transifex_hook_endpoint
-    data = '{"project": "txgh-test-1","resource": "samplepo","language": "el_GR","translated": 100}'
+    data = '{"project": "testing-20","resource": "samplepo","language": "el_GR","translated": 100}'
     post '/transifex', JSON.parse(data)
     assert last_response.ok?, last_response.inspect
     p "Success!"

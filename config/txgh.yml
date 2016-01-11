@@ -6,10 +6,12 @@ txgh:
                 api_token: <%= ENV['GITHUB_TOKEN'] %>
                 push_source_to: txgh-test-1
                 branch: master
+                push_source_to: <%= ENV['GITHUB_PUSH_SOURCE_TO'] %>
+                branch: <%= ENV['GITHUB_BRANCH'] %>
     transifex:
         projects:
             txgh-test-1:
                 tx_config: <%= ENV['TX_CONFIG_PATH'] %>
                 api_username: <%= ENV['TX_USERNAME'] %>
                 api_password: <%= ENV['TX_PASSWORD'] %>
-                push_translations_to: matthewjackowski/txgh-test-resources
+                push_translations_to: <%= ENV['TX_PUSH_TRANSLATIONS_TO'] %>
