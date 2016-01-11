@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'dotenv'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'haml'
@@ -22,4 +23,5 @@ end
 
 group :test do
   gem 'rack-test'
+  gem 'rspec'
 end
