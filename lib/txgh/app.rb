@@ -53,35 +53,11 @@ module Txgh
       settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
-      Txgh::KeyManager.load_yaml(nil, request['project'])
-
-      project_config = Txgh::KeyManager.transifex_project_config.merge(
-        'name' => request['project']
-      )
-
-      Txgh::KeyManager.load_yaml(
-        Txgh::KeyManager.transifex_project_config['push_translations_to'],
-        project_config['name']
-      )
-
-      github_config = Txgh::KeyManager.github_repo_config.merge(
-        'name' => project_config['push_translations_to']
-      )
-
-      transifex_api = Txgh::TransifexApi.instance(
-        project_config['api_username'], project_config['api_password']
-      )
-
-      github_api = Txgh::GitHubApi.new(
-        github_config['api_username'], github_config['api_token']
-      )
-
-      github_repo = Txgh::GitHubRepo.new(github_config, github_api)
-      project = Txgh::TransifexProject.new(project_config, transifex_api)
+      config = Txgh::KeyManager.config_from_project(request['project'])
 
       handler = Txgh::Handlers::TransifexHookHandler.new(
-        project: project,
-        repo: github_repo,
+        project: config.transifex_project,
+        repo: config.github_repo,
         resource: request['resource'],
         language: request['language'],
         logger: settings.logger
@@ -101,38 +77,13 @@ module Txgh
         JSON.parse(request.body.read)
       end
 
-      github_repo_branch = payload['ref']
       github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
-
-      Txgh::KeyManager.load_yaml(github_repo_name, nil)
-
-      github_config = Txgh::KeyManager.github_repo_config.merge(
-        'name' => github_repo_name, 'branch' => github_repo_branch
-      )
-
-      Txgh::KeyManager.load_yaml(
-        github_config['name'],
-        Txgh::KeyManager.github_repo_config['push_source_to'],
-      )
-
-      project_config = Txgh::KeyManager.transifex_project_config.merge(
-        'name' => github_config['push_source_to']
-      )
-
-      transifex_api = Txgh::TransifexApi.instance(
-        project_config['api_username'], project_config['api_password']
-      )
-
-      github_api = Txgh::GitHubApi.new(
-        github_config['api_username'], github_config['api_token']
-      )
-
-      github_repo = Txgh::GitHubRepo.new(github_config, github_api)
-      project = Txgh::TransifexProject.new(project_config, transifex_api)
+      config = Txgh::KeyManager.config_from_repo(github_repo_name)
 
       handler = Txgh::Handlers::GithubHookHandler.new(
-        project: project,
-        repo: github_repo,
+        project: config.transifex_project,
+        repo: config.github_repo,
+        branch: payload['ref'],
         payload: payload,
         logger: settings.logger
       )

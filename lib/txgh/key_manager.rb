@@ -4,12 +4,21 @@ require 'etc'
 module Txgh
   class KeyManager
     class << self
-      attr_reader :github_repo_config, :transifex_project_config
-
-      def load_yaml(github_repository_name, transifex_project_name)
-        @github_repo_config = yaml['txgh']['github']['repos'][github_repository_name]
-        @transifex_project_config = yaml['txgh']['transifex']['projects'][transifex_project_name]
+      def config_from_project(project_name)
+        project_config = project_config_for(project_name)
+        repo_config = repo_config_for(project_config['push_translations_to'])
+        Txgh::Config.new(project_config, repo_config)
       end
+
+      def config_from_repo(repo_name)
+        repo_config = repo_config_for(repo_name)
+        project_config = project_config_for(repo_config['push_source_to'])
+        Txgh::Config.new(project_config, repo_config)
+      end
+
+      private :new
+
+      private
 
       def yaml
         path = if File.file?(File.join(Etc.getpwuid.dir, "txgh.yml"))
@@ -21,7 +30,17 @@ module Txgh
         YAML.load(ERB.new(File.read(path)).result)
       end
 
-      private :new
+      def project_config_for(project_name)
+        yaml['txgh']['transifex']['projects'][project_name].merge(
+          'name' => project_name
+        )
+      end
+
+      def repo_config_for(repo_name)
+        yaml['txgh']['github']['repos'][repo_name].merge(
+          'name' => repo_name
+        )
+      end
     end
   end
 end

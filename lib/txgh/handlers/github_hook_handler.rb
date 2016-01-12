@@ -1,26 +1,29 @@
 module Txgh
   module Handlers
     class GithubHookHandler
-      attr_reader :project, :repo, :payload, :logger
+      attr_reader :project, :repo, :branch, :payload, :logger
 
       def initialize(options = {})
         @project = options.fetch(:project)
         @repo = options.fetch(:repo)
+        @branch = options.fetch(:branch)
         @payload = options.fetch(:payload)
         @logger = options.fetch(:logger) { Logger.new(STDOUT) }
       end
 
       def execute
         github_repo_name = repo.name
-        github_repo_branch = repo.branch
-        github_config_branch = repo.config.fetch('branch', 'master')
-        github_config_branch = github_config_branch.include?("tags/") ? github_config_branch : "heads/#{github_config_branch}"
+        github_config_branch = repo.branch || 'master'
+
+        unless github_config_branch.include?('tags/')
+          github_config_branch = "heads/#{github_config_branch}"
+        end
 
         # Check if the branch in the hook data is the configured branch we want
-        logger.info("request github branch: #{github_repo_branch}")
+        logger.info("request github branch: #{branch}")
         logger.info("config github branch: #{github_config_branch}")
 
-        if github_repo_branch.include?(github_config_branch) || github_repo_branch.include?('L10N')
+        if branch.include?(github_config_branch) || branch.include?('L10N')
           logger.info('found branch in github request')
 
           # Build an index of known Tx resources, by source file
@@ -46,11 +49,11 @@ module Txgh
           end
 
           # Handle DBZ 'L10N' special case
-          if github_repo_branch.include?("L10N")
+          if branch.include?("L10N")
             logger.info('processing L10N tag')
 
             # Create a new branch off tag commit
-            if github_repo_branch.include?('refs/tags/L10N')
+            if branch.include?('refs/tags/L10N')
               repo.api.create_ref(repo.name, 'heads/L10N', payload['head_commit']['id'])
             end
 

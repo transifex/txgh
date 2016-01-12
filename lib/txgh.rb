@@ -1,5 +1,6 @@
 module Txgh
   autoload :Application,      'txgh/app'
+  autoload :Config,           'txgh/config'
   autoload :GitHubApi,        'txgh/github_api'
   autoload :GitHubRepo,       'txgh/github_repo'
   autoload :Handlers,         'txgh/handlers'
