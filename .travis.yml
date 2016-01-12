@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - 2.1.6
+script: 'bundle exec rake && bundle exec rspec'
 before_install:
   - |
     if [ "$LUMOS" == "true" ]; then
