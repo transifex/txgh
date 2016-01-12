@@ -1,15 +1,11 @@
 require 'base64'
-require 'config/key_manager'
 require 'faraday'
 require 'haml'
 require 'json'
-require 'tx_logger'
 require 'sinatra'
 require 'sinatra/reloader'
-require 'strava/l10n/github_repo'
-require 'strava/l10n/transifex_project'
 
-module L10n
+module Txgh
 
   class Application < Sinatra::Base
 
@@ -56,7 +52,7 @@ module L10n
     post '/transifex' do
       settings.logger.info "Processing request at /hooks/transifex"
       settings.logger.info request.inspect
-      transifex_project = Strava::L10n::TransifexProject.new(request['project'])
+      transifex_project = Txgh::TransifexProject.new(request['project'])
       tx_resource = transifex_project.resource(request['resource'])
       settings.logger.info request['resource']
       # Do not update the source
@@ -90,7 +86,7 @@ module L10n
       end
       github_repo_branch = "#{hook_data[:ref]}"
       github_repo_name = "#{hook_data[:repository][:owner][:name]}/#{hook_data[:repository][:name]}"
-      github_repo = Strava::L10n::GitHubRepo.new(github_repo_name)
+      github_repo = Txgh::GitHubRepo.new(github_repo_name)
       transifex_project = github_repo.transifex_project
       github_config_branch = github_repo.config.fetch('branch', 'master')
       github_config_branch = github_config_branch.include?("tags/") ? github_config_branch : "heads/#{github_config_branch}"
