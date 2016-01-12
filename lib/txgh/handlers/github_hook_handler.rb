@@ -1,19 +1,19 @@
 module Txgh
   module Handlers
     class GithubHookHandler
-      attr_reader :payload, :logger
+      attr_reader :project, :repo, :payload, :logger
 
       def initialize(options = {})
+        @project = options.fetch(:project)
+        @repo = options.fetch(:repo)
         @payload = options.fetch(:payload)
         @logger = options.fetch(:logger) { Logger.new(STDOUT) }
       end
 
       def execute
-        github_repo_branch = payload['ref']
-        github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
-        github_repo = Txgh::GitHubRepo.new(github_repo_name)
-        transifex_project = github_repo.transifex_project
-        github_config_branch = github_repo.config.fetch('branch', 'master')
+        github_repo_name = repo.name
+        github_repo_branch = repo.branch
+        github_config_branch = repo.config.fetch('branch', 'master')
         github_config_branch = github_config_branch.include?("tags/") ? github_config_branch : "heads/#{github_config_branch}"
 
         # Check if the branch in the hook data is the configured branch we want
@@ -25,7 +25,7 @@ module Txgh
 
           # Build an index of known Tx resources, by source file
           tx_resources = {}
-          transifex_project.resources.each do |resource|
+          project.resources.each do |resource|
             logger.info('processing resource')
             tx_resources[resource.source_file] = resource
           end
@@ -51,7 +51,7 @@ module Txgh
 
             # Create a new branch off tag commit
             if github_repo_branch.include?('refs/tags/L10N')
-              github_repo.api.create_ref(github_repo.name, 'heads/L10N', payload['head_commit']['id'])
+              repo.api.create_ref(repo.name, 'heads/L10N', payload['head_commit']['id'])
             end
 
             # Create new resources that include 'L10N'
@@ -78,7 +78,7 @@ module Txgh
           # in Transifex.
           updated_resources.each do |tx_resource, commit_sha|
             logger.info('process updated resource')
-            github_api = github_repo.api
+            github_api = repo.api
             tree_sha = github_api.get_commit(github_repo_name, commit_sha)['commit']['tree']['sha']
             tree = github_api.tree(github_repo_name, tree_sha)
 
@@ -89,7 +89,7 @@ module Txgh
                 logger.info("process resource file: #{tx_resource.source_file}")
                 blob = github_api.blob(github_repo_name, file['sha'])
                 content = blob['encoding'] == 'utf-8' ? blob['content'] : Base64.decode64(blob['content'])
-                transifex_project.api.update(tx_resource, content)
+                project.api.update(tx_resource, content)
                 logger.info "updated tx_resource: #{tx_resource.inspect}"
               end
             end
