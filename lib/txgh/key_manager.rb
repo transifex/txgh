@@ -16,6 +16,12 @@ module Txgh
         Txgh::Config.new(project_config, repo_config)
       end
 
+      def config_from(project_name, repo_name)
+        project_config = project_config_for(project_name)
+        repo_config = repo_config_for(repo_name)
+        Txgh::Config.new(project_config, repo_config)
+      end
+
       private :new
 
       private
@@ -31,15 +37,15 @@ module Txgh
       end
 
       def project_config_for(project_name)
-        yaml['txgh']['transifex']['projects'][project_name].merge(
-          'name' => project_name
-        )
+        if config = yaml['txgh']['transifex']['projects'][project_name]
+          config.merge('name' => project_name)
+        end
       end
 
       def repo_config_for(repo_name)
-        yaml['txgh']['github']['repos'][repo_name].merge(
-          'name' => repo_name
-        )
+        if config = yaml['txgh']['github']['repos'][repo_name]
+          config.merge('name' => repo_name)
+        end
       end
     end
   end
