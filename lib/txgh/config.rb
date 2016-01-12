@@ -2,9 +2,10 @@ module Txgh
   class Config
     attr_reader :project_config, :repo_config
 
-    def initialize(project_config, repo_config)
+    def initialize(project_config, repo_config, tx_config)
       @project_config = project_config
       @repo_config = repo_config
+      @tx_config = tx_config
     end
 
     def github_repo
@@ -13,7 +14,7 @@ module Txgh
 
     def transifex_project
       @transifex_project ||= Txgh::TransifexProject.new(
-        project_config, transifex_api
+        project_config, tx_config, transifex_api
       )
     end
 

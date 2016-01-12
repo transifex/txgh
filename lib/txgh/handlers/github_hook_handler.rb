@@ -1,3 +1,5 @@
+require 'logger'
+
 module Txgh
   module Handlers
     class GithubHookHandler

@@ -2,8 +2,9 @@ module Txgh
   class TransifexProject
     attr_reader :config, :api
 
-    def initialize(config, api)
+    def initialize(config, tx_config, api)
       @config = config
+      @tx_config = tx_config
       @api = api
     end
 
@@ -27,12 +28,6 @@ module Txgh
       else
         tx_lang
       end
-    end
-
-    private
-
-    def tx_config
-      @tx_config ||= Txgh::TxConfig.new(config['tx_config'])
     end
   end
 end
