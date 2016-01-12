@@ -1,6 +1,6 @@
 module Txgh
   class Config
-    attr_reader :project_config, :repo_config
+    attr_reader :project_config, :repo_config, :tx_config
 
     def initialize(project_config, repo_config, tx_config)
       @project_config = project_config

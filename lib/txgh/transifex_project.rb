@@ -1,6 +1,6 @@
 module Txgh
   class TransifexProject
-    attr_reader :config, :api
+    attr_reader :config, :tx_config, :api
 
     def initialize(config, tx_config, api)
       @config = config

@@ -6,6 +6,7 @@ module Txgh
   autoload :Handlers,         'txgh/handlers'
   autoload :Hooks,            'txgh/app'
   autoload :KeyManager,       'txgh/key_manager'
+  autoload :ParseConfig,      'txgh/parse_config'
   autoload :TransifexApi,     'txgh/transifex_api'
   autoload :TransifexProject, 'txgh/transifex_project'
   autoload :TxConfig,         'txgh/tx_config'
