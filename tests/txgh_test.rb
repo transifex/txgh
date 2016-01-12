@@ -11,6 +11,9 @@ require 'tests/github_postbody'
 require 'tests/github_postbody_release'
 require 'tests/github_postbody_l10n'
 
+require 'dotenv'
+Dotenv.load
+
 set :environment, :test
 
 class TxghTestCase < Test::Unit::TestCase
