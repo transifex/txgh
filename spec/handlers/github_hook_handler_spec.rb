@@ -21,8 +21,10 @@ describe GithubHookHandler do
     NilLogger.new
   end
 
+  let(:ref) { 'heads/master' }
+
   let(:payload) do
-    GithubPayloadBuilder.webhook_payload(repo_name, branch)
+    GithubPayloadBuilder.webhook_payload(repo_name, ref)
   end
 
   let(:modified_files) do
@@ -70,5 +72,19 @@ describe GithubHookHandler do
     end
 
     handler.execute
+  end
+
+  context 'with an L10N branch' do
+    let(:ref) { 'tags/L10N_my_branch' }
+
+    it 'creates an L10N tag' do
+      payload.add_commit
+
+      expect(github_api).to(
+        receive(:create_ref).with(repo_name, 'heads/L10N', payload.head_commit[:id])
+      )
+
+      handler.execute
+    end
   end
 end

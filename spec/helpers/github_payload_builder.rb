@@ -57,7 +57,7 @@ class GithubWebhookPayload < GithubPayload
     @after = after || generate_sha
 
     @result = {
-      ref: "refs/heads/#{ref}",
+      ref: "refs/#{ref}",
       before: @before,
       after: @after,
       created: true,
@@ -98,5 +98,9 @@ class GithubWebhookPayload < GithubPayload
 
   def commits
     @result[:commits]
+  end
+
+  def head_commit
+    @result[:head_commit]
   end
 end
