@@ -5,10 +5,6 @@ class GithubPayloadBuilder
     def webhook_payload(*args)
       GithubWebhookPayload.new(*args)
     end
-
-    def commit_payload(*args)
-      GithubCommitPayload.new(*args)
-    end
   end
 end
 
@@ -65,7 +61,14 @@ class GithubWebhookPayload < GithubPayload
       forced: true,
       base_ref: nil,
       compare: "https://github.com/#{@repo}/commit/#{@after[0..12]}",
-      commits: []
+      commits: [],
+      repository: {
+        name: repo.split('/').last,
+        full_name: repo,
+        owner: {
+          name: repo.split('/').first
+        }
+      }
     }
   end
 

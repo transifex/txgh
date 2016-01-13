@@ -5,9 +5,12 @@ require 'rake'
 require 'rspec'
 require 'txgh'
 
+require 'helpers/nil_logger'
+
 module StandardTxghSetup
   extend RSpec::SharedContext
 
+  let(:logger) { NilLogger.new }
   let(:github_api) { double(:github_api) }
   let(:transifex_api) { double(:transifex_api) }
 
@@ -15,6 +18,7 @@ module StandardTxghSetup
   let(:resource_slug) { 'my_resource' }
   let(:repo_name) { 'my_org/my_repo' }
   let(:branch) { 'master' }
+  let(:ref) { 'heads/master' }
   let(:language) { 'ko_KR' }
   let(:translations) { 'translation file contents' }
 
@@ -38,7 +42,7 @@ module StandardTxghSetup
   end
 
   let(:tx_config) do
-    TxConfig.load(
+    Txgh::TxConfig.load(
       """
       [main]
       host = https://www.transifex.com
@@ -51,6 +55,23 @@ module StandardTxghSetup
       type = PO
       """
     )
+  end
+
+  let(:yaml) do
+    {
+      'txgh' => {
+        'github' => {
+          'repos' => {
+            repo_name => repo_config
+          }
+        },
+        'transifex' => {
+          'projects' => {
+            project_name => project_config
+          }
+        }
+      }
+    }
   end
 
   let(:transifex_project) do
