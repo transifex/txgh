@@ -1,23 +1,18 @@
 module Txgh
   class GitHubRepo
-    attr_reader :name, :branch, :config
+    attr_reader :config, :api
 
-    def initialize(name)
-      @name = name
-      Txgh::KeyManager.load_yaml(name,nil)
-      @config = Txgh::KeyManager.github_repo_config
-      @branch = @config['branch']
+    def initialize(config, api)
+      @config = config
+      @api = api
     end
 
-    def transifex_project
-      @transifex_project ||=
-        Txgh::TransifexProject.new(@config['push_source_to'])
+    def name
+      config['name']
     end
 
-    def api
-      @api ||= Txgh::GitHubApi.new(
-        config['api_username'], config['api_token']
-      )
+    def branch
+      config['branch']
     end
   end
 end

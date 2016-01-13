@@ -53,8 +53,11 @@ module Txgh
       settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
+      config = Txgh::KeyManager.config_from_project(request['project'])
+
       handler = Txgh::Handlers::TransifexHookHandler.new(
-        project: request['project'],
+        project: config.transifex_project,
+        repo: config.github_repo,
         resource: request['resource'],
         language: request['language'],
         logger: settings.logger
@@ -74,7 +77,13 @@ module Txgh
         JSON.parse(request.body.read)
       end
 
+      github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
+      config = Txgh::KeyManager.config_from_repo(github_repo_name)
+
       handler = Txgh::Handlers::GithubHookHandler.new(
+        project: config.transifex_project,
+        repo: config.github_repo,
+        branch: payload['ref'],
         payload: payload,
         logger: settings.logger
       )

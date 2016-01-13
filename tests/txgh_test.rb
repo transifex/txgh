@@ -26,9 +26,8 @@ class TxghTestCase < Test::Unit::TestCase
   def test_tx_config_setup
     tx_name = 'txgh-test-1'
     gh_name = 'matthewjackowski/txgh-test-resources'
-    Txgh::KeyManager.load_yaml(gh_name,tx_name)
-    @config = Txgh::KeyManager.transifex_project_config
-    assert_not_nil @config
+    @config = Txgh::KeyManager.config_from(tx_name, gh_name)
+    assert_not_nil @config.project_config
     p @config.inspect
     p "Success!"
   end
@@ -36,9 +35,8 @@ class TxghTestCase < Test::Unit::TestCase
   def test_gh_config_setup
     tx_name = 'txgh-test-1'
     gh_name = 'matthewjackowski/txgh-test-resources'
-    Txgh::KeyManager.load_yaml(gh_name,tx_name)
-    @config =  Txgh::KeyManager.github_repo_config
-    assert_not_nil @config
+    @config = Txgh::KeyManager.config_from(tx_name, gh_name)
+    assert_not_nil @config.repo_config
     p @config.inspect
     p "Success!"
   end
