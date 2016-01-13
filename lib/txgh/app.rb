@@ -95,7 +95,7 @@ module Txgh
         Txgh::Handlers::TransifexHookHandler.new(options)
       end
 
-      def github_handler_for
+      def github_handler_for(options)
         Txgh::Handlers::GithubHookHandler.new(options)
       end
     end
