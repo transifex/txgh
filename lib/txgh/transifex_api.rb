@@ -6,6 +6,8 @@ module Txgh
   class TransifexApi
     API_ROOT = '/api/2'
 
+    attr_reader :connection
+
     def initialize(connection)
       @connection = connection
     end
@@ -36,10 +38,10 @@ module Txgh
 
       if resource_exists?(tx_resource)
         url = "#{API_ROOT}/project/#{project}/resource/#{slug}/content/"
-        method = @connection.method(:put)
+        method = connection.method(:put)
       else
         url = "#{API_ROOT}/project/#{project}/resources/"
-        method = @connection.method(:post)
+        method = connection.method(:post)
         payload[:slug] = slug
         payload[:name] = tx_resource.source_file
         payload[:i18n_type] = tx_resource.type
@@ -57,14 +59,14 @@ module Txgh
     def resource_exists?(tx_resource)
       project = tx_resource.project_slug
       slug = tx_resource.resource_slug
-      response = @connection.get("#{API_ROOT}/project/#{project}/resource/#{slug}/")
+      response = connection.get("#{API_ROOT}/project/#{project}/resource/#{slug}/")
       response.status == 200
     end
 
     def download(tx_resource, lang)
       project_slug = tx_resource.project_slug
       resource_slug = tx_resource.resource_slug
-      response = @connection.get(
+      response = connection.get(
         "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/translation/#{lang}/"
       )
 

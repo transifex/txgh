@@ -90,14 +90,12 @@ module Txgh
 
     private
 
-    helpers do
-      def transifex_handler_for(options)
-        Txgh::Handlers::TransifexHookHandler.new(options)
-      end
+    def transifex_handler_for(options)
+      Txgh::Handlers::TransifexHookHandler.new(options)
+    end
 
-      def github_handler_for(options)
-        Txgh::Handlers::GithubHookHandler.new(options)
-      end
+    def github_handler_for(options)
+      Txgh::Handlers::GithubHookHandler.new(options)
     end
   end
 end
