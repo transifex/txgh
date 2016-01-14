@@ -3,7 +3,7 @@ Transifex Txgh
 
 [![Build Status](https://travis-ci.org/transifex/txgh.svg?branch=devel)](https://travis-ci.org/transifex/txgh)
 
-A Sinatra server that integrates Transifex with GitHub
+A Sinatra server that integrates Transifex with Github
 
 ```
 +- app

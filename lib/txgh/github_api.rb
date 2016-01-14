@@ -1,15 +1,21 @@
 require 'octokit'
 
 module Txgh
-  class GitHubApi
-    attr_reader :client
+  class GithubApi
+    class << self
+      def create_from_credentials(login, access_token)
+        new(Octokit::Client.new(login: login, access_token: access_token))
+      end
 
-    def initialize(login, oauth_token)
-      @client = Octokit::Client.new(login: login, access_token: oauth_token)
+      def create_from_client(client)
+        new(client)
+      end
     end
 
-    def tags(repo)
-      client.tags(repo)
+    attr_reader :client
+
+    def initialize(client)
+      @client = client
     end
 
     def tree(repo, sha)
@@ -27,14 +33,14 @@ module Txgh
     def commit(repo, branch, path, content)
       blob = client.create_blob(repo, content)
       master = client.ref(repo, branch)
-      base_commit = client.commit(repo, master[:object][:sha])
+      base_commit = get_commit(repo, master[:object][:sha])
 
       tree_data = [{ path: path, mode: '100644', type: 'blob', sha: blob }]
       tree_options = { base_tree: base_commit[:commit][:tree][:sha] }
 
       tree = client.create_tree(repo, tree_data, tree_options)
       commit = client.create_commit(
-        repo, "Updating translations for #{path} [skip ci]", tree[:sha], master[:object][:sha]
+        repo, "Updating translations for #{path}", tree[:sha], master[:object][:sha]
       )
 
       client.update_ref(repo, branch, commit[:sha])

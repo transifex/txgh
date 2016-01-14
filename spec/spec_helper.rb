@@ -46,7 +46,7 @@ module StandardTxghSetup
       """
       [main]
       host = https://www.transifex.com
-      lang_map =
+      lang_map = pt-BR:pt, ko-KR:ko
 
       [#{project_name}.#{resource_slug}]
       file_filter = translations/<lang>/sample.po
@@ -57,7 +57,7 @@ module StandardTxghSetup
     )
   end
 
-  let(:yaml) do
+  let(:yaml_config) do
     {
       'txgh' => {
         'github' => {
@@ -79,7 +79,7 @@ module StandardTxghSetup
   end
 
   let(:github_repo) do
-    GitHubRepo.new(repo_config, github_api)
+    GithubRepo.new(repo_config, github_api)
   end
 end
 

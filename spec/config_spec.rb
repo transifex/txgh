@@ -12,7 +12,7 @@ describe Config do
   describe '#github_repo' do
     it 'instantiates a github repo with the right config' do
       repo = config.github_repo
-      expect(repo).to be_a(GitHubRepo)
+      expect(repo).to be_a(GithubRepo)
       expect(repo.name).to eq(repo_name)
       expect(repo.branch).to eq(branch)
     end
@@ -38,7 +38,7 @@ describe Config do
   describe '#github_api' do
     it 'instantiates an API instance' do
       api = config.github_api
-      expect(api).to be_a(GitHubApi)
+      expect(api).to be_a(GithubApi)
       expect(api.client.login).to eq(repo_config['api_username'])
       expect(api.client.access_token).to eq(repo_config['api_token'])
     end

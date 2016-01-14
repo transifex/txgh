@@ -1,8 +1,8 @@
 module Txgh
   autoload :Application,      'txgh/app'
   autoload :Config,           'txgh/config'
-  autoload :GitHubApi,        'txgh/github_api'
-  autoload :GitHubRepo,       'txgh/github_repo'
+  autoload :GithubApi,        'txgh/github_api'
+  autoload :GithubRepo,       'txgh/github_repo'
   autoload :Handlers,         'txgh/handlers'
   autoload :Hooks,            'txgh/app'
   autoload :KeyManager,       'txgh/key_manager'

@@ -26,7 +26,7 @@ module Txgh
   end
 
   class Hooks < Sinatra::Base
-    # Hooks are unprotected endpoints used for data integration between GitHub and
+    # Hooks are unprotected endpoints used for data integration between Github and
     # Transifex. They live under the /hooks namespace (see config.ru)
 
     configure :production do

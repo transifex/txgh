@@ -3,26 +3,34 @@ require 'faraday_middleware'
 require 'json'
 
 module Txgh
+  class TransifexApiError < StandardError; end
+
   class TransifexApi
     API_ROOT = '/api/2'
+
+    class << self
+      def create_from_credentials(username, password)
+        connection = Faraday.new(url: 'https://www.transifex.com') do |faraday|
+          faraday.request :multipart
+          faraday.request :url_encoded
+          faraday.response :logger
+          faraday.use FaradayMiddleware::FollowRedirects
+          faraday.adapter Faraday.default_adapter
+        end
+        connection.basic_auth(username, password)
+        connection.headers.update Accept: 'application/json'
+        new(connection)
+      end
+
+      def create_from_connection(connection)
+        new(connection)
+      end
+    end
 
     attr_reader :connection
 
     def initialize(connection)
       @connection = connection
-    end
-
-    def self.instance(username, password)
-      connection = Faraday.new(url: 'https://www.transifex.com') do |faraday|
-        faraday.request :multipart
-        faraday.request :url_encoded
-        faraday.response :logger
-        faraday.use FaradayMiddleware::FollowRedirects
-        faraday.adapter Faraday.default_adapter
-      end
-      connection.basic_auth(username, password)
-      connection.headers.update Accept: 'application/json'
-      new(connection)
     end
 
     def update(tx_resource, content)
@@ -50,7 +58,8 @@ module Txgh
       response = method.call(url, payload)
 
       if (response.status / 100) != 2
-        raise "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
+        raise TransifexApiError,
+          "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
       end
 
       JSON.parse(response.body)
@@ -71,7 +80,8 @@ module Txgh
       )
 
       if (response.status / 100) != 2
-        raise "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
+        raise TransifexApiError,
+          "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
       end
 
       json_data = JSON.parse(response.body)

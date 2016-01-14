@@ -1,5 +1,5 @@
 module Txgh
-  class GitHubRepo
+  class GithubRepo
     attr_reader :config, :api
 
     def initialize(config, api)
