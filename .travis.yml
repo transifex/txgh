@@ -1,9 +1,10 @@
+sudo: false
 language: ruby
 rvm:
   - 2.1.6
+script: 'bundle exec rake && bundle exec rspec'
 before_install:
   - |
     if [ "$LUMOS" == "true" ]; then
-      GIST="https://gist.githubusercontent.com/camertron/c3386c9533e8ed32be35/raw/b399feaa1245a7bf89d3cc04ca44a42efb2ffdb5/txgh_lumos.patch"
       curl $GIST | git apply
     fi

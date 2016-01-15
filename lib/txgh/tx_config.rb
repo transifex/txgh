@@ -1,43 +1,61 @@
-require 'parseconfig'
-
 module Txgh
   class TxConfig
-    attr_reader :resources, :lang_map
+    class << self
+      def load_file(path)
+        config = Txgh::ParseConfig.load_file(path)
+        parse(config)
+      end
 
-    def initialize(path)
-      config = ParseConfig.new(path)
-      @resources = []
+      def load(contents)
+        config = Txgh::ParseConfig.load(contents)
+        parse(config)
+      end
 
-      config.get_groups.each do |group|
-        if group == 'main'
-          main = config[group]
-          @lang_map = {}
+      private
 
-          if main['lang_map']
-            @lang_map = Txgh::TxConfig.parse_lang_map(main['lang_map'])
+      def parse(config)
+        resources = []
+        lang_map = {}
+
+        config.get_groups.each do |group|
+          if group == 'main'
+            main = config[group]
+
+            if main['lang_map']
+              lang_map = parse_lang_map(main['lang_map'])
+            end
+          else
+            resources.push(
+              parse_resource(group, config[group])
+            )
           end
-        else
-          @resources.push(
-            Txgh::TxConfig.parse_resource(group, config[group])
-          )
+        end
+
+        new(resources, lang_map)
+      end
+
+      def parse_lang_map(lang_map)
+        lang_map.split(',').each_with_object({}) do |m, result|
+          key_value = m.split(':', 2)
+          result[key_value[0].strip] = key_value[1].strip
         end
       end
-    end
 
-    def self.parse_lang_map(lang_map)
-      lang_map.split(',').each_with_object({}) do |m, result|
-        key_value = m.split(':', 2)
-        result[key_value[0].strip] = key_value[1].strip
+      def parse_resource(name, resource)
+        id = name.split('.', 2)
+        TxResource.new(
+          id[0].strip, id[1].strip, resource['type'],
+          resource['source_lang'], resource['source_file'],
+          resource['lang_map'], resource['file_filter']
+        )
       end
     end
 
-    def self.parse_resource(name, resource)
-      id = name.split('.', 2)
-      TxResource.new(
-        id[0].strip, id[1].strip, resource['type'],
-        resource['source_lang'], resource['source_file'],
-        resource['lang_map'], resource['file_filter']
-      )
+    attr_reader :resources, :lang_map
+
+    def initialize(resources, lang_map)
+      @resources = resources
+      @lang_map = lang_map
     end
   end
 end

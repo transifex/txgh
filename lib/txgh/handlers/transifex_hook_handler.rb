@@ -32,7 +32,7 @@ module Txgh
             translation_path = tx_resource.translation_path(project.lang_map(language))
           end
 
-          github_branch = repo.config.fetch('branch', 'master')
+          github_branch = repo.branch || 'master'
           github_branch = github_branch.include?("tags/") ? github_branch : "heads/#{github_branch}"
 
           logger.info("make github commit for branch: #{github_branch}")
