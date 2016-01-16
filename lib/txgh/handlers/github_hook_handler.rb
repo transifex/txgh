@@ -1,19 +1,20 @@
+require 'base64'
 require 'logger'
 
 module Txgh
   module Handlers
     class GithubHookHandler
-      attr_reader :project, :repo, :branch, :payload, :logger
+      attr_reader :project, :repo, :payload, :logger
 
       def initialize(options = {})
         @project = options.fetch(:project)
         @repo = options.fetch(:repo)
-        @branch = options.fetch(:branch)
         @payload = options.fetch(:payload)
         @logger = options.fetch(:logger) { Logger.new(STDOUT) }
       end
 
       def execute
+        branch = payload['ref']
         github_repo_name = repo.name
         github_config_branch = repo.branch || 'master'
 
@@ -35,7 +36,7 @@ module Txgh
             tx_resources[resource.source_file] = resource
           end
 
-          # Find the updated resources and maps the most recent commit in which
+          # Finds the updated resources and maps the most recent commit in which
           # each was modified
           updated_resources = {}
           payload['commits'].each do |commit|
@@ -79,7 +80,7 @@ module Txgh
             end
           end
 
-          # For each modified resource, get its content and updates the content
+          # For each modified resource, get its content and update the content
           # in Transifex.
           updated_resources.each do |tx_resource, commit_sha|
             logger.info('process updated resource')

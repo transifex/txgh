@@ -83,7 +83,6 @@ module Txgh
       handler = Txgh::Handlers::GithubHookHandler.new(
         project: config.transifex_project,
         repo: config.github_repo,
-        branch: payload['ref'],
         payload: payload,
         logger: settings.logger
       )
