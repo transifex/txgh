@@ -63,4 +63,7 @@ module StandardTxghSetup
 end
 
 RSpec.configure do |config|
+  config.filter_run(focus: true)
+  config.run_all_when_everything_filtered = true
+  config.filter_run_excluding(integration: true) unless ENV['FULL_SPEC']
 end

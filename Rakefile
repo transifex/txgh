@@ -1,10 +1,17 @@
-require 'rake/testtask'
+require 'rspec/core/rake_task'
 
-Rake::TestTask.new do |t|
-  t.libs = ["lib"]
-  t.warning = true
-  t.verbose = true
-  t.test_files = FileList['tests/*_test.rb']
+desc 'Run specs'
+RSpec::Core::RakeTask.new do |t|
+  t.pattern = './spec/**/*_spec.rb'
 end
 
-task :default => :test
+task default: :spec
+
+namespace :spec do
+  desc 'Run full specs suit'
+  task :full => [:full_spec_env, :spec]
+
+  task :full_spec_env do
+    ENV['FULL_SPEC'] = 'true'
+  end
+end

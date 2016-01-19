@@ -33,7 +33,7 @@ module Txgh
         path = if File.file?(File.join(Etc.getpwuid.dir, "txgh.yml"))
           File.join(Etc.getpwuid.dir, "txgh.yml")
         else
-          File.expand_path('../../../config/txgh.yml', __FILE__)
+          File.expand_path('./config/txgh.yml')
         end
 
         YAML.load(ERB.new(File.read(path)).result)
