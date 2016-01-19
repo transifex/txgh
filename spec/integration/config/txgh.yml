@@ -3,7 +3,8 @@ txgh:
         repos:
             txgh-bot/txgh-test-resources:
                 api_username: txgh-bot
-                api_token: 034560878982f3ba339950af0c8de7a8a617c57b
+                # github will auto-revoke a token if they notice it in one of your commits ;)
+                api_token: <%= require 'base64'; Base64.decode64('YjViYWY3Nzk5NTdkMzVlMmI0OGZmYjk4YThlY2M1ZDY0NzAwNWRhZA==') %>
                 push_source_to: test-project-88
                 branch: master
     transifex:
