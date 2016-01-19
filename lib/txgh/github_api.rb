@@ -4,7 +4,9 @@ module Txgh
   class GithubApi
     class << self
       def create_from_credentials(login, access_token)
-        new(Octokit::Client.new(login: login, access_token: access_token))
+        create_from_client(
+          Octokit::Client.new(login: login, access_token: access_token)
+        )
       end
 
       def create_from_client(client)

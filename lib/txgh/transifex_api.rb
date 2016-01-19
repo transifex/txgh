@@ -19,7 +19,7 @@ module Txgh
         end
         connection.basic_auth(username, password)
         connection.headers.update Accept: 'application/json'
-        new(connection)
+        create_from_connection(connection)
       end
 
       def create_from_connection(connection)

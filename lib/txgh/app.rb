@@ -48,7 +48,7 @@ module Txgh
 
 
     post '/transifex' do
-      settings.logger.info('Processing request at /transifex')
+      settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
       config = Txgh::KeyManager.config_from_project(request['project'])
@@ -65,7 +65,7 @@ module Txgh
     end
 
     post '/github' do
-      settings.logger.info('Processing request at /github')
+      settings.logger.info('Processing request at /hooks/github')
 
       payload = if params[:payload]
         settings.logger.info('processing payload from form')
