@@ -41,29 +41,37 @@ describe 'integration tests', integration: true do
   end
 
   it 'verifies the transifex hook endpoint works' do
-    data = '{"project": "test-project-88","resource": "samplepo","language": "el_GR","translated": 100}'
-    post '/transifex', JSON.parse(data)
-    expect(last_response).to be_ok
+    VCR.use_cassette('transifex_hook_endpoint') do
+      data = '{"project": "test-project-88","resource": "samplepo","language": "el_GR","translated": 100}'
+      post '/transifex', JSON.parse(data)
+      expect(last_response).to be_ok
+    end
   end
 
   it 'verifies the github hook endpoint works' do
-    data = { 'payload' => github_postbody }
-    header 'content-type', 'application/x-www-form-urlencoded'
-    post '/github', data
-    expect(last_response).to be_ok
+    VCR.use_cassette('github_hook_endpoint') do
+      data = { 'payload' => github_postbody }
+      header 'content-type', 'application/x-www-form-urlencoded'
+      post '/github', data
+      expect(last_response).to be_ok
+    end
   end
 
   it 'verifies the github release hook endpoint works' do
-    data = { 'payload' => github_postbody_release }
-    header 'content-type', 'application/x-www-form-urlencoded'
-    post '/github', data
-    expect(last_response).to be_ok
+    VCR.use_cassette('github_release_hook_endpoint') do
+      data = { 'payload' => github_postbody_release }
+      header 'content-type', 'application/x-www-form-urlencoded'
+      post '/github', data
+      expect(last_response).to be_ok
+    end
   end
 
   it 'verifies the github l10n hook endpoint works' do
-    data = { 'payload' => github_postbody_l10n }
-    header 'content-type', 'application/x-www-form-urlencoded'
-    post '/github', data
-    expect(last_response).to be_ok
+    VCR.use_cassette('github_l10n_hook_endpoint') do
+      data = { 'payload' => github_postbody_l10n }
+      header 'content-type', 'application/x-www-form-urlencoded'
+      post '/github', data
+      expect(last_response).to be_ok
+    end
   end
 end
