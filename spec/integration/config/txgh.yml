@@ -3,7 +3,7 @@ txgh:
         repos:
             txgh-bot/txgh-test-resources:
                 api_username: txgh-bot
-                api_token: 0961965e85fe539f3f0d7c575967beb0f915b31e
+                api_token: a32875bc178a300852a18443204573dcb12c850c
                 push_source_to: test-project-88
                 branch: master
     transifex:
