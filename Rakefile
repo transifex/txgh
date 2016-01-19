@@ -8,8 +8,8 @@ end
 task default: :spec
 
 namespace :spec do
-  desc 'Run full specs suit'
-  task :full => [:full_spec_env, :spec]
+  desc 'Run full spec suite'
+  task full: [:full_spec_env, :spec]
 
   task :full_spec_env do
     ENV['FULL_SPEC'] = 'true'
