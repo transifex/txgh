@@ -100,7 +100,6 @@ VCR.configure do |config|
     Txgh::KeyManager.config_from_project('test-project-88')
   end
 
-  binding.pry
   config.filter_sensitive_data('<GITHUB_TOKEN>') do
     txgh_config.repo_config['api_token']
   end
