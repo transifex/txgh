@@ -1,6 +1,4 @@
 require 'base64'
-require 'faraday'
-require 'haml'
 require 'json'
 require 'sinatra'
 require 'sinatra/reloader'
@@ -28,7 +26,7 @@ module Txgh
   end
 
   class Hooks < Sinatra::Base
-    # Hooks are unprotected endpoints used for data integration between GitHub and
+    # Hooks are unprotected endpoints used for data integration between Github and
     # Transifex. They live under the /hooks namespace (see config.ru)
 
     configure :production do
@@ -37,7 +35,7 @@ module Txgh
       set :logger, logger
     end
 
-    configure :development , :test do
+    configure :development, :test do
       register Sinatra::Reloader
       set :logging, nil
       logger = Txgh::TxLogger.logger
@@ -55,7 +53,7 @@ module Txgh
 
       config = Txgh::KeyManager.config_from_project(request['project'])
 
-      handler = Txgh::Handlers::TransifexHookHandler.new(
+      handler = transifex_handler_for(
         project: config.transifex_project,
         repo: config.github_repo,
         resource: request['resource'],
@@ -80,7 +78,7 @@ module Txgh
       github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
       config = Txgh::KeyManager.config_from_repo(github_repo_name)
 
-      handler = Txgh::Handlers::GithubHookHandler.new(
+      handler = github_handler_for(
         project: config.transifex_project,
         repo: config.github_repo,
         payload: payload,
@@ -88,6 +86,16 @@ module Txgh
       )
 
       handler.execute
+    end
+
+    private
+
+    def transifex_handler_for(options)
+      Txgh::Handlers::TransifexHookHandler.new(options)
+    end
+
+    def github_handler_for(options)
+      Txgh::Handlers::GithubHookHandler.new(options)
     end
   end
 end

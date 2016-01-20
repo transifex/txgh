@@ -17,12 +17,6 @@ describe GithubHookHandler do
     )
   end
 
-  let(:logger) do
-    NilLogger.new
-  end
-
-  let(:ref) { 'heads/master' }
-
   let(:payload) do
     GithubPayloadBuilder.webhook_payload(repo_name, ref)
   end
