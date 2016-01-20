@@ -4,6 +4,9 @@ require 'pry-nav'
 require 'rake'
 require 'rspec'
 require 'txgh'
+require 'vcr'
+require 'webmock'
+require 'yaml'
 
 require 'helpers/nil_logger'
 
@@ -84,4 +87,24 @@ module StandardTxghSetup
 end
 
 RSpec.configure do |config|
+  config.filter_run(focus: true)
+  config.run_all_when_everything_filtered = true
+  config.filter_run_excluding(integration: true) unless ENV['FULL_SPEC']
+end
+
+VCR.configure do |config|
+  config.cassette_library_dir = 'spec/integration/cassettes'
+  config.hook_into :webmock
+
+  txgh_config = Dir.chdir('./spec/integration') do
+    Txgh::KeyManager.config_from_project('test-project-88')
+  end
+
+  config.filter_sensitive_data('<GITHUB_TOKEN>') do
+    txgh_config.repo_config['api_token']
+  end
+
+  config.filter_sensitive_data('<TRANSIFEX_PASSWORD>') do
+    txgh_config.project_config['api_password']
+  end
 end
