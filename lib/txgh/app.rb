@@ -7,9 +7,9 @@ module Txgh
 
   class Application < Sinatra::Base
 
-    use Rack::Auth::Basic, 'Restricted Area' do |username, password|
-      username == 'foo' && password == 'bar'
-    end
+    # use Rack::Auth::Basic, 'Restricted Area' do |username, password|
+    #   username == 'foo' && password == 'bar'
+    # end
 
     configure :development do
       register Sinatra::Reloader
