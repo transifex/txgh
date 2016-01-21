@@ -1,17 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'dotenv'
-gem 'faraday'
-gem 'faraday_middleware'
-gem 'haml'
-gem 'json'
-gem 'octokit'
-gem 'puma'
-gem 'rack'
-gem 'rake'
-gem 'parseconfig'
-gem 'sinatra'
-gem 'sinatra-contrib'
+gemspec
 
 group :development, :test do
   gem 'pry-nav'
