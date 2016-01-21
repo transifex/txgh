@@ -1,2 +1,3 @@
 FROM ruby:2.1-onbuild
-CMD ["puma"]
+EXPOSE 9292
+CMD ["puma", "-p", "9292"]
