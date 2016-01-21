@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'faraday'
 gem 'faraday_middleware'
-gem 'haml'
 gem 'json'
 gem 'octokit'
 gem 'puma'
