@@ -56,7 +56,7 @@ module Txgh
         slug: tx_resource.resource_slug,
         name: tx_resource.source_file,
         i18n_type: tx_resource.type,
-        categories: categories,
+        categories: categories.uniq,
         content: get_content_io(tx_resource, content)
       }
 
@@ -100,7 +100,7 @@ module Txgh
     end
 
     def get_resource(tx_resource)
-      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}"
+      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
       response = connection.get(url)
       raise_error!(response)
       JSON.parse(response.body)
