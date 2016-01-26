@@ -9,6 +9,12 @@ describe CategorySupport do
       result = CategorySupport.deserialize_categories(categories)
       expect(result).to eq('captain' => 'janeway', 'commander' => 'chakotay')
     end
+
+    it 'converts an array of space-separated categories' do
+      categories = ['captain:janeway commander:chakotay']
+      result = CategorySupport.deserialize_categories(categories)
+      expect(result).to eq('captain' => 'janeway', 'commander' => 'chakotay')
+    end
   end
 
   describe '.serialize_categories' do

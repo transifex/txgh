@@ -1,9 +1,11 @@
 module Txgh
   module CategorySupport
     def deserialize_categories(categories_arr)
-      categories_arr.each_with_object({}) do |category, ret|
-        if idx = category.index(':')
-          ret[category[0...idx]] = category[(idx + 1)..-1]
+      categories_arr.each_with_object({}) do |category_str, ret|
+        category_str.split(' ').each do |category|
+          if idx = category.index(':')
+            ret[category[0...idx]] = category[(idx + 1)..-1]
+          end
         end
       end
     end
