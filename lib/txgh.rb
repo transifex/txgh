@@ -1,5 +1,8 @@
+require 'txgh/errors'
+
 module Txgh
   autoload :Application,      'txgh/app'
+  autoload :CategorySupport,  'txgh/category_support'
   autoload :Config,           'txgh/config'
   autoload :GithubApi,        'txgh/github_api'
   autoload :GithubRepo,       'txgh/github_repo'
@@ -9,7 +12,9 @@ module Txgh
   autoload :ParseConfig,      'txgh/parse_config'
   autoload :TransifexApi,     'txgh/transifex_api'
   autoload :TransifexProject, 'txgh/transifex_project'
+  autoload :TxBranchResource, 'txgh/tx_branch_resource'
   autoload :TxConfig,         'txgh/tx_config'
   autoload :TxLogger,         'txgh/tx_logger'
   autoload :TxResource,       'txgh/tx_resource'
+  autoload :Utils,            'txgh/utils'
 end

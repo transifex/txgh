@@ -28,7 +28,7 @@ describe GithubHookHandler do
     end
   end
 
-  it 'correctly uploads modified files to transifex' do
+  before(:each) do
     tree_sha = 'abc123'
 
     # indicate that all the files we care about have changed
@@ -36,18 +36,20 @@ describe GithubHookHandler do
       modified: modified_files.map { |f| f['path'] }
     )
 
-    expect(github_api).to(
+    allow(github_api).to(
       receive(:get_commit).with(repo_name, payload.commits.first[:id]) do
         { 'commit' => { 'tree' => { 'sha' => tree_sha } } }
       end
     )
 
-    expect(github_api).to(
+    allow(github_api).to(
       receive(:tree).with(repo_name, tree_sha) do
         { 'tree' => modified_files }
       end
     )
+  end
 
+  it 'correctly uploads modified files to transifex' do
     modified_files.each do |file|
       translations = "translations for #{file['path']}"
 
@@ -68,14 +70,26 @@ describe GithubHookHandler do
     handler.execute
   end
 
+  # it 'uploads by branch name if asked' do
+  # end
+
   context 'with an L10N branch' do
     let(:ref) { 'tags/L10N_my_branch' }
 
     it 'creates an L10N tag' do
-      payload.add_commit
+      modified_files.each do |file|
+        allow(github_api).to(
+          receive(:blob).and_return('content' => '')
+        )
 
+        allow(transifex_api).to receive(:create_or_update)
+      end
+
+      # this is what we actually care about in this test
       expect(github_api).to(
-        receive(:create_ref).with(repo_name, 'heads/L10N', payload.head_commit[:id])
+        receive(:create_ref).with(
+          repo_name, 'heads/L10N', payload.head_commit[:id]
+        )
       )
 
       handler.execute

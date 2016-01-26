@@ -56,7 +56,7 @@ module Txgh
       handler = transifex_handler_for(
         project: config.transifex_project,
         repo: config.github_repo,
-        resource: request['resource'],
+        resource_slug: request['resource'],
         language: request['language'],
         logger: settings.logger
       )

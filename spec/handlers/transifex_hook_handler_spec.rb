@@ -11,7 +11,7 @@ describe TransifexHookHandler do
     TransifexHookHandler.new(
       project: transifex_project,
       repo: github_repo,
-      resource: resource_slug,
+      resource_slug: resource_slug,
       language: language,
       logger: logger
     )
