@@ -17,7 +17,10 @@ module Txgh
 
         if resource_slug.end_with?(suffix)
           resource_slug = resource_slug.chomp(suffix)
-          new(project.resource(resource_slug), branch)
+
+          if resource = project.resource(resource_slug)
+            new(resource, branch)
+          end
         end
       end
     end

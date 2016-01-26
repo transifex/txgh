@@ -14,7 +14,7 @@ module Txgh
       end
     end
 
-    def categorify(str)
+    def escape_category(str)
       str.gsub(' ', '_')
     end
 

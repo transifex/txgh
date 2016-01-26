@@ -93,7 +93,7 @@ module Txgh
         end
 
         categories['branch'] ||= branch
-        categories['author'] ||= categorify(
+        categories['author'] ||= escape_category(
           payload['head_commit']['committer']['name']
         )
 
