@@ -28,6 +28,10 @@ describe GithubHookHandler do
     end
   end
 
+  def translations_for(path)
+    "translations for #{path}"
+  end
+
   before(:each) do
     tree_sha = 'abc123'
 
@@ -47,17 +51,21 @@ describe GithubHookHandler do
         { 'tree' => modified_files }
       end
     )
-  end
 
-  it 'correctly uploads modified files to transifex' do
     modified_files.each do |file|
-      translations = "translations for #{file['path']}"
+      translations = translations_for(file['path'])
 
-      expect(github_api).to(
+      allow(github_api).to(
         receive(:blob).with(repo_name, file['sha']) do
           { 'content' => translations, 'encoding' => 'utf-8' }
         end
       )
+    end
+  end
+
+  it 'correctly uploads modified files to transifex' do
+    modified_files.each do |file|
+      translations = translations_for(file['path'])
 
       expect(transifex_api).to(
         receive(:create_or_update) do |resource, content|
@@ -70,8 +78,28 @@ describe GithubHookHandler do
     handler.execute
   end
 
-  # it 'uploads by branch name if asked' do
-  # end
+  context 'when asked to process all branches' do
+    let(:branch) { 'all' }
+
+    it 'uploads by branch name if asked' do
+      allow(transifex_api).to receive(:resource_exists?).and_return(false)
+
+      modified_files.each do |file|
+        translations = translations_for(file['path'])
+
+        expect(transifex_api).to(
+          receive(:create) do |resource, content, categories|
+            expect(resource.source_file).to eq(file['path'])
+            expect(content).to eq(translations)
+            expect(categories).to include("branch:#{ref}")
+            expect(categories).to include("author:Test_User")
+          end
+        )
+      end
+
+      handler.execute
+    end
+  end
 
   context 'with an L10N branch' do
     let(:ref) { 'tags/L10N_my_branch' }
