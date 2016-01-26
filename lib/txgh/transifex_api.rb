@@ -4,8 +4,6 @@ require 'json'
 require 'set'
 
 module Txgh
-  class TransifexApiError < StandardError; end
-
   class TransifexApi
     API_ROOT = '/api/2'
 
@@ -39,7 +37,7 @@ module Txgh
 
     def create_or_update(tx_resource, content, categories = [])
       if resource_exists?(tx_resource)
-        resource = get_resource(tx_resource)
+        resource = get_resource(*tx_resource.slugs)
         new_categories = Set.new(resource['categories'])
         new_categories.merge(categories)
 
@@ -56,7 +54,7 @@ module Txgh
         slug: tx_resource.resource_slug,
         name: tx_resource.source_file,
         i18n_type: tx_resource.type,
-        categories: categories.uniq,
+        categories: CategorySupport.join_categories(categories.uniq),
         content: get_content_io(tx_resource, content)
       }
 
@@ -99,8 +97,8 @@ module Txgh
       json_data['content']
     end
 
-    def get_resource(tx_resource)
-      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
+    def get_resource(project_slug, resource_slug)
+      url = "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/"
       response = connection.get(url)
       raise_error!(response)
       JSON.parse(response.body)

@@ -7,11 +7,15 @@ include Txgh::Handlers
 describe TransifexHookHandler do
   include StandardTxghSetup
 
+  let(:requested_resource_slug) do
+    resource_slug
+  end
+
   let(:handler) do
     TransifexHookHandler.new(
       project: transifex_project,
       repo: github_repo,
-      resource: resource_slug,
+      resource_slug: requested_resource_slug,
       language: language,
       logger: logger
     )
@@ -20,7 +24,7 @@ describe TransifexHookHandler do
   before(:each) do
     expect(transifex_api).to(receive(:download)) do |resource, language|
       expect(resource.project_slug).to eq(project_name)
-      expect(resource.resource_slug).to eq(resource_slug)
+      expect(resource.resource_slug).to eq(requested_resource_slug)
       translations
     end
   end
@@ -33,6 +37,29 @@ describe TransifexHookHandler do
     )
 
     handler.execute
+  end
+
+  context 'when asked to process all branches' do
+    let(:branch) { 'all' }
+    let(:ref) { 'heads/my_branch' }
+
+    let(:requested_resource_slug) do
+      'my_resource-heads_my_branch'
+    end
+
+    it 'pushes to the individual branch' do
+      expect(transifex_api).to receive(:get_resource) do
+        { 'categories' => ["branch:#{ref}"] }
+      end
+
+      expect(github_api).to(
+        receive(:commit).with(
+          repo_name, ref, "translations/#{language}/sample.po", translations
+        )
+      )
+
+      handler.execute
+    end
   end
 
   context 'with a tag instead of a branch' do
