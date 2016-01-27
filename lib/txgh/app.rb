@@ -62,6 +62,7 @@ module Txgh
       )
 
       handler.execute
+      status 200
     end
 
     post '/github' do
@@ -86,6 +87,7 @@ module Txgh
       )
 
       handler.execute
+      status 200
     end
 
     private
