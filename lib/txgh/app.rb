@@ -51,18 +51,23 @@ module Txgh
       settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
-      config = Txgh::KeyManager.config_from_project(request['project'])
+      payload = JSON.parse(request.body.read)
+      config = Txgh::KeyManager.config_from_project(payload['project'])
 
-      handler = transifex_handler_for(
-        project: config.transifex_project,
-        repo: config.github_repo,
-        resource_slug: request['resource'],
-        language: request['language'],
-        logger: settings.logger
-      )
+      if authenticated_transifex_request?(config.transifex_project, request)
+        handler = transifex_handler_for(
+          project: config.transifex_project,
+          repo: config.github_repo,
+          resource: payload['resource'],
+          language: payload['language'],
+          logger: settings.logger
+        )
 
-      handler.execute
-      status 200
+        handler.execute
+        status 200
+      else
+        status 401
+      end
     end
 
     post '/github' do
@@ -100,6 +105,16 @@ module Txgh
       if repo.webhook_protected?
         GithubRequestAuth.request_valid?(
           request, repo.webhook_secret
+        )
+      else
+        true
+      end
+    end
+
+    def authenticated_transifex_request?(project, request)
+      if project.webhook_protected?
+        TransifexRequestAuth.request_valid?(
+          request, project.webhook_secret
         )
       else
         true

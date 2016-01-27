@@ -77,7 +77,7 @@ describe Txgh::Hooks do
         'resource' => resource_slug,
         'language' => language,
         'translated' => '100'
-      }
+      }.to_json
     end
   end
 
