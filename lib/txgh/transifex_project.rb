@@ -12,6 +12,14 @@ module Txgh
       config['name']
     end
 
+    def webhook_secret
+      config['webhook_secret']
+    end
+
+    def webhook_protected?
+      !(webhook_secret || '').empty?
+    end
+
     def resource(slug)
       tx_config.resources.find do |resource|
         resource.resource_slug == slug
