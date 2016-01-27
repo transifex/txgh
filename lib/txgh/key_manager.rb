@@ -1,5 +1,6 @@
-require 'yaml'
+require 'erb'
 require 'etc'
+require 'yaml'
 
 module Txgh
   class KeyManager

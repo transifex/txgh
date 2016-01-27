@@ -95,7 +95,7 @@ module Txgh
                 logger.info("process resource file: #{tx_resource.source_file}")
                 blob = github_api.blob(github_repo_name, file['sha'])
                 content = blob['encoding'] == 'utf-8' ? blob['content'] : Base64.decode64(blob['content'])
-                project.api.update(tx_resource, content)
+                project.api.create_or_update(tx_resource, content)
                 logger.info "updated tx_resource: #{tx_resource.inspect}"
               end
             end

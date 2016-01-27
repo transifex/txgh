@@ -58,7 +58,7 @@ describe GithubHookHandler do
       )
 
       expect(transifex_api).to(
-        receive(:update) do |resource, content|
+        receive(:create_or_update) do |resource, content|
           expect(resource.source_file).to eq(file['path'])
           expect(content).to eq(translations)
         end
