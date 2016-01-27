@@ -79,18 +79,32 @@ module Txgh
       github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
       config = Txgh::KeyManager.config_from_repo(github_repo_name)
 
-      handler = github_handler_for(
-        project: config.transifex_project,
-        repo: config.github_repo,
-        payload: payload,
-        logger: settings.logger
-      )
+      if authenticated_github_request?(config.github_repo, request)
+        handler = github_handler_for(
+          project: config.transifex_project,
+          repo: config.github_repo,
+          payload: payload,
+          logger: settings.logger
+        )
 
-      handler.execute
-      status 200
+        handler.execute
+        status 200
+      else
+        status 401
+      end
     end
 
     private
+
+    def authenticated_github_request?(repo, request)
+      if repo.webhook_protected?
+        GithubRequestAuth.request_valid?(
+          request, repo.webhook_secret
+        )
+      else
+        true
+      end
+    end
 
     def transifex_handler_for(options)
       Txgh::Handlers::TransifexHookHandler.new(options)

@@ -14,5 +14,13 @@ module Txgh
     def branch
       config['branch']
     end
+
+    def webhook_secret
+      config['webhook_secret']
+    end
+
+    def webhook_protected?
+      !(webhook_secret || '').empty?
+    end
   end
 end

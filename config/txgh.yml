@@ -6,6 +6,7 @@ txgh:
         api_token: "<%= ENV['GITHUB_TOKEN'] %>"
         push_source_to: "<%= ENV['GITHUB_PUSH_SOURCE_TO'] %>"
         branch: "<%= ENV['GITHUB_BRANCH'] %>"
+        webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"
   transifex:
     projects:
       <%= ENV['GITHUB_PUSH_SOURCE_TO'] %>:

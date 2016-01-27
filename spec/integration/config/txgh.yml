@@ -7,6 +7,7 @@ txgh:
                 api_token: <%= require 'base64'; Base64.decode64('YjViYWY3Nzk5NTdkMzVlMmI0OGZmYjk4YThlY2M1ZDY0NzAwNWRhZA==') %>
                 push_source_to: test-project-88
                 branch: master
+                webhook_secret: 18d3998f576dfe933357104b87abfd61
     transifex:
         projects:
             test-project-88:
