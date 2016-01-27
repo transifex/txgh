@@ -96,7 +96,9 @@ module Txgh
 
     def authenticated_github_request?(repo, request)
       if repo.webhook_protected?
-        GithubRequestAuth.request_valid?(request, repo.webhook_secret)
+        GithubRequestAuth.request_valid?(
+          request, repo.webhook_secret
+        )
       else
         true
       end

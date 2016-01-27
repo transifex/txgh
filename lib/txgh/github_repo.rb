@@ -20,7 +20,7 @@ module Txgh
     end
 
     def webhook_protected?
-      !!webhook_secret
+      !(webhook_secret || '').empty?
     end
   end
 end

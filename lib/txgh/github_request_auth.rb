@@ -3,19 +3,26 @@ require 'openssl'
 module Txgh
   class GithubRequestAuth
     HMAC_DIGEST = OpenSSL::Digest.new('sha1')
+    RACK_HEADER = 'HTTP_X_HUB_SIGNATURE'
+    GITHUB_HEADER = 'X-Hub-Signature'
 
-    def self.request_valid?(request, secret)
-      request.body.rewind
+    class << self
+      def request_valid?(request, secret)
+        request.body.rewind
+        expected_signature = header(request.body.read, secret)
+        actual_signature = request.env[RACK_HEADER]
+        actual_signature == expected_signature
+      end
 
-      sha = OpenSSL::HMAC.hexdigest(
-        HMAC_DIGEST, secret, request.body.read
-      )
+      def header(content, secret)
+        "sha1=#{digest(content, secret)}"
+      end
 
-      request.body.rewind
+      private
 
-      expected_signature = "sha1=#{sha}"
-      actual_signature = request.env['HTTP_X_HUB_SIGNATURE']
-      actual_signature == expected_signature
+      def digest(content, secret)
+        OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, content)
+      end
     end
   end
 end

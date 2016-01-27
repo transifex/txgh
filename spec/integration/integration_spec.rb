@@ -4,6 +4,8 @@ require 'json'
 require 'pathname'
 require 'rack/test'
 
+include Txgh
+
 describe 'integration tests', integration: true do
   include Rack::Test::Methods
 
@@ -33,10 +35,21 @@ describe 'integration tests', integration: true do
     File.read(payload_path.join('github_postbody_l10n.json'))
   end
 
+  let(:project_name) { 'test-project-88' }
+  let(:repo_name) { 'txgh-bot/txgh-test-resources' }
+
+  let(:config) do
+    Txgh::KeyManager.config_from(project_name, repo_name)
+  end
+
+  def sign_with(body)
+    header(
+      GithubRequestAuth::GITHUB_HEADER,
+      GithubRequestAuth.header(body, config.github_repo.webhook_secret)
+    )
+  end
+
   it 'loads correct project config' do
-    tx_name = 'test-project-88'
-    gh_name = 'txgh-bot/txgh-test-resources'
-    config = Txgh::KeyManager.config_from(tx_name, gh_name)
     expect(config.project_config).to_not be_nil
   end
 
@@ -50,27 +63,27 @@ describe 'integration tests', integration: true do
 
   it 'verifies the github hook endpoint works' do
     VCR.use_cassette('github_hook_endpoint') do
-      data = { 'payload' => github_postbody }
+      sign_with(github_postbody)
       header 'content-type', 'application/x-www-form-urlencoded'
-      post '/github', data
+      post '/github', github_postbody
       expect(last_response).to be_ok
     end
   end
 
   it 'verifies the github release hook endpoint works' do
     VCR.use_cassette('github_release_hook_endpoint') do
-      data = { 'payload' => github_postbody_release }
+      sign_with(github_postbody_release)
       header 'content-type', 'application/x-www-form-urlencoded'
-      post '/github', data
+      post '/github', github_postbody_release
       expect(last_response).to be_ok
     end
   end
 
   it 'verifies the github l10n hook endpoint works' do
     VCR.use_cassette('github_l10n_hook_endpoint') do
-      data = { 'payload' => github_postbody_l10n }
+      sign_with(github_postbody_l10n)
       header 'content-type', 'application/x-www-form-urlencoded'
-      post '/github', data
+      post '/github', github_postbody_l10n
       expect(last_response).to be_ok
     end
   end
