@@ -42,8 +42,6 @@ module Txgh
           end
 
           update_resources(modified_resources)
-
-          200
         end
       end
 
