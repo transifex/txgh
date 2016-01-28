@@ -102,7 +102,7 @@ module Txgh
 
     def authenticated_github_request?(repo, request)
       if repo.webhook_protected?
-        GithubRequestAuth.request_valid?(
+        GithubRequestAuth.authentic_request?(
           request, repo.webhook_secret
         )
       else
@@ -112,7 +112,7 @@ module Txgh
 
     def authenticated_transifex_request?(project, request)
       if project.webhook_protected?
-        TransifexRequestAuth.request_valid?(
+        TransifexRequestAuth.authentic_request?(
           request, project.webhook_secret
         )
       else
