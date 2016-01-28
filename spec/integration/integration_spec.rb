@@ -46,14 +46,14 @@ describe 'integration tests', integration: true do
   def sign_github_request(body)
     header(
       GithubRequestAuth::GITHUB_HEADER,
-      GithubRequestAuth.header(body, config.github_repo.webhook_secret)
+      GithubRequestAuth.header_value(body, config.github_repo.webhook_secret)
     )
   end
 
   def sign_transifex_request(body)
     header(
       TransifexRequestAuth::TRANSIFEX_HEADER,
-      TransifexRequestAuth.header(body, config.transifex_project.webhook_secret)
+      TransifexRequestAuth.header_value(body, config.transifex_project.webhook_secret)
     )
   end
 

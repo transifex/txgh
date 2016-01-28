@@ -7,14 +7,14 @@ module Txgh
     GITHUB_HEADER = 'X-Hub-Signature'
 
     class << self
-      def request_valid?(request, secret)
+      def authentic_request?(request, secret)
         request.body.rewind
-        expected_signature = header(request.body.read, secret)
+        expected_signature = header_value(request.body.read, secret)
         actual_signature = request.env[RACK_HEADER]
         actual_signature == expected_signature
       end
 
-      def header(content, secret)
+      def header_value(content, secret)
         "sha1=#{digest(content, secret)}"
       end
 
