@@ -15,13 +15,38 @@ module Txgh
       end
 
       def header(content, secret)
-        digest(content, secret)
+        digest(transform(content), secret)
       end
 
       private
 
+      # In order to generate a correct HMAC hash, the request body must be
+      # parsed and made to look like a python map. If you're thinking that's
+      # weird, you're correct, but it's apparently expected behavior.
+      def transform(content)
+        params = URI.decode_www_form(content)
+
+        params = params.map do |key, val|
+          key = "'#{key}'"
+          val = interpret_val(val)
+          "#{key}: #{val}"
+        end
+
+        "{#{params.join(', ')}}"
+      end
+
+      def interpret_val(val)
+        if val =~ /[\d]+/
+          val
+        else
+          "u'#{val}'"
+        end
+      end
+
       def digest(content, secret)
-        OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, content)
+        Base64.encode64(
+          OpenSSL::HMAC.digest(HMAC_DIGEST, secret, content)
+        ).strip
       end
     end
   end

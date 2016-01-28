@@ -2,6 +2,7 @@ require 'base64'
 require 'json'
 require 'sinatra'
 require 'sinatra/reloader'
+require 'uri'
 
 module Txgh
 
@@ -51,7 +52,7 @@ module Txgh
       settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
-      payload = JSON.parse(request.body.read)
+      payload = Hash[URI.decode_www_form(request.body.read)]
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
       if authenticated_transifex_request?(config.transifex_project, request)

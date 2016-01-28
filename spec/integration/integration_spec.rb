@@ -3,6 +3,7 @@ require 'spec_helper'
 require 'json'
 require 'pathname'
 require 'rack/test'
+require 'uri'
 
 include Txgh
 
@@ -62,7 +63,13 @@ describe 'integration tests', integration: true do
 
   it 'verifies the transifex hook endpoint works' do
     VCR.use_cassette('transifex_hook_endpoint') do
-      payload = '{"project": "test-project-88","resource": "samplepo","language": "el_GR","translated": 100}'
+      params = {
+        'project' => 'test-project-88', 'resource' => 'samplepo',
+        'language' => 'el_GR', 'translated' => 100
+      }
+
+      payload = URI.encode_www_form(params.to_a)
+
       sign_transifex_request(payload)
       post '/transifex', payload
       expect(last_response).to be_ok
