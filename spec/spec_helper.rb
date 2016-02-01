@@ -60,18 +60,20 @@ module StandardTxghSetup
     )
   end
 
-  let(:yaml_config) do
+  before(:each) do
+    allow(KeyManager).to receive(:base_config).and_return(base_config)
+  end
+
+  let(:base_config) do
     {
-      'txgh' => {
-        'github' => {
-          'repos' => {
-            repo_name => repo_config
-          }
-        },
-        'transifex' => {
-          'projects' => {
-            project_name => project_config
-          }
+      'github' => {
+        'repos' => {
+          repo_name => repo_config
+        }
+      },
+      'transifex' => {
+        'projects' => {
+          project_name => project_config
         }
       }
     }
@@ -95,16 +97,4 @@ end
 VCR.configure do |config|
   config.cassette_library_dir = 'spec/integration/cassettes'
   config.hook_into :webmock
-
-  txgh_config = Dir.chdir('./spec/integration') do
-    Txgh::KeyManager.config_from_project('test-project-88')
-  end
-
-  config.filter_sensitive_data('<GITHUB_TOKEN>') do
-    txgh_config.repo_config['api_token']
-  end
-
-  config.filter_sensitive_data('<TRANSIFEX_PASSWORD>') do
-    txgh_config.project_config['api_password']
-  end
 end
