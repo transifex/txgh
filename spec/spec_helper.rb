@@ -67,6 +67,10 @@ module StandardTxghSetup
     allow(Txgh::KeyManager).to receive(:base_config).and_return(base_config)
   end
 
+  before(:each) do
+    allow(KeyManager).to receive(:base_config).and_return(base_config)
+  end
+
   let(:base_config) do
     {
       'github' => {
