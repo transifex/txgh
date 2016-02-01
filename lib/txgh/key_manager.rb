@@ -30,24 +30,40 @@ module Txgh
 
       private
 
-      def yaml
-        path = if File.file?(File.join(Etc.getpwuid.dir, "txgh.yml"))
-          File.join(Etc.getpwuid.dir, "txgh.yml")
-        else
-          File.expand_path('./config/txgh.yml')
-        end
+      def base_config
+        {
+          github: {
+            repos: {
+              ENV['TX_PUSH_TRANSLATIONS_TO'] => {
+                api_username: ENV['GITHUB_USERNAME'],
+                api_token: ENV['GITHUB_TOKEN'],
+                push_source_to: ENV['GITHUB_PUSH_SOURCE_TO'],
+                branch: ENV['GITHUB_BRANCH']
+              }
+            }
+          },
 
-        YAML.load(ERB.new(File.read(path)).result)
+          transifex: {
+            projects: {
+              ENV['GITHUB_PUSH_SOURCE_TO'] => {
+                tx_config: ENV['TX_CONFIG_PATH'],
+                api_username: ENV['TX_USERNAME'],
+                api_password: ENV['TX_PASSWORD'],
+                push_translations_to: ENV['TX_PUSH_TRANSLATIONS_TO']
+              }
+            }
+          }
+        }
       end
 
       def project_config_for(project_name)
-        if config = yaml['txgh']['transifex']['projects'][project_name]
+        if config = base_config['transifex']['projects'][project_name]
           config.merge('name' => project_name)
         end
       end
 
       def repo_config_for(repo_name)
-        if config = yaml['txgh']['github']['repos'][repo_name]
+        if config = base_config['github']['repos'][repo_name]
           config.merge('name' => repo_name)
         end
       end

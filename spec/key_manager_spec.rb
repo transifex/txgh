@@ -5,10 +5,6 @@ include Txgh
 describe KeyManager do
   include StandardTxghSetup
 
-  before(:each) do
-    allow(KeyManager).to receive(:yaml) { yaml_config }
-  end
-
   describe '.config_from_project' do
     it 'creates a config object' do
       config = KeyManager.config_from_project(project_name, tx_config)
