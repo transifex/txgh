@@ -38,7 +38,7 @@ module Txgh
             end
 
             Txgh::TxConfig.load(
-              github_repo.api.download(payload, ref)
+              github_repo.api.download(github_repo.name, payload, ref)
             )
         end
       end

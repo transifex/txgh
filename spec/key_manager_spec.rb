@@ -67,7 +67,7 @@ describe KeyManager do
 
       expect(repo.api).to(
         receive(:download)
-          .with('./tx.config', 'my_branch')
+          .with(repo.name, './tx.config', 'my_branch')
           .and_return("[main]\nlang_map = ko:ko_KR")
       )
 

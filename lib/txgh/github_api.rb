@@ -52,13 +52,13 @@ module Txgh
       client.commit(repo, sha)
     end
 
-    def download(path, branch)
-      master = client.ref(git_repo, branch)
-      commit = client.commit(git_repo, master[:object][:sha])
-      tree = client.tree(git_repo, commit[:commit][:tree][:sha])
+    def download(repo, path, branch)
+      master = client.ref(repo, branch)
+      commit = client.commit(repo, master[:object][:sha])
+      tree = client.tree(repo, commit[:commit][:tree][:sha])
 
       if found = tree[:tree].find { |t| t[:path] == path }
-        blob(git_repo, found[:sha])
+        blob(repo, found[:sha])
       end
     end
 

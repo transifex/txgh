@@ -62,4 +62,20 @@ describe GithubApi do
       api.get_commit(repo, sha)
     end
   end
+
+  describe '#download' do
+    it 'downloads the file from the given branch' do
+      path = 'path/to/file.xyz'
+
+      expect(client).to receive(:ref).with(repo, branch).and_return(object: { sha: :branch_sha })
+      expect(client).to receive(:commit).with(repo, :branch_sha).and_return(commit: { tree: { sha: :base_tree_sha } })
+      expect(client).to receive(:tree).with(repo, :base_tree_sha).and_return(
+        tree: [{ path: path, sha: :blob_sha }]
+      )
+
+      expect(client).to receive(:blob).with(repo, :blob_sha).and_return(:blob)
+
+      expect(api.download(repo, path, branch)).to eq(:blob)
+    end
+  end
 end
