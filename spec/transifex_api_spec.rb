@@ -7,7 +7,7 @@ describe TransifexApi do
 
   let(:connection) { double(:connection) }
   let(:api) { TransifexApi.create_from_connection(connection) }
-  let(:resource) { transifex_project.resources.first }
+  let(:resource) { tx_config.resources.first }
   let(:response) { double(:response) }
 
   describe '#create_or_update' do

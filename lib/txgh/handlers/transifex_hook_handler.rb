@@ -30,7 +30,7 @@ module Txgh
               tx_resource.translation_path(tx_resource.lang_map(language))
             else
               logger.info('request language is in lang_map and is in request or is nil')
-              tx_resource.translation_path(project.lang_map(language))
+              tx_resource.translation_path(tx_resource.lang_map(language))
             end
 
             logger.info("make github commit for branch: #{branch}")
@@ -47,34 +47,40 @@ module Txgh
 
       private
 
-      def branch
-        branch_candidate = if process_all_branches?
-          tx_resource.branch
-        else
-          repo.branch || 'master'
-        end
+      def tx_config
+        @tx_config ||= Txgh::KeyManager.tx_config(project, repo, branch)
+      end
 
-        if branch_candidate.include?('tags/')
-          branch_candidate
-        elsif branch_candidate.include?('heads/')
-          branch_candidate
-        else
-          "heads/#{branch_candidate}"
+      def branch
+        @branch ||= begin
+          branch_candidate = if process_all_branches?
+            resource = project.api.get_resource(project.name, resource_slug)
+            categories = deserialize_categories(Array(resource['categories']))
+            categories['branch']
+          else
+            repo.branch || 'master'
+          end
+
+          if branch_candidate.include?('tags/')
+            branch_candidate
+          elsif branch_candidate.include?('heads/')
+            branch_candidate
+          else
+            "heads/#{branch_candidate}"
+          end
         end
       end
 
       def tx_resource
         @tx_resource ||= if process_all_branches?
-          resource = project.api.get_resource(project.name, resource_slug)
-          categories = deserialize_categories(Array(resource['categories']))
-          project.resource(resource_slug, categories['branch'])
+          tx_config.resource(resource_slug, branch)
         else
-          project.resource(resource_slug)
+          tx_config.resource(resource_slug)
         end
       end
 
       def process_all_branches?
-        repo.branch == 'all'
+        repo.process_all_branches?
       end
     end
   end

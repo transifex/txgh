@@ -14,5 +14,9 @@ module Txgh
     def branch
       config['branch']
     end
+
+    def process_all_branches?
+      branch == 'all'
+    end
   end
 end

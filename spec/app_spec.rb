@@ -45,7 +45,7 @@ describe Txgh::Hooks do
   end
 
   let(:config) do
-    Txgh::Config.new(project_config, repo_config, tx_config)
+    Txgh::Config.new(project_config, repo_config)
   end
 
   before(:each) do

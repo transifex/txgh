@@ -143,7 +143,7 @@ module Txgh
 
       # Build an index of known Tx resources, by source file
       def tx_resources_for(branch)
-        project.resources.each_with_object({}) do |resource, ret|
+        tx_config.resources.each_with_object({}) do |resource, ret|
           logger.info('processing resource')
 
           # If we're processing by branch, create a branch resource. Otherwise,
@@ -156,6 +156,10 @@ module Txgh
         end
       end
 
+      def tx_config
+        @tx_config = KeyManager.tx_config(project, repo, branch)
+      end
+
       def should_process_branch?
         process_all_branches? || (
           branch.include?(github_config_branch) || branch.include?('L10N')
@@ -164,7 +168,7 @@ module Txgh
 
       def github_config_branch
         @github_config_branch = begin
-          if repo.branch == 'all'
+          if process_all_branches?
             repo.branch
           else
             branch = repo.branch || 'master'
@@ -174,7 +178,7 @@ module Txgh
       end
 
       def process_all_branches?
-        github_config_branch == 'all'
+        repo.process_all_branches?
       end
 
       alias_method :upload_by_branch?, :process_all_branches?

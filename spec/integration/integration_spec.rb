@@ -34,7 +34,7 @@ describe 'integration tests', integration: true do
       'transifex' => {
         'projects' => {
           'test-project-88' => {
-            'tx_config' => './config/tx.config',
+            'tx_config' => 'file://./config/tx.config',
             'api_username' => 'txgh.bot',
             'api_password' => '2aqFGW99fPRKWvXBPjbrxkdiR',
             'push_translations_to' => 'txgh-bot/txgh-test-resources'

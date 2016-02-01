@@ -16,10 +16,6 @@ describe TxBranchResource do
     TxConfig.new(resources, {})
   end
 
-  let(:project) do
-    TransifexProject.new(config, tx_config, api)
-  end
-
   let(:base_resource) do
     TxResource.new(
       project_slug, resource_slug, 'type', 'source_lang', 'source_file',
@@ -29,17 +25,17 @@ describe TxBranchResource do
 
   describe '.find' do
     it 'finds the correct resource' do
-      resource = TxBranchResource.find(project, resource_slug_with_branch, branch)
+      resource = TxBranchResource.find(tx_config, resource_slug_with_branch, branch)
       expect(resource).to be_a(TxBranchResource)
       expect(resource.resource).to eq(base_resource)
       expect(resource.branch).to eq(branch)
     end
 
     it 'returns nil if no resource matches' do
-      resource = TxBranchResource.find(project, 'foobar', branch)
+      resource = TxBranchResource.find(tx_config, 'foobar', branch)
       expect(resource).to be_nil
 
-      resource = TxBranchResource.find(project, resource_slug_with_branch, 'foobar')
+      resource = TxBranchResource.find(tx_config, resource_slug_with_branch, 'foobar')
       expect(resource).to be_nil
     end
   end
