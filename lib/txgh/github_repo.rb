@@ -22,5 +22,9 @@ module Txgh
     def webhook_protected?
       !(webhook_secret || '').empty?
     end
+
+    def process_all_branches?
+      branch == 'all'
+    end
   end
 end

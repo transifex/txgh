@@ -3,6 +3,8 @@ require 'spec_helper'
 include Txgh
 
 describe TxConfig do
+  include StandardTxghSetup
+
   describe '.load' do
     it 'parses the config correctly' do
       config_str = """
@@ -28,6 +30,19 @@ describe TxConfig do
       expect(resource.source_lang).to eq('en')
       expect(resource.translation_file).to eq('translations/<lang>/sample.po')
       expect(resource.type).to eq('PO')
+    end
+  end
+
+  describe '#resource' do
+    it 'finds the resource by slug' do
+      resource = tx_config.resource(resource_slug)
+      expect(resource).to be_a(TxResource)
+      expect(resource.resource_slug).to eq(resource_slug)
+    end
+
+    it 'returns nil if there is no resource with the given slug' do
+      resource = tx_config.resource('foobarbaz')
+      expect(resource).to be_nil
     end
   end
 end

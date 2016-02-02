@@ -57,5 +57,15 @@ module Txgh
       @resources = resources
       @lang_map = lang_map
     end
+
+    def resource(slug, branch = nil)
+      if branch
+        TxBranchResource.find(self, slug, branch)
+      else
+        resources.find do |resource|
+          resource.resource_slug == slug
+        end
+      end
+    end
   end
 end

@@ -30,7 +30,8 @@ module StandardTxghSetup
       'api_username' => 'transifex_api_username',
       'api_password' => 'transifex_api_password',
       'push_translations_to' => repo_name,
-      'name' => project_name
+      'name' => project_name,
+      'tx_config' => "raw://#{tx_config_raw}"
     }
   end
 
@@ -44,41 +45,49 @@ module StandardTxghSetup
     }
   end
 
-  let(:tx_config) do
-    Txgh::TxConfig.load(
-      """
-      [main]
-      host = https://www.transifex.com
-      lang_map = pt-BR:pt, ko-KR:ko
+  let(:tx_config_raw) do
+    """
+    [main]
+    host = https://www.transifex.com
+    lang_map = pt-BR:pt, ko-KR:ko
 
-      [#{project_name}.#{resource_slug}]
-      file_filter = translations/<lang>/sample.po
-      source_file = sample.po
-      source_lang = en
-      type = PO
-      """
-    )
+    [#{project_name}.#{resource_slug}]
+    file_filter = translations/<lang>/sample.po
+    source_file = sample.po
+    source_lang = en
+    type = PO
+    """
   end
 
-  let(:yaml_config) do
+  let(:tx_config) do
+    Txgh::TxConfig.load(tx_config_raw)
+  end
+
+  before(:each) do
+    allow(Txgh::KeyManager).to receive(:base_config).and_return(base_config)
+  end
+
+  before(:each) do
+    allow(KeyManager).to receive(:base_config).and_return(base_config)
+  end
+
+  let(:base_config) do
     {
-      'txgh' => {
-        'github' => {
-          'repos' => {
-            repo_name => repo_config
-          }
-        },
-        'transifex' => {
-          'projects' => {
-            project_name => project_config
-          }
+      'github' => {
+        'repos' => {
+          repo_name => repo_config
+        }
+      },
+      'transifex' => {
+        'projects' => {
+          project_name => project_config
         }
       }
     }
   end
 
   let(:transifex_project) do
-    TransifexProject.new(project_config, tx_config, transifex_api)
+    TransifexProject.new(project_config, transifex_api)
   end
 
   let(:github_repo) do
@@ -95,16 +104,4 @@ end
 VCR.configure do |config|
   config.cassette_library_dir = 'spec/integration/cassettes'
   config.hook_into :webmock
-
-  txgh_config = Dir.chdir('./spec/integration') do
-    Txgh::KeyManager.config_from_project('test-project-88')
-  end
-
-  config.filter_sensitive_data('<GITHUB_TOKEN>') do
-    txgh_config.repo_config['api_token']
-  end
-
-  config.filter_sensitive_data('<TRANSIFEX_PASSWORD>') do
-    txgh_config.project_config['api_password']
-  end
 end

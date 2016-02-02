@@ -6,7 +6,7 @@ describe Config do
   include StandardTxghSetup
 
   let(:config) do
-    Txgh::Config.new(project_config, repo_config, tx_config)
+    Txgh::Config.new(project_config, repo_config)
   end
 
   describe '#github_repo' do
@@ -23,7 +23,7 @@ describe Config do
       project = config.transifex_project
       expect(project).to be_a(TransifexProject)
       expect(project.name).to eq(project_name)
-      expect(project.resources.first.resource_slug).to eq(resource_slug)
+      expect(tx_config.resources.first.resource_slug).to eq(resource_slug)
     end
   end
 

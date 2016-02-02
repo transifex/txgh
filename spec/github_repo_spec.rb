@@ -20,4 +20,18 @@ describe GithubRepo do
       expect(repo.branch).to eq(branch)
     end
   end
+
+  describe '#process_all_branches?' do
+    it 'returns false if only one branch should be processed' do
+      expect(repo.process_all_branches?).to eq(false)
+    end
+
+    context 'with all branches indicated' do
+      let(:branch) { 'all' }
+
+      it 'returns true if all branches should be processed' do
+        expect(repo.process_all_branches?).to eq(true)
+      end
+    end
+  end
 end

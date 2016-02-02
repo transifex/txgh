@@ -23,7 +23,7 @@ describe GithubHookHandler do
 
   let(:modified_files) do
     file_sha = 'def456'
-    transifex_project.resources.map do |resource|
+    tx_config.resources.map do |resource|
       { 'path' => resource.source_file, 'sha' => file_sha.next! }
     end
   end

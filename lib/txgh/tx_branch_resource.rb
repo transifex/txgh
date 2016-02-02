@@ -12,13 +12,13 @@ module Txgh
     attr_reader :resource, :branch
 
     class << self
-      def find(project, resource_slug, branch)
+      def find(tx_config, resource_slug, branch)
         suffix = "-#{Utils.slugify(branch)}"
 
         if resource_slug.end_with?(suffix)
           resource_slug = resource_slug.chomp(suffix)
 
-          if resource = project.resource(resource_slug)
+          if resource = tx_config.resource(resource_slug)
             new(resource, branch)
           end
         end
