@@ -73,7 +73,9 @@ describe GithubApi do
         tree: [{ path: path, sha: :blob_sha }]
       )
 
-      expect(client).to receive(:blob).with(repo, :blob_sha).and_return(:blob)
+      expect(client).to receive(:blob).with(repo, :blob_sha).and_return(
+        { 'content' => :blob, 'encoding' => 'utf-8' }
+      )
 
       expect(api.download(repo, path, branch)).to eq(:blob)
     end
