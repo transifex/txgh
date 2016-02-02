@@ -24,7 +24,7 @@ module Txgh
           logger.info('found branch in github request')
 
           tx_resources = tx_resources_for(branch)
-          modified_resources = modified_resources_for(tx_resources)
+          modified_resources = added_and_modified_resources_for(tx_resources)
           modified_resources.merge!(l10n_resources_for(tx_resources))
 
           if github_config_branch.include?('tags/')
@@ -127,15 +127,15 @@ module Txgh
 
       # Finds the updated resources and maps the most recent commit in which
       # each was modified
-      def modified_resources_for(tx_resources)
+      def added_and_modified_resources_for(tx_resources)
         payload['commits'].each_with_object({}) do |commit, ret|
           logger.info('processing commit')
 
-          commit['modified'].each do |modified|
-            logger.info("processing modified file: #{modified}")
+          (commit['modified'] + commit['added']).each do |file|
+            logger.info("processing added/modified file: #{file}")
 
-            if tx_resources.include?(modified)
-              ret[tx_resources[modified]] = commit['id']
+            if tx_resources.include?(file)
+              ret[tx_resources[file]] = commit['id']
             end
           end
         end

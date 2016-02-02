@@ -58,24 +58,24 @@ module Txgh
 
       def base_config
         {
-          github: {
-            repos: {
+          'github' => {
+            'repos' => {
               ENV['TX_PUSH_TRANSLATIONS_TO'] => {
-                api_username: ENV['GITHUB_USERNAME'],
-                api_token: ENV['GITHUB_TOKEN'],
-                push_source_to: ENV['GITHUB_PUSH_SOURCE_TO'],
-                branch: ENV['GITHUB_BRANCH']
+                'api_username' => ENV['GITHUB_USERNAME'],
+                'api_token' => ENV['GITHUB_TOKEN'],
+                'push_source_to' => ENV['GITHUB_PUSH_SOURCE_TO'],
+                'branch' => ENV['GITHUB_BRANCH']
               }
             }
           },
 
-          transifex: {
-            projects: {
+          'transifex' => {
+            'projects' => {
               ENV['GITHUB_PUSH_SOURCE_TO'] => {
-                tx_config: ENV['TX_CONFIG_PATH'],
-                api_username: ENV['TX_USERNAME'],
-                api_password: ENV['TX_PASSWORD'],
-                push_translations_to: ENV['TX_PUSH_TRANSLATIONS_TO']
+                'tx_config' => ENV['TX_CONFIG_PATH'],
+                'api_username' => ENV['TX_USERNAME'],
+                'api_password' => ENV['TX_PASSWORD'],
+                'push_translations_to' => ENV['TX_PUSH_TRANSLATIONS_TO']
               }
             }
           }
