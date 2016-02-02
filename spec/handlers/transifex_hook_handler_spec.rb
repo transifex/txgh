@@ -17,10 +17,6 @@ describe TransifexHookHandler do
     )
   end
 
-  let(:logger) do
-    NilLogger.new
-  end
-
   before(:each) do
     expect(transifex_api).to(receive(:download)) do |resource, language|
       expect(resource.project_slug).to eq(project_name)

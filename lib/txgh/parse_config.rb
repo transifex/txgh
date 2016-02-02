@@ -2,6 +2,8 @@ require 'parseconfig'
 require 'tempfile'
 
 module Txgh
+  # This class wraps the ParseConfig class from the parseconfig gem and
+  # provides a way to load config from a string instead of just a file.
   class ParseConfig < ::ParseConfig
     class << self
       def load(contents)
@@ -14,6 +16,7 @@ module Txgh
       end
 
       def load_file(path)
+        # use the default file loading logic
         new(path)
       end
     end

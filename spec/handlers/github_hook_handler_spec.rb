@@ -17,12 +17,6 @@ describe GithubHookHandler do
     )
   end
 
-  let(:logger) do
-    NilLogger.new
-  end
-
-  let(:ref) { 'heads/master' }
-
   let(:payload) do
     GithubPayloadBuilder.webhook_payload(repo_name, ref)
   end
@@ -64,7 +58,7 @@ describe GithubHookHandler do
       )
 
       expect(transifex_api).to(
-        receive(:update) do |resource, content|
+        receive(:create_or_update) do |resource, content|
           expect(resource.source_file).to eq(file['path'])
           expect(content).to eq(translations)
         end

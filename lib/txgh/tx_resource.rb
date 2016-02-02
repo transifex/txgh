@@ -26,7 +26,7 @@ module Txgh
     end
 
     def L10N_resource_slug
-      "L10N" + resource_slug
+      "L10N#{resource_slug}"
     end
 
     def lang_map(tx_lang)

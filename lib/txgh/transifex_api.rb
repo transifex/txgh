@@ -1,79 +1,126 @@
 require 'faraday'
 require 'faraday_middleware'
 require 'json'
+require 'set'
 
 module Txgh
+  class TransifexApiError < StandardError; end
+
   class TransifexApi
     API_ROOT = '/api/2'
+
+    class << self
+      def create_from_credentials(username, password)
+        connection = Faraday.new(url: 'https://www.transifex.com') do |faraday|
+          faraday.request(:multipart)
+          faraday.request(:json)
+          faraday.request(:url_encoded)
+
+          faraday.response(:logger)
+          faraday.use(FaradayMiddleware::FollowRedirects)
+          faraday.adapter(Faraday.default_adapter)
+        end
+
+        connection.basic_auth(username, password)
+        connection.headers.update(Accept: 'application/json')
+        create_from_connection(connection)
+      end
+
+      def create_from_connection(connection)
+        new(connection)
+      end
+    end
+
+    attr_reader :connection
 
     def initialize(connection)
       @connection = connection
     end
 
-    def self.instance(username, password)
-      connection = Faraday.new(url: 'https://www.transifex.com') do |faraday|
-        faraday.request :multipart
-        faraday.request :url_encoded
-        faraday.response :logger
-        faraday.use FaradayMiddleware::FollowRedirects
-        faraday.adapter Faraday.default_adapter
+    def create_or_update(tx_resource, content, categories = [])
+      if resource_exists?(tx_resource)
+        resource = get_resource(tx_resource)
+        new_categories = Set.new(resource['categories'])
+        new_categories.merge(categories)
+
+        # update details first so new content is always tagged
+        update_details(tx_resource, categories: new_categories.to_a)
+        update_content(tx_resource, content)
+      else
+        create(tx_resource, content, categories)
       end
-      connection.basic_auth(username, password)
-      connection.headers.update Accept: 'application/json'
-      new(connection)
     end
 
-    def update(tx_resource, content)
-      content_io = StringIO::new(content)
-      content_io.set_encoding(Encoding::UTF_8.name)
-      content_part = Faraday::UploadIO.new(
-        content_io, 'application/octet-stream', tx_resource.source_file
-      )
+    def create(tx_resource, content, categories = [])
+      payload = {
+        slug: tx_resource.resource_slug,
+        name: tx_resource.source_file,
+        i18n_type: tx_resource.type,
+        categories: categories.uniq,
+        content: get_content_io(tx_resource, content)
+      }
 
-      slug = tx_resource.resource_slug
-      payload = { content: content_part }
-      project = tx_resource.project_slug
+      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resources/"
+      response = connection.post(url, payload)
+      raise_error!(response)
+    end
 
-      if resource_exists?(tx_resource)
-        url = "#{API_ROOT}/project/#{project}/resource/#{slug}/content/"
-        method = @connection.method(:put)
-      else
-        url = "#{API_ROOT}/project/#{project}/resources/"
-        method = @connection.method(:post)
-        payload[:slug] = slug
-        payload[:name] = tx_resource.source_file
-        payload[:i18n_type] = tx_resource.type
-      end
+    def update_content(tx_resource, content)
+      content_io = get_content_io(tx_resource, content)
+      payload = { content: content_io }
+      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/content/"
+      response = connection.put(url, payload)
+      raise_error!(response)
+    end
 
-      response = method.call(url, payload)
-
-      if (response.status / 100) != 2
-        raise "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
-      end
-
-      JSON.parse(response.body)
+    def update_details(tx_resource, details = {})
+      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
+      response = connection.put(url, details)
+      raise_error!(response)
     end
 
     def resource_exists?(tx_resource)
       project = tx_resource.project_slug
       slug = tx_resource.resource_slug
-      response = @connection.get("#{API_ROOT}/project/#{project}/resource/#{slug}/")
+      response = connection.get("#{API_ROOT}/project/#{project}/resource/#{slug}/")
       response.status == 200
     end
 
     def download(tx_resource, lang)
       project_slug = tx_resource.project_slug
       resource_slug = tx_resource.resource_slug
-      response = @connection.get(
+      response = connection.get(
         "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/translation/#{lang}/"
       )
 
-      if (response.status / 100) != 2
-        raise "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
-      end
+      raise_error!(response)
 
       json_data = JSON.parse(response.body)
       json_data['content']
+    end
+
+    def get_resource(tx_resource)
+      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
+      response = connection.get(url)
+      raise_error!(response)
+      JSON.parse(response.body)
+    end
+
+    private
+
+    def get_content_io(tx_resource, content)
+      content_io = StringIO::new(content)
+      content_io.set_encoding(Encoding::UTF_8.name)
+      Faraday::UploadIO.new(
+        content_io, 'application/octet-stream', tx_resource.source_file
+      )
+    end
+
+    def raise_error!(response)
+      if (response.status / 100) != 2
+        raise TransifexApiError,
+          "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
+      end
     end
   end
 end

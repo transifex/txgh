@@ -4,10 +4,16 @@ require 'pry-nav'
 require 'rake'
 require 'rspec'
 require 'txgh'
+require 'vcr'
+require 'webmock'
+require 'yaml'
+
+require 'helpers/nil_logger'
 
 module StandardTxghSetup
   extend RSpec::SharedContext
 
+  let(:logger) { NilLogger.new }
   let(:github_api) { double(:github_api) }
   let(:transifex_api) { double(:transifex_api) }
 
@@ -15,6 +21,7 @@ module StandardTxghSetup
   let(:resource_slug) { 'my_resource' }
   let(:repo_name) { 'my_org/my_repo' }
   let(:branch) { 'master' }
+  let(:ref) { 'heads/master' }
   let(:language) { 'ko_KR' }
   let(:translations) { 'translation file contents' }
 
@@ -38,11 +45,11 @@ module StandardTxghSetup
   end
 
   let(:tx_config) do
-    TxConfig.load(
+    Txgh::TxConfig.load(
       """
       [main]
       host = https://www.transifex.com
-      lang_map =
+      lang_map = pt-BR:pt, ko-KR:ko
 
       [#{project_name}.#{resource_slug}]
       file_filter = translations/<lang>/sample.po
@@ -53,14 +60,51 @@ module StandardTxghSetup
     )
   end
 
+  let(:yaml_config) do
+    {
+      'txgh' => {
+        'github' => {
+          'repos' => {
+            repo_name => repo_config
+          }
+        },
+        'transifex' => {
+          'projects' => {
+            project_name => project_config
+          }
+        }
+      }
+    }
+  end
+
   let(:transifex_project) do
     TransifexProject.new(project_config, tx_config, transifex_api)
   end
 
   let(:github_repo) do
-    GitHubRepo.new(repo_config, github_api)
+    GithubRepo.new(repo_config, github_api)
   end
 end
 
 RSpec.configure do |config|
+  config.filter_run(focus: true)
+  config.run_all_when_everything_filtered = true
+  config.filter_run_excluding(integration: true) unless ENV['FULL_SPEC']
+end
+
+VCR.configure do |config|
+  config.cassette_library_dir = 'spec/integration/cassettes'
+  config.hook_into :webmock
+
+  txgh_config = Dir.chdir('./spec/integration') do
+    Txgh::KeyManager.config_from_project('test-project-88')
+  end
+
+  config.filter_sensitive_data('<GITHUB_TOKEN>') do
+    txgh_config.repo_config['api_token']
+  end
+
+  config.filter_sensitive_data('<TRANSIFEX_PASSWORD>') do
+    txgh_config.project_config['api_password']
+  end
 end
