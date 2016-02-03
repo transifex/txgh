@@ -36,5 +36,9 @@ module Txgh
     def translation_path(language)
       translation_file.gsub('<lang>', language)
     end
+
+    def slugs
+      [project_slug, resource_slug]
+    end
   end
 end

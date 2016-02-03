@@ -28,7 +28,11 @@ describe GithubHookHandler do
     end
   end
 
-  it 'correctly uploads modified files to transifex' do
+  def translations_for(path)
+    "translations for #{path}"
+  end
+
+  before(:each) do
     tree_sha = 'abc123'
 
     # indicate that all the files we care about have changed
@@ -36,26 +40,32 @@ describe GithubHookHandler do
       modified: modified_files.map { |f| f['path'] }
     )
 
-    expect(github_api).to(
+    allow(github_api).to(
       receive(:get_commit).with(repo_name, payload.commits.first[:id]) do
         { 'commit' => { 'tree' => { 'sha' => tree_sha } } }
       end
     )
 
-    expect(github_api).to(
+    allow(github_api).to(
       receive(:tree).with(repo_name, tree_sha) do
         { 'tree' => modified_files }
       end
     )
 
     modified_files.each do |file|
-      translations = "translations for #{file['path']}"
+      translations = translations_for(file['path'])
 
-      expect(github_api).to(
+      allow(github_api).to(
         receive(:blob).with(repo_name, file['sha']) do
           { 'content' => translations, 'encoding' => 'utf-8' }
         end
       )
+    end
+  end
+
+  it 'correctly uploads modified files to transifex' do
+    modified_files.each do |file|
+      translations = translations_for(file['path'])
 
       expect(transifex_api).to(
         receive(:create_or_update) do |resource, content|
@@ -68,14 +78,46 @@ describe GithubHookHandler do
     handler.execute
   end
 
+  context 'when asked to process all branches' do
+    let(:branch) { 'all' }
+
+    it 'uploads by branch name if asked' do
+      allow(transifex_api).to receive(:resource_exists?).and_return(false)
+
+      modified_files.each do |file|
+        translations = translations_for(file['path'])
+
+        expect(transifex_api).to(
+          receive(:create) do |resource, content, categories|
+            expect(resource.source_file).to eq(file['path'])
+            expect(content).to eq(translations)
+            expect(categories).to include("branch:#{ref}")
+            expect(categories).to include("author:Test_User")
+          end
+        )
+      end
+
+      handler.execute
+    end
+  end
+
   context 'with an L10N branch' do
     let(:ref) { 'tags/L10N_my_branch' }
 
     it 'creates an L10N tag' do
-      payload.add_commit
+      modified_files.each do |file|
+        allow(github_api).to(
+          receive(:blob).and_return('content' => '')
+        )
 
+        allow(transifex_api).to receive(:create_or_update)
+      end
+
+      # this is what we actually care about in this test
       expect(github_api).to(
-        receive(:create_ref).with(repo_name, 'heads/L10N', payload.head_commit[:id])
+        receive(:create_ref).with(
+          repo_name, 'heads/L10N', payload.head_commit[:id]
+        )
       )
 
       handler.execute
