@@ -11,7 +11,7 @@ module Txgh
     def name
       config['name']
     end
-
+    
     def webhook_secret
       config['webhook_secret']
     end
@@ -20,9 +20,13 @@ module Txgh
       !(webhook_secret || '').empty?
     end
 
-    def resource(slug)
-      tx_config.resources.find do |resource|
-        resource.resource_slug == slug
+    def resource(slug, branch = nil)
+      if branch
+        TxBranchResource.find(self, slug, branch)
+      else
+        tx_config.resources.find do |resource|
+          resource.resource_slug == slug
+        end
       end
     end
 

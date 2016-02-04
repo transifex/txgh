@@ -59,12 +59,13 @@ module Txgh
         handler = transifex_handler_for(
           project: config.transifex_project,
           repo: config.github_repo,
-          resource: payload['resource'],
+          resource_slug: request['resource'],
           language: payload['language'],
           logger: settings.logger
         )
 
         handler.execute
+        status 200
       else
         status 401
       end
@@ -93,6 +94,7 @@ module Txgh
         )
 
         handler.execute
+        status 200
       else
         status 401
       end

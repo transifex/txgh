@@ -77,17 +77,17 @@ describe TransifexApi do
         )
 
         expect(payload[:content].io.string).to eq('new_content')
-        expect(payload[:categories]).to eq(['abc'])
+        expect(payload[:categories]).to eq('abc def')
         response
       end
 
       expect(response).to receive(:status).and_return(200)
-      api.create(resource, 'new_content', ['abc'])
+      api.create(resource, 'new_content', ['abc', 'def'])
     end
 
     it 'submits de-duped categories' do
       expect(connection).to receive(:post) do |url, payload|
-        expect(payload[:categories]).to eq(['abc'])
+        expect(payload[:categories]).to eq('abc')
         response
       end
 
@@ -221,14 +221,14 @@ describe TransifexApi do
 
       expect(response).to receive(:status).and_return(200)
       expect(response).to receive(:body).and_return('{"foo":"bar"}')
-      expect(api.get_resource(resource)).to eq({ 'foo' => 'bar' })
+      expect(api.get_resource(*resource.slugs)).to eq({ 'foo' => 'bar' })
     end
 
     it 'raises an exception if the api responds with an error code' do
       allow(connection).to receive(:get).and_return(response)
       allow(response).to receive(:status).and_return(404)
       allow(response).to receive(:body).and_return('{}')
-      expect { api.get_resource(resource) }.to raise_error(TransifexApiError)
+      expect { api.get_resource(*resource.slugs) }.to raise_error(TransifexApiError)
     end
   end
 end

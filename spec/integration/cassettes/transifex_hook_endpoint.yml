@@ -28,9 +28,9 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 25 Jan 2016 19:52:12 GMT
+      - Tue, 26 Jan 2016 16:58:37 GMT
       Expires:
-      - Mon, 25 Jan 2016 19:52:12 GMT
+      - Tue, 26 Jan 2016 16:58:37 GMT
       Transfer-Encoding:
       - chunked
       Content-Language:
@@ -40,9 +40,9 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - X-Mapping-fjhppofk=D7F0B90A7FEFB2573FEF4C177EEBE6A8; path=/
+      - X-Mapping-fjhppofk=EC88B8A0F350FE88E4BF67A3F4B1C219; path=/
       Last-Modified:
-      - Mon, 25 Jan 2016 19:52:12 GMT
+      - Tue, 26 Jan 2016 16:58:37 GMT
       X-Frame-Options:
       - SAMEORIGIN
     body:
@@ -63,7 +63,7 @@ http_interactions:
         \\\"Eight\\\"\\nmsgstr \\\"\\\"\\n\\nmsgid \\\"Nine\\\"\\nmsgstr \\\"\\\"\\n\\nmsgid
         \\\"Ten\\\"\\nmsgstr \\\"\\\"\\n\", \n    \"mimetype\": \"text/x-po\"\n}"
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:12 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:39 GMT
 - request:
     method: post
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs
@@ -101,7 +101,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Mon, 25 Jan 2016 19:52:12 GMT
+      - Tue, 26 Jan 2016 16:58:39 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -111,9 +111,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4999'
+      - '4993'
       X-Ratelimit-Reset:
-      - '1453755132'
+      - '1453830860'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Etag:
@@ -147,14 +147,14 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 173530fed4bbeb1e264b2ed22e8b5c20
+      - 01d096e6cfe28f8aea352e988c332cd3
       X-Github-Request-Id:
-      - 04358C36:175B0:5A724C7:56A67CEC
+      - A6F186B5:2075:9DF583B:56A7A5BE
     body:
       encoding: UTF-8
       string: '{"sha":"540a3d944ac19f573e756de687c8c4f3f9847b53","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/540a3d944ac19f573e756de687c8c4f3f9847b53"}'
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:14 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:40 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master
@@ -180,7 +180,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Mon, 25 Jan 2016 19:52:14 GMT
+      - Tue, 26 Jan 2016 16:58:39 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -190,15 +190,15 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4998'
+      - '4992'
       X-Ratelimit-Reset:
-      - '1453755132'
+      - '1453830860'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
       - Mon, 11 Jan 2016 23:45:43 GMT
       Etag:
-      - W/"2b6917f18180a72bbe11323d56090489"
+      - W/"829c010dd79e2ffb3e86de693245e41f"
       X-Poll-Interval:
       - '300'
       X-Oauth-Scopes:
@@ -228,17 +228,17 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - d594a23ec74671eba905bf91ef329026
+      - 173530fed4bbeb1e264b2ed22e8b5c20
       X-Github-Request-Id:
-      - 04358C36:175AB:FE5639:56A67CEE
+      - A6F186B5:2073:6B5EDAB:56A7A5BF
     body:
       encoding: UTF-8
-      string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"6ea48545155f561b142e730f7284961b312090fc","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/6ea48545155f561b142e730f7284961b312090fc"}}'
+      string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"51886fe773848ff49f5313c8afe4e026f044ae66","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/51886fe773848ff49f5313c8afe4e026f044ae66"}}'
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:14 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:40 GMT
 - request:
     method: get
-    uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/6ea48545155f561b142e730f7284961b312090fc
+    uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/51886fe773848ff49f5313c8afe4e026f044ae66
     body:
       encoding: US-ASCII
       string: ''
@@ -261,7 +261,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Mon, 25 Jan 2016 19:52:14 GMT
+      - Tue, 26 Jan 2016 16:58:40 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -271,15 +271,15 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4997'
+      - '4991'
       X-Ratelimit-Reset:
-      - '1453755132'
+      - '1453830860'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
-      - Sat, 23 Jan 2016 01:12:19 GMT
+      - Mon, 25 Jan 2016 22:14:05 GMT
       Etag:
-      - W/"ab77d4b0a5e9d218c6cb2b4cde3b771b"
+      - W/"4b78669c490ba191aff076a1e68dad2d"
       X-Oauth-Scopes:
       - public_repo
       X-Accepted-Oauth-Scopes:
@@ -307,15 +307,15 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 139317cebd6caf9cd03889139437f00b
+      - a6882e5cd2513376cb9481dbcd83f3a2
       X-Github-Request-Id:
-      - 04358C36:175B1:7346E44:56A67CEE
+      - A6F186B5:2075:9DF5A2A:56A7A5BF
     body:
       encoding: UTF-8
-      string: '{"sha":"6ea48545155f561b142e730f7284961b312090fc","commit":{"author":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-23T01:12:19Z"},"committer":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-23T01:12:19Z"},"message":"Updating
-        translations for translations/el_GR/sample.po","tree":{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460"},"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/6ea48545155f561b142e730f7284961b312090fc","comment_count":0},"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/6ea48545155f561b142e730f7284961b312090fc","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/6ea48545155f561b142e730f7284961b312090fc","comments_url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/6ea48545155f561b142e730f7284961b312090fc/comments","author":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false},"committer":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false},"parents":[{"sha":"0ed84551e879a3fe3181bb758b08f792ebec4769","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/0ed84551e879a3fe3181bb758b08f792ebec4769","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/0ed84551e879a3fe3181bb758b08f792ebec4769"}],"stats":{"total":0,"additions":0,"deletions":0},"files":[]}'
+      string: '{"sha":"51886fe773848ff49f5313c8afe4e026f044ae66","commit":{"author":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-25T22:14:05Z"},"committer":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-25T22:14:05Z"},"message":"Updating
+        translations for translations/el_GR/sample.po","tree":{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460"},"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/51886fe773848ff49f5313c8afe4e026f044ae66","comment_count":0},"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/51886fe773848ff49f5313c8afe4e026f044ae66","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/51886fe773848ff49f5313c8afe4e026f044ae66","comments_url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/51886fe773848ff49f5313c8afe4e026f044ae66/comments","author":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false},"committer":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false},"parents":[{"sha":"5a92eb64ba0f092fccb9942ea8763bdba385694f","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/5a92eb64ba0f092fccb9942ea8763bdba385694f","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/5a92eb64ba0f092fccb9942ea8763bdba385694f"}],"stats":{"total":0,"additions":0,"deletions":0},"files":[]}'
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:15 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:41 GMT
 - request:
     method: post
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees
@@ -341,7 +341,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Mon, 25 Jan 2016 19:52:15 GMT
+      - Tue, 26 Jan 2016 16:58:40 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -351,9 +351,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4996'
+      - '4990'
       X-Ratelimit-Reset:
-      - '1453755132'
+      - '1453830860'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Etag:
@@ -387,20 +387,20 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - c6c65e5196703428e7641f7d1e9bc353
+      - 01d096e6cfe28f8aea352e988c332cd3
       X-Github-Request-Id:
-      - 04358C36:175B3:580AABD:56A67CEE
+      - A6F186B5:2074:8893062:56A7A5C0
     body:
       encoding: UTF-8
       string: '{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460","tree":[{"path":"README.md","mode":"100644","type":"blob","sha":"cee445fa5bceaeb83c8d443b28f1647c2feff565","size":53,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/cee445fa5bceaeb83c8d443b28f1647c2feff565"},{"path":"sample.po","mode":"100644","type":"blob","sha":"a93e31a00137e0bd23db5bc7720568f8e908b2b6","size":855,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/a93e31a00137e0bd23db5bc7720568f8e908b2b6"},{"path":"translations","mode":"040000","type":"tree","sha":"64881902c6515e26c22e022abc0bedeaa15eafdc","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/64881902c6515e26c22e022abc0bedeaa15eafdc"}],"truncated":false}'
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:15 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:41 GMT
 - request:
     method: post
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits
     body:
       encoding: UTF-8
-      string: '{"message":"Updating translations for translations/el_GR/sample.po","tree":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","parents":["6ea48545155f561b142e730f7284961b312090fc"]}'
+      string: '{"message":"Updating translations for translations/el_GR/sample.po","tree":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","parents":["51886fe773848ff49f5313c8afe4e026f044ae66"]}'
     headers:
       Accept:
       - application/vnd.github.v3+json
@@ -420,7 +420,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Mon, 25 Jan 2016 19:52:15 GMT
+      - Tue, 26 Jan 2016 16:58:41 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -430,19 +430,19 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4995'
+      - '4989'
       X-Ratelimit-Reset:
-      - '1453755132'
+      - '1453830860'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Etag:
-      - '"23db945e0f6a850200970c3b09c4376d"'
+      - '"fd8f1f505d5262148b82200a46d27bd5"'
       X-Oauth-Scopes:
       - public_repo
       X-Accepted-Oauth-Scopes:
       - ''
       Location:
-      - https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/dd6f7c2301400a36475306556d7da1e56b7477e1
+      - https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/f0356f2c6216af45b74a517835a6b8d11c246a33
       Vary:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding
@@ -466,21 +466,21 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 593010132f82159af0ded24b4932e109
+      - 4c8b2d4732c413f4b9aefe394bd65569
       X-Github-Request-Id:
-      - 04358C36:175AE:2DEA956:56A67CEF
+      - A6F186B5:2074:889311A:56A7A5C1
     body:
       encoding: UTF-8
-      string: '{"sha":"dd6f7c2301400a36475306556d7da1e56b7477e1","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/dd6f7c2301400a36475306556d7da1e56b7477e1","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/dd6f7c2301400a36475306556d7da1e56b7477e1","author":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-25T19:52:15Z"},"committer":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-25T19:52:15Z"},"tree":{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460"},"message":"Updating
-        translations for translations/el_GR/sample.po","parents":[{"sha":"6ea48545155f561b142e730f7284961b312090fc","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/6ea48545155f561b142e730f7284961b312090fc","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/6ea48545155f561b142e730f7284961b312090fc"}]}'
+      string: '{"sha":"f0356f2c6216af45b74a517835a6b8d11c246a33","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/f0356f2c6216af45b74a517835a6b8d11c246a33","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/f0356f2c6216af45b74a517835a6b8d11c246a33","author":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-26T16:58:41Z"},"committer":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-01-26T16:58:41Z"},"tree":{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460"},"message":"Updating
+        translations for translations/el_GR/sample.po","parents":[{"sha":"51886fe773848ff49f5313c8afe4e026f044ae66","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/51886fe773848ff49f5313c8afe4e026f044ae66","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/51886fe773848ff49f5313c8afe4e026f044ae66"}]}'
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:15 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:42 GMT
 - request:
     method: patch
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master
     body:
       encoding: UTF-8
-      string: '{"sha":"dd6f7c2301400a36475306556d7da1e56b7477e1","force":true}'
+      string: '{"sha":"f0356f2c6216af45b74a517835a6b8d11c246a33","force":true}'
     headers:
       Accept:
       - application/vnd.github.v3+json
@@ -500,7 +500,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Mon, 25 Jan 2016 19:52:15 GMT
+      - Tue, 26 Jan 2016 16:58:42 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -510,13 +510,13 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4994'
+      - '4988'
       X-Ratelimit-Reset:
-      - '1453755132'
+      - '1453830860'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Etag:
-      - W/"38da3d7f7e3ba497adac4b879211dae1"
+      - W/"a660aabe64518dee2922fd0ed8b92530"
       X-Oauth-Scopes:
       - public_repo
       X-Accepted-Oauth-Scopes:
@@ -544,12 +544,12 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 7b641bda7ec2ca7cd9df72d2578baf75
+      - a30e6f9aa7cf5731b87dfb3b9992202d
       X-Github-Request-Id:
-      - 04358C36:175B2:841DADB:56A67CEF
+      - A6F186B5:2075:9DF5CDD:56A7A5C1
     body:
       encoding: UTF-8
-      string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"dd6f7c2301400a36475306556d7da1e56b7477e1","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/dd6f7c2301400a36475306556d7da1e56b7477e1"}}'
+      string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"f0356f2c6216af45b74a517835a6b8d11c246a33","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/f0356f2c6216af45b74a517835a6b8d11c246a33"}}'
     http_version: 
-  recorded_at: Mon, 25 Jan 2016 19:52:16 GMT
+  recorded_at: Tue, 26 Jan 2016 16:58:43 GMT
 recorded_with: VCR 3.0.1

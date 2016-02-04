@@ -25,4 +25,10 @@ describe TxResource do
       expect(resource.lang_map('foo')).to eq('foo')
     end
   end
+
+  describe '#slugs' do
+    it 'returns an array containing the project and resource slugs' do
+      expect(resource.slugs).to eq(%w(project_slug resource_slug))
+    end
+  end
 end
