@@ -3,6 +3,7 @@ require 'txgh'
 
 map '/' do
   use Txgh::Application
+  use Txgh::Triggers
   run Sinatra::Base
 end
 
