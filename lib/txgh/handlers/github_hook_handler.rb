@@ -62,9 +62,8 @@ module Txgh
 
       def l10n_resources_for(tx_resources)
         payload['head_commit']['modified'].each_with_object({}) do |modified, ret|
-          logger.info("setting new resource: #{tx_resources[modified].L10N_resource_slug}")
-
           if tx_resources.include?(modified)
+            logger.info("setting new resource: #{tx_resources[modified].L10N_resource_slug}")
             ret[tx_resources[modified]] = payload['head_commit']['id']
           end
         end
