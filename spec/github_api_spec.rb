@@ -50,7 +50,7 @@ describe GithubApi do
           .and_return(sha: :new_commit_sha)
       )
 
-      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha)
+      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
 
       api.commit(repo, branch, path, :new_content)
     end

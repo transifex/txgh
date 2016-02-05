@@ -14,6 +14,7 @@ module Txgh
   autoload :ResourceUpdater,      'txgh/resource_updater'
   autoload :TransifexApi,         'txgh/transifex_api'
   autoload :TransifexProject,     'txgh/transifex_project'
+  autoload :TxBranchResource,     'txgh/tx_branch_resource'
   autoload :TransifexRequestAuth, 'txgh/transifex_request_auth'
   autoload :TxBranchResource,     'txgh/tx_branch_resource'
   autoload :TxConfig,             'txgh/tx_config'
