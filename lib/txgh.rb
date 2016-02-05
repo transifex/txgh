@@ -16,6 +16,7 @@ module Txgh
   autoload :TransifexApi,         'txgh/transifex_api'
   autoload :TransifexProject,     'txgh/transifex_project'
   autoload :TransifexRequestAuth, 'txgh/transifex_request_auth'
+  autoload :Triggers,             'txgh/app'
   autoload :TxBranchResource,     'txgh/tx_branch_resource'
   autoload :TxConfig,             'txgh/tx_config'
   autoload :TxLogger,             'txgh/tx_logger'
