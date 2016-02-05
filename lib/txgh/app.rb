@@ -164,7 +164,29 @@ module Txgh
       status 200
     end
 
-    get '/:project_slug/:resource_slug/pull/:branch' do
+    patch '/project/:project_slug/resource/:resource_slug/branch/:branch/pull' do
+      config = Txgh::KeyManager.config_from_project(params[:project_slug])
+      branch = Utils.absolute_branch(params[:branch])
+
+      tx_config = Txgh::KeyManager.tx_config(
+        config.transifex_project, config.github_repo, branch
+      )
+
+      committer = Txgh::ResourceCommitter.new(
+        config.transifex_project, config.github_repo, settings.logger
+      )
+
+      resource = tx_config.resource(params[:resource_slug])
+      branch_resource = TxBranchResource.new(resource, branch)
+      languages = config.transifex_project.api.get_languages(params[:project_slug])
+
+      languages.each do |language|
+        committer.commit_resource(
+          branch_resource, branch, language['language_code']
+        )
+      end
+
+      status 200
     end
   end
 end
