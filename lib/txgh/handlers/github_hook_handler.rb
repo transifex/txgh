@@ -39,8 +39,12 @@ module Txgh
             end
           end
 
-          updater = ResourceUpdater.new(project, repo, logger, payload)
-          updater.update_resources(modified_resources)
+          updater = ResourceUpdater.new(project, repo, logger)
+          categories = { 'author' => payload['head_commit']['committer']['name'] }
+
+          modified_resources.each_pair do |resource, commit_sha|
+            updater.update_resource(resource, commit_sha, categories)
+          end
         end
       end
 
@@ -48,7 +52,7 @@ module Txgh
 
       def tag_resources_for(tx_resources)
         payload['head_commit']['modified'].each_with_object({}) do |modified, ret|
-          # logger.info("processing modified file: #{modified}")
+          logger.info("processing modified file: #{modified}")
 
           if tx_resources.include?(modified)
             ret[tx_resources[modified]] = payload['head_commit']['id']
@@ -58,7 +62,7 @@ module Txgh
 
       def l10n_resources_for(tx_resources)
         payload['head_commit']['modified'].each_with_object({}) do |modified, ret|
-          # logger.info("setting new resource: #{tx_resources[modified].L10N_resource_slug}")
+          logger.info("setting new resource: #{tx_resources[modified].L10N_resource_slug}")
 
           if tx_resources.include?(modified)
             ret[tx_resources[modified]] = payload['head_commit']['id']
@@ -113,7 +117,7 @@ module Txgh
             repo.branch
           else
             branch = repo.branch || 'master'
-            branch.include?('tags/') ? branch : "heads/#{branch}"
+            Utils.absolute_branch(branch)
           end
         end
       end
