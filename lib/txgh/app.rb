@@ -145,7 +145,7 @@ module Txgh
       set :logger, logger
     end
 
-    patch '/project/:project_slug/resource/:resource_slug/branch/:branch/push' do
+    patch '/push' do
       config = Txgh::KeyManager.config_from_project(params[:project_slug])
       branch = Utils.absolute_branch(params[:branch])
 
@@ -164,7 +164,7 @@ module Txgh
       status 200
     end
 
-    patch '/project/:project_slug/resource/:resource_slug/branch/:branch/pull' do
+    patch '/pull' do
       config = Txgh::KeyManager.config_from_project(params[:project_slug])
       branch = Utils.absolute_branch(params[:branch])
 
