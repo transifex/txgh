@@ -45,7 +45,8 @@ module Txgh
         repo, "Updating translations for #{path}", tree[:sha], master[:object][:sha]
       )
 
-      client.update_ref(repo, branch, commit[:sha])
+      # false means don't force push
+      client.update_ref(repo, branch, commit[:sha], false)
     end
 
     def get_commit(repo, sha)
