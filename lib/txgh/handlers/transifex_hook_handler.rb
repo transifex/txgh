@@ -19,11 +19,8 @@ module Txgh
         logger.info(resource_slug)
 
         if tx_resource
-          unless language == tx_resource.source_lang
-            logger.info('request language matches resource')
-            committer = ResourceCommitter.new(project, repo, logger)
-            committer.commit_resource(tx_resource, branch, language)
-          end
+          committer = ResourceCommitter.new(project, repo, logger)
+          committer.commit_resource(tx_resource, branch, language)
         else
           raise TxghError,
             "Could not find configuration for resource '#{resource_slug}'"

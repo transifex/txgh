@@ -134,7 +134,7 @@ module Txgh
       status 200
     end
 
-    get '/project/:project_slug/resource/:resource_slug/branch/:branch/pull' do
+    patch '/project/:project_slug/resource/:resource_slug/branch/:branch/pull' do
       config = Txgh::KeyManager.config_from_project(params[:project_slug])
       branch = Utils.absolute_branch(params[:branch])
 
