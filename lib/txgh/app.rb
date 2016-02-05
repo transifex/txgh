@@ -130,4 +130,41 @@ module Txgh
       Txgh::Handlers::GithubHookHandler.new(options)
     end
   end
+
+  class Triggers < Sinatra::Base
+    configure :production do
+      set :logging, nil
+      logger = Txgh::TxLogger.logger
+      set :logger, logger
+    end
+
+    configure :development, :test do
+      register Sinatra::Reloader
+      set :logging, nil
+      logger = Txgh::TxLogger.logger
+      set :logger, logger
+    end
+
+    patch '/project/:project_slug/resource/:resource_slug/branch/:branch/push' do
+      config = Txgh::KeyManager.config_from_project(params[:project_slug])
+      branch = Utils.absolute_branch(params[:branch])
+
+      tx_config = Txgh::KeyManager.tx_config(
+        config.transifex_project, config.github_repo, branch
+      )
+
+      updater = Txgh::ResourceUpdater.new(
+        config.transifex_project, config.github_repo, settings.logger
+      )
+
+      resource = tx_config.resource(params[:resource_slug])
+      branch_resource = TxBranchResource.new(resource, branch)
+      ref = config.github_repo.api.get_ref(config.github_repo.name, branch)
+      updater.update_resource(branch_resource, ref[:object][:sha])
+      status 200
+    end
+
+    get '/:project_slug/:resource_slug/pull/:branch' do
+    end
+  end
 end

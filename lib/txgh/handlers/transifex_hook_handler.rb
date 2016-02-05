@@ -61,13 +61,7 @@ module Txgh
             repo.branch || 'master'
           end
 
-          if branch_candidate.include?('tags/')
-            branch_candidate
-          elsif branch_candidate.include?('heads/')
-            branch_candidate
-          else
-            "heads/#{branch_candidate}"
-          end
+          Utils.absolute_branch(branch_candidate)
         end
       end
 

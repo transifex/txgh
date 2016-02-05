@@ -12,7 +12,7 @@ module Txgh
 
     def serialize_categories(categories_hash)
       categories_hash.map do |key, value|
-        "#{key}:#{value}"
+        "#{key}:#{escape_category(value)}"
       end
     end
 

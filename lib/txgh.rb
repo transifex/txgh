@@ -11,6 +11,7 @@ module Txgh
   autoload :Hooks,                'txgh/app'
   autoload :KeyManager,           'txgh/key_manager'
   autoload :ParseConfig,          'txgh/parse_config'
+  autoload :ResourceUpdater,      'txgh/resource_updater'
   autoload :TransifexApi,         'txgh/transifex_api'
   autoload :TransifexProject,     'txgh/transifex_project'
   autoload :TransifexRequestAuth, 'txgh/transifex_request_auth'
