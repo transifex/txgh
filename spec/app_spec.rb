@@ -1,6 +1,8 @@
 require 'spec_helper'
-require 'helpers/github_payload_builder'
 require 'rack/test'
+
+require 'helpers/github_payload_builder'
+require 'helpers/standard_txgh_setup'
 
 describe Txgh::Application do
   include Rack::Test::Methods
