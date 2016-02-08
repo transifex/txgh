@@ -109,3 +109,78 @@ describe Txgh::Hooks do
     end
   end
 end
+
+describe Txgh::Triggers do
+  include Rack::Test::Methods
+  include StandardTxghSetup
+
+  def app
+    Txgh::Triggers
+  end
+
+  let(:config) do
+    Txgh::Config.new(project_config, repo_config)
+  end
+
+  before(:each) do
+    allow(Txgh::KeyManager).to(
+      receive(:config_from_project).with(project_name).and_return(config)
+    )
+
+    allow(Txgh::KeyManager).to(
+      receive(:config_from_repo).with(repo_name).and_return(config)
+    )
+  end
+
+  describe '/push' do
+    it 'updates the expected resource' do
+      updater = double(:updater)
+      expect(Txgh::ResourceUpdater).to receive(:new).and_return(updater)
+      expect(Txgh::GithubApi).to receive(:new).and_return(github_api)
+      expect(github_api).to receive(:get_ref).and_return(object: { sha: 'abc123' })
+
+      expect(updater).to receive(:update_resource) do |resource, sha|
+        expected_branch = Txgh::Utils.absolute_branch(branch)
+        expect(resource.branch).to eq(expected_branch)
+        expect(resource.project_slug).to eq(project_name)
+        expect(resource.resource_slug).to(
+          eq("#{resource_slug}-#{Txgh::Utils.slugify(expected_branch)}")
+        )
+      end
+
+      patch '/push', {
+        project_slug: project_name, resource_slug: resource_slug, branch: branch
+      }
+
+      expect(last_response).to be_ok
+    end
+  end
+
+  describe '/pull' do
+    it 'updates translations (in all locales) in the expected repo' do
+      committer = double(:committer)
+      languages = [{ 'language_code' => 'pt' }, { 'language_code' => 'ja' }]
+      expect(Txgh::ResourceCommitter).to receive(:new).and_return(committer)
+      expect(Txgh::TransifexApi).to receive(:new).and_return(transifex_api)
+      expect(transifex_api).to receive(:get_languages).and_return(languages)
+
+      languages.each do |language|
+        expect(committer).to receive(:commit_resource) do |resource, branch, lang|
+          expect(branch).to eq(branch)
+          expect(lang).to eq(language['language_code'])
+          expect(resource.branch).to eq(branch)
+          expect(resource.project_slug).to eq(project_name)
+          expect(resource.resource_slug).to(
+            eq("#{resource_slug}-#{Txgh::Utils.slugify(branch)}")
+          )
+        end
+      end
+
+      patch '/pull', {
+        project_slug: project_name, resource_slug: resource_slug, branch: branch
+      }
+
+      expect(last_response).to be_ok
+    end
+  end
+end

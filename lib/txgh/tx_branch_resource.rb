@@ -15,13 +15,13 @@ module Txgh
       def find(tx_config, resource_slug, branch)
         suffix = "-#{Utils.slugify(branch)}"
 
-        if resource_slug.end_with?(suffix)
-          resource_slug = resource_slug.chomp(suffix)
-
-          if resource = tx_config.resource(resource_slug)
-            new(resource, branch)
-          end
+        resource = if resource_slug.end_with?(suffix)
+          resource_slug_without_suffix = resource_slug.chomp(suffix)
+          tx_config.resource(resource_slug_without_suffix)
         end
+
+        resource ||= tx_config.resource(resource_slug)
+        new(resource, branch) if resource
       end
     end
 
