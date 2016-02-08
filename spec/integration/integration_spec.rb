@@ -30,7 +30,8 @@ describe 'integration tests', integration: true do
             # github will auto-revoke a token if they notice it in one of your commits ;)
             'api_token' => Base64.decode64('YjViYWY3Nzk5NTdkMzVlMmI0OGZmYjk4YThlY2M1ZDY0NzAwNWRhZA=='),
             'push_source_to' => 'test-project-88',
-            'branch' => 'master'
+            'branch' => 'master',
+            'webhook_secret' => 'abc123'
           }
         }
       },
@@ -40,7 +41,8 @@ describe 'integration tests', integration: true do
             'tx_config' => 'file://./config/tx.config',
             'api_username' => 'txgh.bot',
             'api_password' => '2aqFGW99fPRKWvXBPjbrxkdiR',
-            'push_translations_to' => 'txgh-bot/txgh-test-resources'
+            'push_translations_to' => 'txgh-bot/txgh-test-resources',
+            'webhook_secret' => 'def456'
           }
         }
       }
