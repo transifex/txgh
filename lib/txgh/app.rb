@@ -2,6 +2,7 @@ require 'base64'
 require 'json'
 require 'sinatra'
 require 'sinatra/reloader'
+require 'uri'
 
 module Txgh
 
@@ -51,18 +52,23 @@ module Txgh
       settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
-      config = Txgh::KeyManager.config_from_project(request['project'])
+      payload = Hash[URI.decode_www_form(request.body.read)]
+      config = Txgh::KeyManager.config_from_project(payload['project'])
 
-      handler = transifex_handler_for(
-        project: config.transifex_project,
-        repo: config.github_repo,
-        resource_slug: request['resource'],
-        language: request['language'],
-        logger: settings.logger
-      )
+      if authenticated_transifex_request?(config.transifex_project, request)
+        handler = transifex_handler_for(
+          project: config.transifex_project,
+          repo: config.github_repo,
+          resource_slug: request['resource'],
+          language: payload['language'],
+          logger: settings.logger
+        )
 
-      handler.execute
-      status 200
+        handler.execute
+        status 200
+      else
+        status 401
+      end
     end
 
     post '/github' do
@@ -79,18 +85,42 @@ module Txgh
       github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
       config = Txgh::KeyManager.config_from_repo(github_repo_name)
 
-      handler = github_handler_for(
-        project: config.transifex_project,
-        repo: config.github_repo,
-        payload: payload,
-        logger: settings.logger
-      )
+      if authenticated_github_request?(config.github_repo, request)
+        handler = github_handler_for(
+          project: config.transifex_project,
+          repo: config.github_repo,
+          payload: payload,
+          logger: settings.logger
+        )
 
-      handler.execute
-      status 200
+        handler.execute
+        status 200
+      else
+        status 401
+      end
     end
 
     private
+
+    def authenticated_github_request?(repo, request)
+      if repo.webhook_protected?
+        GithubRequestAuth.authentic_request?(
+          request, repo.webhook_secret
+        )
+      else
+        true
+      end
+    end
+
+    def authenticated_transifex_request?(project, request)
+      if project.webhook_protected?
+        TransifexRequestAuth.authentic_request?(
+          request, project.webhook_secret
+        )
+      else
+        true
+      end
+    end
 
     def transifex_handler_for(options)
       Txgh::Handlers::TransifexHookHandler.new(options)

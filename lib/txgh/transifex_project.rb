@@ -10,6 +10,14 @@ module Txgh
     def name
       config['name']
     end
+    
+    def webhook_secret
+      config['webhook_secret']
+    end
+
+    def webhook_protected?
+      !(webhook_secret || '').empty?
+    end
 
     def tx_config_uri
       config['tx_config']
