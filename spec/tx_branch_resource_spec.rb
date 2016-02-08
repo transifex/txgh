@@ -24,8 +24,15 @@ describe TxBranchResource do
   end
 
   describe '.find' do
-    it 'finds the correct resource' do
+    it 'finds the correct resource when the suffix is included in the slug' do
       resource = TxBranchResource.find(tx_config, resource_slug_with_branch, branch)
+      expect(resource).to be_a(TxBranchResource)
+      expect(resource.resource).to eq(base_resource)
+      expect(resource.branch).to eq(branch)
+    end
+
+    it 'finds the correct resource if no suffix is included in the slug' do
+      resource = TxBranchResource.find(tx_config, resource_slug, branch)
       expect(resource).to be_a(TxBranchResource)
       expect(resource.resource).to eq(base_resource)
       expect(resource.branch).to eq(branch)
