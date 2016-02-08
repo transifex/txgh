@@ -40,7 +40,7 @@ module Txgh
           end
 
           updater = ResourceUpdater.new(project, repo, logger)
-          categories = { 'author' => payload['head_commit']['committer']['name'] }
+          categories = { 'Author' => payload['head_commit']['committer']['name'] }
 
           modified_resources.each_pair do |resource, commit_sha|
             updater.update_resource(resource, commit_sha, categories)

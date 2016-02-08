@@ -4,12 +4,14 @@ require 'base64'
 require 'json'
 require 'pathname'
 require 'rack/test'
+require 'helpers/integration_setup'
 require 'uri'
 
 include Txgh
 
-describe 'integration tests', integration: true do
+describe 'hook integration tests', integration: true do
   include Rack::Test::Methods
+  include IntegrationSetup
 
   def app
     @app ||= Txgh::Hooks.new

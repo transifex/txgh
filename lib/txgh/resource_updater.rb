@@ -45,14 +45,7 @@ module Txgh
 
     def upload_by_branch(tx_resource, content, additional_categories)
       resource_exists = project.api.resource_exists?(tx_resource)
-
-      categories = if resource_exists
-        resource = project.api.get_resource(*tx_resource.slugs)
-        deserialize_categories(Array(resource['categories']))
-      else
-        {}
-      end
-
+      categories = resource_exists ? categories_for(tx_resource) : {}
       categories.merge!(additional_categories)
       categories['branch'] ||= tx_resource.branch
       categories = serialize_categories(categories)
@@ -63,6 +56,11 @@ module Txgh
       else
         project.api.create(tx_resource, content, categories)
       end
+    end
+
+    def categories_for(tx_resource)
+      resource = project.api.get_resource(*tx_resource.slugs)
+      deserialize_categories(Array(resource['categories']))
     end
   end
 end
