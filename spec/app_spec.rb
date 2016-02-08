@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'helpers/github_payload_builder'
 require 'rack/test'
+require 'uri'
 
 describe Txgh::Application do
   include Rack::Test::Methods
@@ -72,12 +73,15 @@ describe Txgh::Hooks do
 
       expect(handler).to receive(:execute)
 
-      post '/transifex', {
+      params = {
         'project' => project_name,
         'resource' => resource_slug,
         'language' => language,
         'translated' => '100'
       }
+
+      payload = URI.encode_www_form(params.to_a)
+      post '/transifex', payload
     end
   end
 
