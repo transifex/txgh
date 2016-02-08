@@ -51,5 +51,11 @@ describe TxBranchResource do
         expect(resource.resource_slug).to eq(resource_slug_with_branch)
       end
     end
+
+    describe '#slugs' do
+      it 'ensures the project slug contains the branch name' do
+        expect(resource.slugs).to eq([project_slug, resource_slug_with_branch])
+      end
+    end
   end
 end
