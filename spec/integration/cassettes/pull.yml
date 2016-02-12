@@ -26,7 +26,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 05 Feb 2016 23:56:58 GMT
+      - Fri, 12 Feb 2016 19:48:59 GMT
       Transfer-Encoding:
       - chunked
       Content-Language:
@@ -36,12 +36,12 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - X-Mapping-fjhppofk=7BA9C65DD9CD0F1A96194A82BFB61D00; path=/
+      - X-Mapping-fjhppofk=B8558B7BB369B761FC4CE03884ACF0F5; path=/
       X-Frame-Options:
       - SAMEORIGIN
     body:
       encoding: UTF-8
       string: "[]"
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:56:59 GMT
+  recorded_at: Fri, 12 Feb 2016 19:48:59 GMT
 recorded_with: VCR 3.0.1

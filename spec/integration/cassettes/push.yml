@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Fri, 05 Feb 2016 23:57:54 GMT
+      - Fri, 12 Feb 2016 19:49:00 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,9 +35,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4999'
+      - '4989'
       X-Ratelimit-Reset:
-      - '1454720274'
+      - '1455310132'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
@@ -73,14 +73,14 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 2c18a09f3ac5e4dd1e004af7c5a94769
+      - 318e55760cf7cdb40e61175a4d36cd32
       X-Github-Request-Id:
-      - 04358C36:C8D3:6DAD347:56B53702
+      - 04358C36:14596:F629B21:56BE372C
     body:
       encoding: UTF-8
       string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"e411b627bdb8884f66748d48fcd9576f61992085","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/e411b627bdb8884f66748d48fcd9576f61992085"}}'
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:57:54 GMT
+  recorded_at: Fri, 12 Feb 2016 19:49:00 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/e411b627bdb8884f66748d48fcd9576f61992085
@@ -106,7 +106,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Fri, 05 Feb 2016 23:57:55 GMT
+      - Fri, 12 Feb 2016 19:49:00 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -116,9 +116,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4998'
+      - '4988'
       X-Ratelimit-Reset:
-      - '1454720274'
+      - '1455310132'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
@@ -152,15 +152,15 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 3e3b9690823fb031da84658eb58aa83b
+      - a474937f3b2fa272558fa6dc951018ad
       X-Github-Request-Id:
-      - 04358C36:C8D4:7CD1C38:56B53702
+      - 04358C36:1458D:29185EB:56BE372C
     body:
       encoding: UTF-8
       string: '{"sha":"e411b627bdb8884f66748d48fcd9576f61992085","commit":{"author":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-02-01T20:15:13Z"},"committer":{"name":"txgh-bot","email":"txgh.bot@gmail.com","date":"2016-02-01T20:15:13Z"},"message":"Updating
         translations for translations/el_GR/sample.po","tree":{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460"},"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/e411b627bdb8884f66748d48fcd9576f61992085","comment_count":0},"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/e411b627bdb8884f66748d48fcd9576f61992085","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/e411b627bdb8884f66748d48fcd9576f61992085","comments_url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/e411b627bdb8884f66748d48fcd9576f61992085/comments","author":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false},"committer":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false},"parents":[{"sha":"f0356f2c6216af45b74a517835a6b8d11c246a33","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/commits/f0356f2c6216af45b74a517835a6b8d11c246a33","html_url":"https://github.com/txgh-bot/txgh-test-resources/commit/f0356f2c6216af45b74a517835a6b8d11c246a33"}],"stats":{"total":0,"additions":0,"deletions":0},"files":[]}'
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:57:55 GMT
+  recorded_at: Fri, 12 Feb 2016 19:49:00 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460?recursive=1
@@ -186,7 +186,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Fri, 05 Feb 2016 23:57:55 GMT
+      - Fri, 12 Feb 2016 19:49:01 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -196,9 +196,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4997'
+      - '4987'
       X-Ratelimit-Reset:
-      - '1454720274'
+      - '1455310132'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
@@ -232,14 +232,14 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - ef96c2e493b28ffea49b891b085ed2dd
+      - 3e3b9690823fb031da84658eb58aa83b
       X-Github-Request-Id:
-      - 04358C36:C8D2:582848A:56B53703
+      - 04358C36:14594:ED063B2:56BE372C
     body:
       encoding: UTF-8
       string: '{"sha":"4ee65f809366225a4d575ad47f0f8c2a05a6d460","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/4ee65f809366225a4d575ad47f0f8c2a05a6d460","tree":[{"path":"README.md","mode":"100644","type":"blob","sha":"cee445fa5bceaeb83c8d443b28f1647c2feff565","size":53,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/cee445fa5bceaeb83c8d443b28f1647c2feff565"},{"path":"sample.po","mode":"100644","type":"blob","sha":"a93e31a00137e0bd23db5bc7720568f8e908b2b6","size":855,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/a93e31a00137e0bd23db5bc7720568f8e908b2b6"},{"path":"translations","mode":"040000","type":"tree","sha":"64881902c6515e26c22e022abc0bedeaa15eafdc","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/64881902c6515e26c22e022abc0bedeaa15eafdc"},{"path":"translations/el_GR","mode":"040000","type":"tree","sha":"050a15129f99770b93244b61d6acbf0abc8bca47","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/trees/050a15129f99770b93244b61d6acbf0abc8bca47"},{"path":"translations/el_GR/sample.po","mode":"100644","type":"blob","sha":"540a3d944ac19f573e756de687c8c4f3f9847b53","size":911,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/540a3d944ac19f573e756de687c8c4f3f9847b53"},{"path":"translations/el_GR/test.txt","mode":"100644","type":"blob","sha":"f16628a67170414c9d346279f2595e77a1c3cf0f","size":28,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/f16628a67170414c9d346279f2595e77a1c3cf0f"},{"path":"translations/test.txt","mode":"100644","type":"blob","sha":"f16628a67170414c9d346279f2595e77a1c3cf0f","size":28,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/f16628a67170414c9d346279f2595e77a1c3cf0f"}],"truncated":false}'
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:57:55 GMT
+  recorded_at: Fri, 12 Feb 2016 19:49:01 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/a93e31a00137e0bd23db5bc7720568f8e908b2b6
@@ -265,7 +265,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Fri, 05 Feb 2016 23:57:55 GMT
+      - Fri, 12 Feb 2016 19:49:01 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -275,9 +275,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4996'
+      - '4986'
       X-Ratelimit-Reset:
-      - '1454720274'
+      - '1455310132'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Etag:
@@ -309,14 +309,14 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 173530fed4bbeb1e264b2ed22e8b5c20
+      - 76d9828c7e4f1d910f7ba069e90ce976
       X-Github-Request-Id:
-      - 04358C36:C8D4:7CD1D35:56B53703
+      - 04358C36:1458E:2FD06AA:56BE372D
     body:
       encoding: UTF-8
       string: '{"sha":"a93e31a00137e0bd23db5bc7720568f8e908b2b6","size":855,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/a93e31a00137e0bd23db5bc7720568f8e908b2b6","content":"IyBUcmFuc2xhdGlvbiBmaWxlIGZvciBUcmFuc2lmZXguCiMgQ29weXJpZ2h0\nIChDKSAyMDA3LTIwMTAgSW5kaWZleCBMdGQuCiMgVGhpcyBmaWxlIGlzIGRp\nc3RyaWJ1dGVkIHVuZGVyIHRoZSBzYW1lIGxpY2Vuc2UgYXMgdGhlIFRyYW5z\naWZleCBwYWNrYWdlLgojCiMgVHJhbnNsYXRvcnM6Cm1zZ2lkICIiCm1zZ3N0\nciAiIgoiUHJvamVjdC1JZC1WZXJzaW9uOiBUcmFuc2lmZXhcbiIKIlJlcG9y\ndC1Nc2dpZC1CdWdzLVRvOiBcbiIKIlBPVC1DcmVhdGlvbi1EYXRlOiAyMDE1\nLTAyLTE3IDIwOjEwKzAwMDBcbiIKIlBPLVJldmlzaW9uLURhdGU6IDIwMTMt\nMTAtMjIgMTA6NTcrMDAwMFxuIgoiTGFzdC1UcmFuc2xhdG9yOiBJbGlhcy1E\naW1pdHJpb3MgVnJhY2huaXNcbiIKIkxhbmd1YWdlLVRlYW06IExBTkdVQUdF\nIDxMTEBsaS5vcmc+XG4iCiJMYW5ndWFnZTogZW5cbiIKIk1JTUUtVmVyc2lv\nbjogMS4wXG4iCiJDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9\nVVRGLThcbiIKIkNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXRcbiIK\nIlBsdXJhbC1Gb3JtczogbnBsdXJhbHM9MjsgcGx1cmFsPShuICE9IDEpO1xu\nIgptc2dpZCAiT25lIgptc2dzdHIgIk9uZSIKbXNnaWQgIlR3byIKbXNnc3Ry\nICJUd28iCm1zZ2lkICJUaHJlZSIKbXNnc3RyICJUaHJlZSIKbXNnaWQgIkZv\ndXIiCm1zZ3N0ciAiRm91ciIKbXNnaWQgIkZpdmUiCm1zZ3N0ciAiRml2ZSIK\nbXNnaWQgIlNpeCIKbXNnc3RyICJTaXgiCm1zZ2lkICJTZXZlbiIKbXNnc3Ry\nICJTZXZlbiIKbXNnaWQgIkVpZ2h0Igptc2dzdHIgIkVpZ2h0Igptc2dpZCAi\nTmluZSIKbXNnc3RyICJOaW5lIgptc2dpZCAiVGVuIgptc2dzdHIgIlRlbiIK\n","encoding":"base64"}'
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:57:55 GMT
+  recorded_at: Fri, 12 Feb 2016 19:49:01 GMT
 - request:
     method: get
     uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resource/samplepo-heads_master/
@@ -332,8 +332,114 @@ http_interactions:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
     status:
-      code: 404
-      message: NOT FOUND
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 12 Feb 2016 19:49:02 GMT
+      Expires:
+      - Fri, 12 Feb 2016 19:49:02 GMT
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      X-Content-Type-Options:
+      - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=EC88B8A0F350FE88E4BF67A3F4B1C219; path=/
+      Last-Modified:
+      - Fri, 12 Feb 2016 19:49:02 GMT
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: UTF-8
+      string: "{\n    \"source_language_code\": \"en\", \n    \"name\": \"sample.po\",
+        \n    \"i18n_type\": \"PO\", \n    \"priority\": \"1\", \n    \"slug\": \"samplepo-heads_master\",
+        \n    \"categories\": [\n        \"\"\n    ]\n}"
+    http_version: 
+  recorded_at: Fri, 12 Feb 2016 19:49:02 GMT
+- request:
+    method: get
+    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resource/samplepo-heads_master/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 12 Feb 2016 19:49:02 GMT
+      Expires:
+      - Fri, 12 Feb 2016 19:49:02 GMT
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      X-Content-Type-Options:
+      - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=B8558B7BB369B761FC4CE03884ACF0F5; path=/
+      Last-Modified:
+      - Fri, 12 Feb 2016 19:49:02 GMT
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: UTF-8
+      string: "{\n    \"source_language_code\": \"en\", \n    \"name\": \"sample.po\",
+        \n    \"i18n_type\": \"PO\", \n    \"priority\": \"1\", \n    \"slug\": \"samplepo-heads_master\",
+        \n    \"categories\": [\n        \"\"\n    ]\n}"
+    http_version: 
+  recorded_at: Fri, 12 Feb 2016 19:49:02 GMT
+- request:
+    method: put
+    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resource/samplepo-heads_master/
+    body:
+      encoding: UTF-8
+      string: '{"categories":[""]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
     headers:
       Server:
       - nginx
@@ -345,49 +451,47 @@ http_interactions:
       Content-Type:
       - text/plain
       Date:
-      - Fri, 05 Feb 2016 23:57:56 GMT
+      - Fri, 12 Feb 2016 19:49:03 GMT
       Expires:
-      - Fri, 05 Feb 2016 23:57:56 GMT
+      - Fri, 12 Feb 2016 19:49:03 GMT
       Transfer-Encoding:
       - chunked
       Content-Language:
       - en
+      X-Content-Type-Options:
+      - nosniff
       Connection:
       - keep-alive
       Set-Cookie:
-      - X-Mapping-fjhppofk=C7ADAD16FC9FAF25B589211B926C5FF5; path=/
+      - X-Mapping-fjhppofk=B8558B7BB369B761FC4CE03884ACF0F5; path=/
       Last-Modified:
-      - Fri, 05 Feb 2016 23:57:56 GMT
+      - Fri, 12 Feb 2016 19:49:03 GMT
       X-Frame-Options:
       - SAMEORIGIN
     body:
       encoding: UTF-8
-      string: Not Found
+      string: OK
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:57:56 GMT
+  recorded_at: Fri, 12 Feb 2016 19:49:03 GMT
 - request:
-    method: post
-    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resources/
+    method: put
+    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resource/samplepo-heads_master/content/
     body:
       encoding: UTF-8
-      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"slug\"\r\n\r\nsamplepo-heads_master\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"name\"\r\n\r\nsample.po\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"i18n_type\"\r\n\r\nPO\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"categories\"\r\n\r\n\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"content\"; filename=\"sample.po\"\r\nContent-Length: 855\r\nContent-Type:
-        application/octet-stream\r\nContent-Transfer-Encoding: binary\r\n\r\n# Translation
-        file for Transifex.\n# Copyright (C) 2007-2010 Indifex Ltd.\n# This file is
-        distributed under the same license as the Transifex package.\n#\n# Translators:\nmsgid
-        \"\"\nmsgstr \"\"\n\"Project-Id-Version: Transifex\\n\"\n\"Report-Msgid-Bugs-To:
-        \\n\"\n\"POT-Creation-Date: 2015-02-17 20:10+0000\\n\"\n\"PO-Revision-Date:
-        2013-10-22 10:57+0000\\n\"\n\"Last-Translator: Ilias-Dimitrios Vrachnis\\n\"\n\"Language-Team:
-        LANGUAGE <LL@li.org>\\n\"\n\"Language: en\\n\"\n\"MIME-Version: 1.0\\n\"\n\"Content-Type:
-        text/plain; charset=UTF-8\\n\"\n\"Content-Transfer-Encoding: 8bit\\n\"\n\"Plural-Forms:
-        nplurals=2; plural=(n != 1);\\n\"\nmsgid \"One\"\nmsgstr \"One\"\nmsgid \"Two\"\nmsgstr
-        \"Two\"\nmsgid \"Three\"\nmsgstr \"Three\"\nmsgid \"Four\"\nmsgstr \"Four\"\nmsgid
-        \"Five\"\nmsgstr \"Five\"\nmsgid \"Six\"\nmsgstr \"Six\"\nmsgid \"Seven\"\nmsgstr
-        \"Seven\"\nmsgid \"Eight\"\nmsgstr \"Eight\"\nmsgid \"Nine\"\nmsgstr \"Nine\"\nmsgid
-        \"Ten\"\nmsgstr \"Ten\"\n\r\n-------------RubyMultipartPost--\r\n\r\n"
+      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"content\";
+        filename=\"sample.po\"\r\nContent-Length: 855\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding:
+        binary\r\n\r\n# Translation file for Transifex.\n# Copyright (C) 2007-2010
+        Indifex Ltd.\n# This file is distributed under the same license as the Transifex
+        package.\n#\n# Translators:\nmsgid \"\"\nmsgstr \"\"\n\"Project-Id-Version:
+        Transifex\\n\"\n\"Report-Msgid-Bugs-To: \\n\"\n\"POT-Creation-Date: 2015-02-17
+        20:10+0000\\n\"\n\"PO-Revision-Date: 2013-10-22 10:57+0000\\n\"\n\"Last-Translator:
+        Ilias-Dimitrios Vrachnis\\n\"\n\"Language-Team: LANGUAGE <LL@li.org>\\n\"\n\"Language:
+        en\\n\"\n\"MIME-Version: 1.0\\n\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Content-Transfer-Encoding:
+        8bit\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\nmsgid \"One\"\nmsgstr
+        \"One\"\nmsgid \"Two\"\nmsgstr \"Two\"\nmsgid \"Three\"\nmsgstr \"Three\"\nmsgid
+        \"Four\"\nmsgstr \"Four\"\nmsgid \"Five\"\nmsgstr \"Five\"\nmsgid \"Six\"\nmsgstr
+        \"Six\"\nmsgid \"Seven\"\nmsgstr \"Seven\"\nmsgid \"Eight\"\nmsgstr \"Eight\"\nmsgid
+        \"Nine\"\nmsgstr \"Nine\"\nmsgid \"Ten\"\nmsgstr \"Ten\"\n\r\n-------------RubyMultipartPost--\r\n\r\n"
     headers:
       User-Agent:
       - Faraday v0.9.2
@@ -396,41 +500,45 @@ http_interactions:
       Content-Type:
       - multipart/form-data; boundary=-----------RubyMultipartPost
       Content-Length:
-      - '1460'
+      - '1093'
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
     status:
-      code: 201
-      message: CREATED
+      code: 200
+      message: OK
     headers:
       Server:
       - nginx
       Vary:
+      - Accept-Encoding
       - Authorization, Host, Accept-Language, Cookie
       Cache-Control:
       - max-age=0
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 05 Feb 2016 23:57:57 GMT
+      - Fri, 12 Feb 2016 19:49:04 GMT
       Expires:
-      - Fri, 05 Feb 2016 23:57:57 GMT
+      - Fri, 12 Feb 2016 19:49:04 GMT
       Transfer-Encoding:
       - chunked
       Content-Language:
       - en
+      X-Content-Type-Options:
+      - nosniff
       Connection:
       - keep-alive
       Set-Cookie:
-      - X-Mapping-fjhppofk=7BA9C65DD9CD0F1A96194A82BFB61D00; path=/
+      - X-Mapping-fjhppofk=EB51E54611BEFDE531C59D8E5F7EF32B; path=/
       Last-Modified:
-      - Fri, 05 Feb 2016 23:57:57 GMT
+      - Fri, 12 Feb 2016 19:49:04 GMT
       X-Frame-Options:
       - SAMEORIGIN
     body:
       encoding: UTF-8
-      string: "[\n    10, \n    0, \n    0\n]"
+      string: "{\n    \"strings_added\": 0, \n    \"strings_updated\": 0, \n    \"strings_delete\":
+        0, \n    \"redirect\": \"/txgh-test/test-project-88/samplepo-heads_master/\"\n}"
     http_version: 
-  recorded_at: Fri, 05 Feb 2016 23:57:58 GMT
+  recorded_at: Fri, 12 Feb 2016 19:49:06 GMT
 recorded_with: VCR 3.0.1
