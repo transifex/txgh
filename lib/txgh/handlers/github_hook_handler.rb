@@ -24,7 +24,7 @@ module Txgh
           logger.info('found branch in github request')
 
           tx_resources = tx_resources_for(branch)
-          modified_resources = modified_resources_for(tx_resources)
+          modified_resources = added_and_modified_resources_for(tx_resources)
           modified_resources.merge!(l10n_resources_for(tx_resources))
 
           if github_config_branch.include?('tags/')
@@ -127,15 +127,15 @@ module Txgh
 
       # Finds the updated resources and maps the most recent commit in which
       # each was modified
-      def modified_resources_for(tx_resources)
+      def added_and_modified_resources_for(tx_resources)
         payload['commits'].each_with_object({}) do |commit, ret|
           logger.info('processing commit')
 
-          commit['modified'].each do |modified|
-            logger.info("processing modified file: #{modified}")
+          (commit['modified'] + commit['added']).each do |file|
+            logger.info("processing added/modified file: #{file}")
 
-            if tx_resources.include?(modified)
-              ret[tx_resources[modified]] = commit['id']
+            if tx_resources.include?(file)
+              ret[tx_resources[file]] = commit['id']
             end
           end
         end
@@ -143,7 +143,7 @@ module Txgh
 
       # Build an index of known Tx resources, by source file
       def tx_resources_for(branch)
-        project.resources.each_with_object({}) do |resource, ret|
+        tx_config.resources.each_with_object({}) do |resource, ret|
           logger.info('processing resource')
 
           # If we're processing by branch, create a branch resource. Otherwise,
@@ -156,6 +156,10 @@ module Txgh
         end
       end
 
+      def tx_config
+        @tx_config ||= KeyManager.tx_config(project, repo, branch)
+      end
+
       def should_process_branch?
         process_all_branches? || (
           branch.include?(github_config_branch) || branch.include?('L10N')
@@ -164,7 +168,7 @@ module Txgh
 
       def github_config_branch
         @github_config_branch = begin
-          if repo.branch == 'all'
+          if process_all_branches?
             repo.branch
           else
             branch = repo.branch || 'master'
@@ -174,7 +178,7 @@ module Txgh
       end
 
       def process_all_branches?
-        github_config_branch == 'all'
+        repo.process_all_branches?
       end
 
       alias_method :upload_by_branch?, :process_all_branches?

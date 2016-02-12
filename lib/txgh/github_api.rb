@@ -1,3 +1,4 @@
+require 'base64'
 require 'octokit'
 
 module Txgh
@@ -51,6 +52,17 @@ module Txgh
 
     def get_commit(repo, sha)
       client.commit(repo, sha)
+    end
+
+    def download(repo, path, branch)
+      master = client.ref(repo, branch)
+      commit = client.commit(repo, master[:object][:sha])
+      tree = client.tree(repo, commit[:commit][:tree][:sha])
+
+      if found = tree[:tree].find { |t| t[:path] == path }
+        b = blob(repo, found[:sha])
+        b['encoding'] == 'utf-8' ? b['content'] : Base64.decode64(b['content'])
+      end
     end
 
   end

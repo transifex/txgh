@@ -15,6 +15,10 @@ module Txgh
       config['branch']
     end
 
+    def process_all_branches?
+      branch == 'all'
+    end
+
     def webhook_secret
       config['webhook_secret']
     end
