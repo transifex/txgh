@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'sinatra-contrib', '~> 1.4'
 
   s.require_path = 'lib'
-  s.files = Dir['{lib,spec}/**/*', 'Gemfile', 'README.md', 'Rakefile', 'txgh.gemspec']
+  s.files = Dir['{lib,spec}/**/*', 'README.md', 'txgh.gemspec']
 end
