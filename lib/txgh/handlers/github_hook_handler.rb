@@ -157,7 +157,7 @@ module Txgh
       end
 
       def tx_config
-        @tx_config = KeyManager.tx_config(project, repo, branch)
+        @tx_config ||= KeyManager.tx_config(project, repo, branch)
       end
 
       def should_process_branch?
