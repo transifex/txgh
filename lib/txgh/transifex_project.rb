@@ -10,7 +10,7 @@ module Txgh
     def name
       config['name']
     end
-
+    
     def webhook_secret
       config['webhook_secret']
     end
