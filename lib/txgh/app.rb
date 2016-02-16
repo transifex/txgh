@@ -30,17 +30,14 @@ module Txgh
     # Hooks are unprotected endpoints used for data integration between Github and
     # Transifex. They live under the /hooks namespace (see config.ru)
 
-    configure :production do
+    configure do
       set :logging, nil
       logger = Txgh::TxLogger.logger
       set :logger, logger
     end
 
-    configure :development, :test do
+    configure :development do
       register Sinatra::Reloader
-      set :logging, nil
-      logger = Txgh::TxLogger.logger
-      set :logger, logger
     end
 
     def initialize(app = nil)
@@ -132,17 +129,14 @@ module Txgh
   end
 
   class Triggers < Sinatra::Base
-    configure :production do
+    configure do
       set :logging, nil
       logger = Txgh::TxLogger.logger
       set :logger, logger
     end
 
-    configure :development, :test do
+    configure :development do
       register Sinatra::Reloader
-      set :logging, nil
-      logger = Txgh::TxLogger.logger
-      set :logger, logger
     end
 
     patch '/push' do
