@@ -63,6 +63,13 @@ describe GithubApi do
     end
   end
 
+  describe '#get_ref' do
+    it 'retrieves the given ref (i.e. branch) using the client' do
+      expect(client).to receive(:ref).with(repo, sha)
+      api.get_ref(repo, sha)
+    end
+  end
+
   describe '#download' do
     it 'downloads the file from the given branch' do
       path = 'path/to/file.xyz'

@@ -54,6 +54,10 @@ module Txgh
       client.commit(repo, sha)
     end
 
+    def get_ref(repo, ref)
+      client.ref(repo, ref)
+    end
+
     def download(repo, path, branch)
       master = client.ref(repo, branch)
       commit = client.commit(repo, master[:object][:sha])

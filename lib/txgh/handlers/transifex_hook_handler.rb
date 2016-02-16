@@ -19,26 +19,8 @@ module Txgh
         logger.info(resource_slug)
 
         if tx_resource
-        # Do not update the source
-          unless language == tx_resource.source_lang
-            logger.info('request language matches resource')
-
-            translations = project.api.download(tx_resource, language)
-
-            translation_path = if tx_resource.lang_map(language) != language
-              logger.info('request language is in lang_map and is not in request')
-              tx_resource.translation_path(tx_resource.lang_map(language))
-            else
-              logger.info('request language is in lang_map and is in request or is nil')
-              tx_resource.translation_path(tx_resource.lang_map(language))
-            end
-
-            logger.info("make github commit for branch: #{branch}")
-
-            repo.api.commit(
-              repo.name, branch, translation_path, translations
-            )
-          end
+          committer = ResourceCommitter.new(project, repo, logger)
+          committer.commit_resource(tx_resource, branch, language)
         else
           raise TxghError,
             "Could not find configuration for resource '#{resource_slug}'"
@@ -61,13 +43,7 @@ module Txgh
             repo.branch || 'master'
           end
 
-          if branch_candidate.include?('tags/')
-            branch_candidate
-          elsif branch_candidate.include?('heads/')
-            branch_candidate
-          else
-            "heads/#{branch_candidate}"
-          end
+          Utils.absolute_branch(branch_candidate)
         end
       end
 

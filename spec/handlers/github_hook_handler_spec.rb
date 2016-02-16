@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'helpers/github_payload_builder'
 require 'helpers/nil_logger'
+require 'helpers/standard_txgh_setup'
 
 include Txgh
 include Txgh::Handlers
@@ -28,49 +29,24 @@ describe GithubHookHandler do
     end
   end
 
-  def translations_for(path)
-    "translations for #{path}"
-  end
+  let(:updater) { double(:updater) }
 
   before(:each) do
-    tree_sha = 'abc123'
-
-    # indicate that all the files we care about have changed
     payload.add_commit(
       modified: modified_files.map { |f| f['path'] }
     )
 
-    allow(github_api).to(
-      receive(:get_commit).with(repo_name, payload.commits.first[:id]) do
-        { 'commit' => { 'tree' => { 'sha' => tree_sha } } }
-      end
-    )
-
-    allow(github_api).to(
-      receive(:tree).with(repo_name, tree_sha) do
-        { 'tree' => modified_files }
-      end
-    )
-
-    modified_files.each do |file|
-      translations = translations_for(file['path'])
-
-      allow(github_api).to(
-        receive(:blob).with(repo_name, file['sha']) do
-          { 'content' => translations, 'encoding' => 'utf-8' }
-        end
-      )
-    end
+    expect(ResourceUpdater).to receive(:new).and_return(updater)
   end
 
-  it 'correctly uploads modified files to transifex' do
-    modified_files.each do |file|
-      translations = translations_for(file['path'])
-
-      expect(transifex_api).to(
-        receive(:create_or_update) do |resource, content|
-          expect(resource.source_file).to eq(file['path'])
-          expect(content).to eq(translations)
+  it 'correctly uploads modified resources to transifex' do
+    tx_config.resources.each do |resource|
+      expect(updater).to(
+        receive(:update_resource) do |resource, sha, categories|
+          expect(resource.project_slug).to eq(project_name)
+          expect(resource.resource_slug).to eq(resource_slug)
+          expect(sha).to eq(payload.head_commit[:id])
+          expect(categories).to eq('Author' => 'Test User')
         end
       )
     end
@@ -78,40 +54,11 @@ describe GithubHookHandler do
     handler.execute
   end
 
-  context 'when asked to process all branches' do
-    let(:branch) { 'all' }
-
-    it 'uploads by branch name if asked' do
-      allow(transifex_api).to receive(:resource_exists?).and_return(false)
-
-      modified_files.each do |file|
-        translations = translations_for(file['path'])
-
-        expect(transifex_api).to(
-          receive(:create) do |resource, content, categories|
-            expect(resource.source_file).to eq(file['path'])
-            expect(content).to eq(translations)
-            expect(categories).to include("branch:#{ref}")
-            expect(categories).to include("author:Test_User")
-          end
-        )
-      end
-
-      handler.execute
-    end
-  end
-
   context 'with an L10N branch' do
     let(:ref) { 'tags/L10N_my_branch' }
 
     it 'creates an L10N tag' do
-      modified_files.each do |file|
-        allow(github_api).to(
-          receive(:blob).and_return('content' => '')
-        )
-
-        allow(transifex_api).to receive(:create_or_update)
-      end
+      expect(updater).to receive(:update_resource)
 
       # this is what we actually care about in this test
       expect(github_api).to(

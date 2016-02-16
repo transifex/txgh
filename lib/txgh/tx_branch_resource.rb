@@ -5,8 +5,8 @@ module Txgh
     extend Forwardable
 
     def_delegators :@resource, *[
-      :project_slug, :resource_slug, :type, :source_lang, :source_file,
-      :translation_file, :lang_map, :translation_path, :slugs
+      :project_slug, :type, :source_lang, :source_file, :L10N_resource_slug,
+      :translation_file, :lang_map, :translation_path
     ]
 
     attr_reader :resource, :branch
@@ -15,13 +15,13 @@ module Txgh
       def find(tx_config, resource_slug, branch)
         suffix = "-#{Utils.slugify(branch)}"
 
-        if resource_slug.end_with?(suffix)
-          resource_slug = resource_slug.chomp(suffix)
-
-          if resource = tx_config.resource(resource_slug)
-            new(resource, branch)
-          end
+        resource = if resource_slug.end_with?(suffix)
+          resource_slug_without_suffix = resource_slug.chomp(suffix)
+          tx_config.resource(resource_slug_without_suffix)
         end
+
+        resource ||= tx_config.resource(resource_slug)
+        new(resource, branch) if resource
       end
     end
 
@@ -32,6 +32,10 @@ module Txgh
 
     def resource_slug
       "#{resource.resource_slug}-#{slugified_branch}"
+    end
+
+    def slugs
+      [project_slug, resource_slug]
     end
 
     private

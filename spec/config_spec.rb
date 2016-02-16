@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'helpers/standard_txgh_setup'
 
 include Txgh
 

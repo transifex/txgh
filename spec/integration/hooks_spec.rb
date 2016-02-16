@@ -4,12 +4,14 @@ require 'base64'
 require 'json'
 require 'pathname'
 require 'rack/test'
+require 'helpers/integration_setup'
 require 'uri'
 
 include Txgh
 
-describe 'integration tests', integration: true do
+describe 'hook integration tests', integration: true do
   include Rack::Test::Methods
+  include IntegrationSetup
 
   def app
     @app ||= Txgh::Hooks.new
@@ -31,7 +33,7 @@ describe 'integration tests', integration: true do
             'api_token' => Base64.decode64('YjViYWY3Nzk5NTdkMzVlMmI0OGZmYjk4YThlY2M1ZDY0NzAwNWRhZA=='),
             'push_source_to' => 'test-project-88',
             'branch' => 'master',
-            'webhook_secret' => 'abc123'
+            'webhook_secret' => '18d3998f576dfe933357104b87abfd61'
           }
         }
       },
@@ -42,7 +44,7 @@ describe 'integration tests', integration: true do
             'api_username' => 'txgh.bot',
             'api_password' => '2aqFGW99fPRKWvXBPjbrxkdiR',
             'push_translations_to' => 'txgh-bot/txgh-test-resources',
-            'webhook_secret' => 'def456'
+            'webhook_secret' => 'fce95b1748fd638c22174d34200f10cf'
           }
         }
       }
