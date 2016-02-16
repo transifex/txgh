@@ -13,19 +13,7 @@ describe Txgh::Application do
   end
 
   describe '/health_check' do
-    xit 'does not allow requests with no credentials' do
-      get '/health_check'
-      expect(last_response.status).to eq(401)
-    end
-
-    xit 'does not allow invalid credentials' do
-      authorize 'bad', 'wrong'
-      get '/health_check'
-      expect(last_response.status).to eq(401)
-    end
-
     it 'indicates the server is running, returns a 200' do
-      authorize 'foo', 'bar'
       get '/health_check'
       expect(last_response).to be_ok
       expect(last_response.body).to be_empty
