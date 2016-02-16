@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'faraday_middleware', '~> 0.10'
   s.add_dependency 'json', '~> 1.8'
   s.add_dependency 'octokit', '~> 4.2'
-  s.add_dependency 'puma', '~> 2.15'
   s.add_dependency 'parseconfig', '~> 1.0'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
