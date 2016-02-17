@@ -10,9 +10,16 @@ module Txgh
     def name
       config['name']
     end
-    
+
     def webhook_secret
       config['webhook_secret']
+    end
+
+    def protected_branches
+      @protected_branches ||=
+        config.fetch('protected_branches', '').split(',').map do |branch|
+          Utils.absolute_branch(branch.strip)
+        end
     end
 
     def webhook_protected?
