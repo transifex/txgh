@@ -9,6 +9,7 @@ module Txgh
     end
 
     def commit_resource(tx_resource, branch, language)
+      return if prevent_commit_on?(branch)
       unless language == tx_resource.source_lang
         logger.info('request language matches resource')
         translations = project.api.download(tx_resource, language)
@@ -27,6 +28,12 @@ module Txgh
           repo.name, branch, translation_path, translations
         )
       end
+    end
+
+    private
+
+    def prevent_commit_on?(branch)
+      project.protected_branches.include?(branch)
     end
   end
 end

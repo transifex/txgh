@@ -77,6 +77,7 @@ module Txgh
                 'api_username' => ENV['TX_USERNAME'],
                 'api_password' => ENV['TX_PASSWORD'],
                 'push_translations_to' => ENV['TX_PUSH_TRANSLATIONS_TO'],
+                'protected_branches' => ENV['PROTECTED_BRANCHES'],
                 'webhook_secret' => ENV['TX_WEBHOOK_SECRET']
               }
             }

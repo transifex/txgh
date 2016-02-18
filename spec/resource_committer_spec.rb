@@ -28,5 +28,11 @@ describe ResourceCommitter do
       expect(github_api).to_not receive(:commit)
       committer.commit_resource(resource, branch, resource.source_lang)
     end
+
+    it "doesn't commit anything if the branch is protected" do
+      transifex_project.protected_branches << 'foobranch'
+      expect(github_api).to_not receive(:commit)
+      committer.commit_resource(resource, 'foobranch', resource.source_lang)
+    end
   end
 end
