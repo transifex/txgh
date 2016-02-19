@@ -46,7 +46,7 @@ describe GithubHookHandler do
           expect(resource.project_slug).to eq(project_name)
           expect(resource.resource_slug).to eq(resource_slug)
           expect(sha).to eq(payload.head_commit[:id])
-          expect(categories).to eq('Author' => 'Test User')
+          expect(categories).to eq('author' => 'Test User')
         end
       )
     end
