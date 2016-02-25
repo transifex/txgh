@@ -5,6 +5,7 @@ module Txgh
     end
 
     def absolute_branch(branch)
+      return unless branch
       if branch.include?('tags/')
         branch
       elsif branch.include?('heads/')

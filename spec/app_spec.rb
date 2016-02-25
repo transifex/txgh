@@ -7,6 +7,7 @@ require 'helpers/standard_txgh_setup'
 
 describe Txgh::Application do
   include Rack::Test::Methods
+  include StandardTxghSetup
 
   def app
     Txgh::Application
@@ -17,6 +18,52 @@ describe Txgh::Application do
       get '/health_check'
       expect(last_response).to be_ok
       expect(last_response.body).to be_empty
+    end
+  end
+
+  describe '/config' do
+    it 'fetches and returns the config for the given project' do
+      get '/config', project_slug: project_name
+      config = JSON.parse(last_response.body)['data']
+      expect(config).to include('resources')
+      expect(config).to_not include('branch_slug')
+      expect(config['resources'].first).to eq(
+        'project_slug' => 'my_awesome_project',
+        'resource_slug' => 'my_resource',
+        'type' => 'PO',
+        'source_lang' => 'en',
+        'source_file' => 'sample.po',
+        'translation_file' => 'translations/<lang>/sample.po'
+      )
+    end
+
+    it 'fetches and returns the config for the given project and branch' do
+      get '/config', project_slug: project_name, branch: branch
+      config = JSON.parse(last_response.body)['data']
+      expect(config).to include('resources')
+      expect(config['branch_slug']).to eq('heads_master')
+      expect(config['resources'].first).to eq(
+        'project_slug' => 'my_awesome_project',
+        'resource_slug' => 'my_resource',
+        'type' => 'PO',
+        'source_lang' => 'en',
+        'source_file' => 'sample.po',
+        'translation_file' => 'translations/<lang>/sample.po'
+      )
+    end
+
+    it 'returns an error response on error' do
+      message = 'Red alert!'
+
+      expect(Txgh::KeyManager).to(
+        receive(:tx_config).and_raise(StandardError, message)
+      )
+
+      get '/config', project_slug: project_name
+      response = JSON.parse(last_response.body)
+      expect(response).to eq([
+        'error' => message
+      ])
     end
   end
 end
