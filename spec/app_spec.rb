@@ -52,7 +52,22 @@ describe Txgh::Application do
       )
     end
 
-    it 'returns an error response on error' do
+    it "responds with not found when config can't be found" do
+      message = 'Red alert!'
+
+      expect(Txgh::KeyManager).to(
+        receive(:tx_config).and_raise(ConfigNotFoundError, message)
+      )
+
+      get '/config', project_slug: project_name
+      expect(last_response.status).to eq(404)
+      response = JSON.parse(last_response.body)
+      expect(response).to eq([
+        'error' => message
+      ])
+    end
+
+    it 'responds with internal error when an unexpected error occurs' do
       message = 'Red alert!'
 
       expect(Txgh::KeyManager).to(
@@ -60,6 +75,7 @@ describe Txgh::Application do
       )
 
       get '/config', project_slug: project_name
+      expect(last_response.status).to eq(500)
       response = JSON.parse(last_response.body)
       expect(response).to eq([
         'error' => message

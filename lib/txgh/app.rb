@@ -35,8 +35,11 @@ module Txgh
 
         status 200
         json data: data
-      rescue => e
+      rescue ConfigNotFoundError => e
         status 404
+        json [{ error: e.message }]
+      rescue => e
+        status 500
         json [{ error: e.message }]
       end
     end
