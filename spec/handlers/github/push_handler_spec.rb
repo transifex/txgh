@@ -4,13 +4,13 @@ require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 
 include Txgh
-include Txgh::Handlers
+include Txgh::Handlers::Github
 
-describe GithubHookHandler do
+describe PushHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    GithubHookHandler.new(
+    PushHandler.new(
       project: transifex_project,
       repo: github_repo,
       payload: payload.to_h,

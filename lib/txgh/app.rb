@@ -1,6 +1,7 @@
 require 'base64'
 require 'json'
 require 'sinatra'
+require 'sinatra/json'
 require 'sinatra/reloader'
 require 'uri'
 
@@ -49,7 +50,7 @@ module Txgh
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
       if authenticated_transifex_request?(config.transifex_project, request)
-        handler = transifex_handler_for(
+        handler = Txgh::Handlers::TransifexHookHandler.new(
           project: config.transifex_project,
           repo: config.github_repo,
           resource_slug: payload['resource'],
@@ -65,45 +66,15 @@ module Txgh
     end
 
     post '/github' do
-      settings.logger.info('Processing request at /hooks/github')
+      response = Txgh::Handlers::Github::RequestHandler.handle_request(
+        request, settings.logger
+      )
 
-      payload = if params[:payload]
-        settings.logger.info('processing payload from form')
-        JSON.parse(params[:payload])
-      else
-        settings.logger.info("processing payload from request.body")
-        JSON.parse(request.body.read)
-      end
-
-      github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
-      config = Txgh::KeyManager.config_from_repo(github_repo_name)
-
-      if authenticated_github_request?(config.github_repo, request)
-        handler = github_handler_for(
-          project: config.transifex_project,
-          repo: config.github_repo,
-          payload: payload,
-          logger: settings.logger
-        )
-
-        handler.execute
-        status 200
-      else
-        status 401
-      end
+      status response.status
+      json response.body
     end
 
     private
-
-    def authenticated_github_request?(repo, request)
-      if repo.webhook_protected?
-        GithubRequestAuth.authentic_request?(
-          request, repo.webhook_secret
-        )
-      else
-        true
-      end
-    end
 
     def authenticated_transifex_request?(project, request)
       if project.webhook_protected?
@@ -113,14 +84,6 @@ module Txgh
       else
         true
       end
-    end
-
-    def transifex_handler_for(options)
-      Txgh::Handlers::TransifexHookHandler.new(options)
-    end
-
-    def github_handler_for(options)
-      Txgh::Handlers::GithubHookHandler.new(options)
     end
   end
 

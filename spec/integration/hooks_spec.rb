@@ -126,6 +126,7 @@ describe 'hook integration tests', integration: true do
   it 'verifies the github hook endpoint works' do
     VCR.use_cassette('github_hook_endpoint') do
       sign_github_request(github_postbody)
+      header 'X-GitHub-Event', 'push'
       header 'content-type', 'application/x-www-form-urlencoded'
       post '/github', github_postbody
       expect(last_response).to be_ok
@@ -135,6 +136,7 @@ describe 'hook integration tests', integration: true do
   it 'verifies the github release hook endpoint works' do
     VCR.use_cassette('github_release_hook_endpoint') do
       sign_github_request(github_postbody_release)
+      header 'X-GitHub-Event', 'push'
       header 'content-type', 'application/x-www-form-urlencoded'
       post '/github', github_postbody_release
       expect(last_response).to be_ok
@@ -144,6 +146,7 @@ describe 'hook integration tests', integration: true do
   it 'verifies the github l10n hook endpoint works' do
     VCR.use_cassette('github_l10n_hook_endpoint') do
       sign_github_request(github_postbody_l10n)
+      header 'X-GitHub-Event', 'push'
       header 'content-type', 'application/x-www-form-urlencoded'
       post '/github', github_postbody_l10n
       expect(last_response).to be_ok

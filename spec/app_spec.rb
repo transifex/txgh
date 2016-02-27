@@ -26,13 +26,7 @@ describe Txgh::Hooks do
   include StandardTxghSetup
 
   def app
-    # this insanity is necessary to allow the tests to stub helper methods
-    @app ||= Class.new(Txgh::Hooks) do
-      def call(env)
-        # don't let sinatra dup us before calling
-        call!(env)
-      end
-    end.new!  # new bang gives us a raw instance (Sinatra redefines `new`)
+    Txgh::Hooks
   end
 
   let(:config) do
@@ -50,11 +44,20 @@ describe Txgh::Hooks do
   end
 
   describe '/transifex' do
+    def sign_with(body)
+      header(
+        Txgh::TransifexRequestAuth::TRANSIFEX_HEADER,
+        Txgh::TransifexRequestAuth.header_value(
+          body, config.transifex_project.webhook_secret
+        )
+      )
+    end
+
     let(:handler) { double(:handler) }
 
     it 'creates a handler and executes it' do
-      expect(app).to(
-        receive(:transifex_handler_for) do |options|
+      expect(Txgh::Handlers::TransifexHookHandler).to(
+        receive(:new) do |options|
           expect(options[:project].name).to eq(project_name)
           expect(options[:repo].name).to eq(repo_name)
           handler
@@ -71,29 +74,74 @@ describe Txgh::Hooks do
       }
 
       payload = URI.encode_www_form(params.to_a)
+      sign_with payload
       post '/transifex', payload
     end
   end
 
   describe '/github' do
-    let(:handler) { double(:handler) }
-
-    it 'creates a handler and executes it' do
-      expect(app).to(
-        receive(:github_handler_for) do |options|
-          expect(options[:project].name).to eq(project_name)
-          expect(options[:repo].name).to eq(repo_name)
-          handler
-        end
+    def sign_with(body)
+      header(
+        Txgh::GithubRequestAuth::GITHUB_HEADER,
+        Txgh::GithubRequestAuth.header_value(
+          body, config.github_repo.webhook_secret
+        )
       )
+    end
 
-      expect(handler).to receive(:execute)
+    describe 'push event' do
+      let(:handler) { double(:handler) }
 
-      payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+      before(:each) do
+        allow(Txgh::Handlers::Github::PushHandler).to(
+          receive(:new) do |options|
+            expect(options[:project].name).to eq(project_name)
+            expect(options[:repo].name).to eq(repo_name)
+            handler
+          end
+        )
+      end
 
-      post '/github', {
-        'payload' => payload.to_json
-      }
+      it 'forwards the request to the github request handler' do
+        expect(handler).to receive(:execute)
+
+        payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+
+        sign_with payload.to_json
+        header 'X-GitHub-Event', 'push'
+        post '/github', payload.to_json
+
+        expect(last_response).to be_ok
+      end
+
+      it 'returns unauthorized if not properly signed' do
+        payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+
+        header 'X-GitHub-Event', 'push'
+        post '/github', payload.to_json
+
+        expect(last_response.status).to eq(401)
+      end
+
+      it 'returns invalid request if event unrecognized' do
+        header 'X-GitHub-Event', 'foobar'
+        post '/github'
+
+        expect(last_response.status).to eq(400)
+      end
+
+      it 'returns internal error on unexpected error' do
+        payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+
+        expect(Txgh::KeyManager).to(
+          receive(:config_from_repo).and_raise(StandardError)
+        )
+
+        header 'X-GitHub-Event', 'push'
+        post '/github', payload.to_json
+
+        expect(last_response.status).to eq(500)
+      end
     end
   end
 end
