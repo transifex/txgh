@@ -56,7 +56,7 @@ describe Txgh::Hooks do
     let(:handler) { double(:handler) }
 
     it 'creates a handler and executes it' do
-      expect(Txgh::Handlers::TransifexHookHandler).to(
+      expect(Txgh::Handlers::Transifex::HookHandler).to(
         receive(:new) do |options|
           expect(options[:project].name).to eq(project_name)
           expect(options[:repo].name).to eq(repo_name)

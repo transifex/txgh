@@ -47,6 +47,8 @@ module Txgh
               updater.update_resource(resource, commit_sha, categories)
             end
           end
+
+          [200, {}]
         end
 
         private

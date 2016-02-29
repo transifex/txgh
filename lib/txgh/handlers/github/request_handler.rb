@@ -13,9 +13,7 @@ module Txgh
               when 'delete'
                 handle_delete(request, logger)
               else
-                Response.new(
-                  400, error('Unexpected event type')
-                )
+                [400, error('Unexpected event type')]
             end
           end
 
@@ -34,12 +32,12 @@ module Txgh
                 logger: logger
               )
 
-              Response.new(200, handler.execute)
+              handler.execute
             else
-              Response.new(401, error('Unauthorized'))
+              [401, error('Unauthorized')]
             end
           rescue => e
-            Response.new(500, error("Internal server error #{e.message}"))
+            [500, error("Internal server error: #{e.message}")]
           end
 
           def handle_delete(request)
