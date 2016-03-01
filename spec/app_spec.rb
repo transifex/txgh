@@ -55,27 +55,47 @@ describe Txgh::Hooks do
 
     let(:handler) { double(:handler) }
 
-    it 'creates a handler and executes it' do
-      expect(Txgh::Handlers::Transifex::HookHandler).to(
+    let(:params) do
+      {
+        'project' => project_name,
+        'resource' => resource_slug,
+        'language' => language,
+        'translated' => '100'
+      }
+    end
+
+    let(:payload) { URI.encode_www_form(params.to_a) }
+
+    before(:each) do
+      allow(Txgh::Handlers::Transifex::HookHandler).to(
         receive(:new) do |options|
           expect(options[:project].name).to eq(project_name)
           expect(options[:repo].name).to eq(repo_name)
           handler
         end
       )
+    end
 
+    it 'creates a handler and executes it' do
       expect(handler).to receive(:execute)
-
-      params = {
-        'project' => project_name,
-        'resource' => resource_slug,
-        'language' => language,
-        'translated' => '100'
-      }
-
       payload = URI.encode_www_form(params.to_a)
       sign_with payload
       post '/transifex', payload
+    end
+
+    it 'returns unauthorized if not properly signed' do
+      post '/transifex', payload
+      expect(last_response.status).to eq(401)
+    end
+
+    it 'returns internal error on unexpected error' do
+      expect(Txgh::KeyManager).to(
+        receive(:config_from_project).and_raise(StandardError)
+      )
+
+      sign_with payload
+      post '/transifex', payload
+      expect(last_response.status).to eq(500)
     end
   end
 
