@@ -78,10 +78,14 @@ describe Txgh::Hooks do
     end
 
     it 'creates a handler and executes it' do
-      expect(handler).to receive(:execute)
+      expect(handler).to(
+        receive(:execute).and_return(respond_with(200, true))
+      )
+
       payload = URI.encode_www_form(params.to_a)
       sign_with payload
       post '/transifex', payload
+      expect(last_response).to be_ok
     end
 
     it 'returns unauthorized if not properly signed' do
