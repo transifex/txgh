@@ -22,6 +22,8 @@ module Txgh
           if tx_resource
             committer = ResourceCommitter.new(project, repo, logger)
             committer.commit_resource(tx_resource, branch, language)
+
+            [200, {}]
           else
             [
               404,
@@ -30,8 +32,6 @@ module Txgh
               }]
             ]
           end
-
-          [200, {}]
         end
 
         private

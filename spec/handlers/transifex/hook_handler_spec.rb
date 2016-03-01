@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'helpers/nil_logger'
+require 'helpers/standard_txgh_setup'
 
 include Txgh
 include Txgh::Handlers::Transifex
@@ -22,7 +23,7 @@ describe HookHandler do
   end
 
   before(:each) do
-    expect(transifex_api).to(receive(:download)) do |resource, language|
+    allow(transifex_api).to(receive(:download)) do |resource, language|
       expect(resource.project_slug).to eq(project_name)
       expect(resource.resource_slug).to eq(requested_resource_slug)
       translations
@@ -36,7 +37,20 @@ describe HookHandler do
       )
     )
 
-    handler.execute
+    response = handler.execute
+    expect(response).to eq([200, {}])
+  end
+
+  context 'with a non-existent resource' do
+    let(:requested_resource_slug) { 'foobarbazboo' }
+
+    it "responds with an error if the resource can't be found" do
+      status, body = handler.execute
+      expect(status).to eq(404)
+      expect(body).to eq(
+        [{ error: "Could not find configuration for resource '#{requested_resource_slug}'" }]
+      )
+    end
   end
 
   context 'when asked to process all branches' do
@@ -58,7 +72,8 @@ describe HookHandler do
         )
       )
 
-      handler.execute
+      response = handler.execute
+      expect(response).to eq([200, {}])
     end
   end
 
@@ -72,7 +87,8 @@ describe HookHandler do
         )
       )
 
-      handler.execute
+      response = handler.execute
+      expect(response).to eq([200, {}])
     end
   end
 end
