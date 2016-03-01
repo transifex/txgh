@@ -58,22 +58,32 @@ describe KeyManager do
       expect(config).to eq(:tx_config)
     end
 
-    it 'raises an error if asked to load config from a git repository and no ref is given' do
-      project_config.merge!('tx_config' => 'git://./tx.config')
-      expect { KeyManager.tx_config(project, repo) }.to raise_error(TxghError)
-    end
+    context 'with git-based config' do
+      before(:each) do
+        project_config.merge!('tx_config' => 'git://./tx.config')
+      end
 
-    it 'loads tx config from a git repository' do
-      project_config.merge!('tx_config' => 'git://./tx.config')
+      it 'raises an error if asked to load config from a git repository and no ref is given' do
+        expect { KeyManager.tx_config(project, repo) }.to raise_error(TxghError)
+      end
 
-      expect(repo.api).to(
-        receive(:download)
-          .with(repo.name, './tx.config', 'my_branch')
-          .and_return("[main]\nlang_map = ko:ko_KR")
-      )
+      it "raises an error if the git repo doesn't contain the requested config file" do
+        expect(repo.api).to receive(:download).and_raise(Octokit::NotFound)
+        expect { KeyManager.tx_config(project, repo, 'my_branch') }.to(
+          raise_error(ConfigNotFoundError)
+        )
+      end
 
-      config = KeyManager.tx_config(project, repo, 'my_branch')
-      expect(config.lang_map).to eq({ 'ko' => 'ko_KR' })
+      it 'loads tx config from a git repository' do
+        expect(repo.api).to(
+          receive(:download)
+            .with(repo.name, './tx.config', 'my_branch')
+            .and_return("[main]\nlang_map = ko:ko_KR")
+        )
+
+        config = KeyManager.tx_config(project, repo, 'my_branch')
+        expect(config.lang_map).to eq({ 'ko' => 'ko_KR' })
+      end
     end
 
     it 'loads raw tx config' do

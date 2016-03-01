@@ -31,4 +31,17 @@ describe TxResource do
       expect(resource.slugs).to eq(%w(project_slug resource_slug))
     end
   end
+
+  describe '#to_h' do
+    it 'converts the resource into a hash' do
+      expect(resource.to_h).to eq(
+        project_slug: 'project_slug',
+        resource_slug: 'resource_slug',
+        type: 'type',
+        source_lang: 'source_lang',
+        source_file: 'source_file',
+        translation_file: 'translation_file'
+      )
+    end
+  end
 end

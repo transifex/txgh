@@ -38,6 +38,13 @@ module Txgh
       [project_slug, resource_slug]
     end
 
+    def to_h
+      resource.to_h.merge(
+        project_slug: project_slug,
+        resource_slug: resource_slug
+      )
+    end
+
     private
 
     def slugified_branch
