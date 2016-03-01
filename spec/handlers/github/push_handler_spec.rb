@@ -52,7 +52,8 @@ describe PushHandler do
     end
 
     response = handler.execute
-    expect(response).to eq([200, true])
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
   end
 
   context 'with an L10N branch' do
@@ -69,7 +70,8 @@ describe PushHandler do
       )
 
       response = handler.execute
-      expect(response).to eq([200, true])
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
     end
   end
 end

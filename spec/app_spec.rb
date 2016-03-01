@@ -24,6 +24,7 @@ end
 describe Txgh::Hooks do
   include Rack::Test::Methods
   include StandardTxghSetup
+  include Txgh::ResponseHelpers
 
   def app
     Txgh::Hooks
@@ -123,7 +124,9 @@ describe Txgh::Hooks do
       end
 
       it 'forwards the request to the github request handler' do
-        expect(handler).to receive(:execute)
+        expect(handler).to(
+          receive(:execute).and_return(respond_with(200, true))
+        )
 
         payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
 

@@ -1,7 +1,7 @@
 module Txgh
   module ResponseHelpers
     def respond_with(status, body)
-      [status, body]
+      Txgh::Handlers::Response.new(status, body)
     end
 
     def respond_with_success(status, body)

@@ -41,21 +41,15 @@ module Txgh
 
 
     post '/transifex' do
-      status_code, body = Transifex::RequestHandler.handle_request(
-        request, settings.logger
-      )
-
-      status status_code
-      json body
+      response = Transifex::RequestHandler.handle_request(request, settings.logger)
+      status response.status
+      json response.body
     end
 
     post '/github' do
-      status_code, body = Github::RequestHandler.handle_request(
-        request, settings.logger
-      )
-
-      status status_code
-      json body
+      response = Github::RequestHandler.handle_request(request, settings.logger)
+      status response.status
+      json response.body
     end
   end
 

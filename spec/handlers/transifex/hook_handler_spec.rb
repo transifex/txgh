@@ -38,16 +38,17 @@ describe HookHandler do
     )
 
     response = handler.execute
-    expect(response).to eq([200, true])
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
   end
 
   context 'with a non-existent resource' do
     let(:requested_resource_slug) { 'foobarbazboo' }
 
     it "responds with an error if the resource can't be found" do
-      status, body = handler.execute
-      expect(status).to eq(404)
-      expect(body).to eq(
+      response = handler.execute
+      expect(response.status).to eq(404)
+      expect(response.body).to eq(
         [{ error: "Could not find configuration for resource '#{requested_resource_slug}'" }]
       )
     end
@@ -73,7 +74,8 @@ describe HookHandler do
       )
 
       response = handler.execute
-      expect(response).to eq([200, true])
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
     end
   end
 
@@ -88,7 +90,8 @@ describe HookHandler do
       )
 
       response = handler.execute
-      expect(response).to eq([200, true])
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
     end
   end
 end
