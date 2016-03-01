@@ -40,5 +40,16 @@ module Txgh
     def slugs
       [project_slug, resource_slug]
     end
+
+    def to_h
+      {
+        project_slug: project_slug,
+        resource_slug: resource_slug,
+        type: type,
+        source_lang: source_lang,
+        source_file: source_file,
+        translation_file: translation_file
+      }
+    end
   end
 end

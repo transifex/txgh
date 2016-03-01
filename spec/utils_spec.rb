@@ -25,5 +25,9 @@ describe Utils do
     it 'prefixes heads/ to bare branch names' do
       expect(Utils.absolute_branch('foo')).to eq('heads/foo')
     end
+
+    it 'handles a nil branch' do
+      expect(Utils.absolute_branch(nil)).to eq(nil)
+    end
   end
 end

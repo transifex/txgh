@@ -67,5 +67,9 @@ module Txgh
         end
       end
     end
+
+    def to_h
+      { resources: resources.map(&:to_h), lang_map: lang_map }
+    end
   end
 end

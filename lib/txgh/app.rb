@@ -18,6 +18,28 @@ module Txgh
       200
     end
 
+    get '/config' do
+      config = Txgh::KeyManager.config_from_project(params[:project_slug])
+      branch = Utils.absolute_branch(params[:branch])
+
+      begin
+        tx_config = Txgh::KeyManager.tx_config(
+          config.transifex_project, config.github_repo, branch
+        )
+
+        data = tx_config.to_h
+        data.merge!(branch_slug: Utils.slugify(branch)) if branch
+
+        status 200
+        json data: data
+      rescue ConfigNotFoundError => e
+        status 404
+        json [{ error: e.message }]
+      rescue => e
+        status 500
+        json [{ error: e.message }]
+      end
+    end
   end
 
   class Hooks < Sinatra::Base

@@ -37,9 +37,13 @@ module Txgh
                 "TX_CONFIG specified a file from git but did not provide a ref."
             end
 
-            Txgh::TxConfig.load(
-              github_repo.api.download(github_repo.name, payload, ref)
-            )
+            begin
+              Txgh::TxConfig.load(
+                github_repo.api.download(github_repo.name, payload, ref)
+              )
+            rescue Octokit::NotFound
+              raise ConfigNotFoundError, "Config file #{payload} not found in #{ref}"
+            end
         end
       end
 
