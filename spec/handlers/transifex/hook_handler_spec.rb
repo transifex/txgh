@@ -38,7 +38,7 @@ describe HookHandler do
     )
 
     response = handler.execute
-    expect(response).to eq([200, {}])
+    expect(response).to eq([200, true])
   end
 
   context 'with a non-existent resource' do
@@ -73,7 +73,7 @@ describe HookHandler do
       )
 
       response = handler.execute
-      expect(response).to eq([200, {}])
+      expect(response).to eq([200, true])
     end
   end
 
@@ -88,7 +88,7 @@ describe HookHandler do
       )
 
       response = handler.execute
-      expect(response).to eq([200, {}])
+      expect(response).to eq([200, true])
     end
   end
 end

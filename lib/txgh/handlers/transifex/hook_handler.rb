@@ -4,7 +4,8 @@ module Txgh
   module Handlers
     module Transifex
       class HookHandler
-        include Txgh::CategorySupport
+        include CategorySupport
+        include ResponseHelpers
 
         attr_reader :project, :repo, :resource_slug, :language, :logger
 
@@ -23,14 +24,11 @@ module Txgh
             committer = ResourceCommitter.new(project, repo, logger)
             committer.commit_resource(tx_resource, branch, language)
 
-            [200, {}]
+            respond_with(200, true)
           else
-            [
-              404,
-              [{
-                error: "Could not find configuration for resource '#{resource_slug}'"
-              }]
-            ]
+            respond_with_error(
+              404, "Could not find configuration for resource '#{resource_slug}'"
+            )
           end
         end
 

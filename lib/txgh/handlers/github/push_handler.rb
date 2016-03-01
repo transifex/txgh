@@ -5,6 +5,8 @@ module Txgh
   module Handlers
     module Github
       class PushHandler
+        include ResponseHelpers
+
         attr_reader :project, :repo, :payload, :logger
 
         def initialize(options = {})
@@ -48,7 +50,7 @@ module Txgh
             end
           end
 
-          [200, {}]
+          respond_with(200, true)
         end
 
         private
