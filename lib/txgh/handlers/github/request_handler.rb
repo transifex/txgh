@@ -10,8 +10,6 @@ module Txgh
             case request.env['HTTP_X_GITHUB_EVENT']
               when 'push'
                 handle_push(request, logger)
-              when 'delete'
-                handle_delete(request, logger)
               else
                 [400, error('Unexpected event type')]
             end
@@ -38,9 +36,6 @@ module Txgh
             end
           rescue => e
             [500, error("Internal server error: #{e.message}")]
-          end
-
-          def handle_delete(request)
           end
 
           def get_payload_from(request)
