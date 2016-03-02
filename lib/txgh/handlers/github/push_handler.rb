@@ -1,20 +1,9 @@
 require 'base64'
-require 'logger'
 
 module Txgh
   module Handlers
     module Github
-      class PushHandler
-        include ResponseHelpers
-
-        attr_reader :project, :repo, :payload, :logger
-
-        def initialize(options = {})
-          @project = options.fetch(:project)
-          @repo = options.fetch(:repo)
-          @payload = options.fetch(:payload)
-          @logger = options.fetch(:logger) { Logger.new(STDOUT) }
-        end
+      class PushHandler < Handler
 
         def execute
           # Check if the branch in the hook data is the configured branch we want
@@ -112,6 +101,7 @@ module Txgh
         def branch
           @ref ||= payload['ref'].sub(/^refs\//, '')
         end
+
       end
     end
   end
