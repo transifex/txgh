@@ -57,7 +57,9 @@ module Txgh
 
         def should_handle_request?
           # ref_type can be either 'branch' or 'tag' - we only care about branches
-          payload['ref_type'] == 'branch' && repo.should_process_branch?(branch)
+          payload['ref_type'] == 'branch' &&
+            repo.should_process_branch?(branch) &&
+            project.auto_delete_resources?
         end
 
         def branch

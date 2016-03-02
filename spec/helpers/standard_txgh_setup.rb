@@ -22,7 +22,8 @@ module StandardTxghSetup
       'push_translations_to' => repo_name,
       'name' => project_name,
       'tx_config' => "raw://#{tx_config_raw}",
-      'webhook_secret' => 'abc123'
+      'webhook_secret' => 'abc123',
+      'auto_delete_resources' => 'true'
     }
   end
 

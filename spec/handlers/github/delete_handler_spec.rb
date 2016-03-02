@@ -45,6 +45,15 @@ describe DeleteHandler do
     expect(response.body).to eq(true)
   end
 
+  it 'does not delete resources if auto resource deletions are disabled' do
+    allow(transifex_api).to receive(:resource_exists?).and_return(true)
+    project_config['auto_delete_resources'] = 'false'
+    expect(transifex_api).to_not receive(:delete)
+    response = handler.execute
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
+  end
+
   it "responds with an error if the config can't be found" do
     allow(handler).to receive(:tx_config).and_return(nil)
     response = handler.execute
