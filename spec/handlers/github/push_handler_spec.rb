@@ -4,13 +4,13 @@ require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 
 include Txgh
-include Txgh::Handlers
+include Txgh::Handlers::Github
 
-describe GithubHookHandler do
+describe PushHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    GithubHookHandler.new(
+    PushHandler.new(
       project: transifex_project,
       repo: github_repo,
       payload: payload.to_h,
@@ -51,7 +51,9 @@ describe GithubHookHandler do
       )
     end
 
-    handler.execute
+    response = handler.execute
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
   end
 
   context 'with an L10N branch' do
@@ -67,7 +69,9 @@ describe GithubHookHandler do
         )
       )
 
-      handler.execute
+      response = handler.execute
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
     end
   end
 end

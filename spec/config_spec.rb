@@ -3,7 +3,7 @@ require 'helpers/standard_txgh_setup'
 
 include Txgh
 
-describe Config do
+describe Txgh::Config do
   include StandardTxghSetup
 
   let(:config) do

@@ -13,6 +13,7 @@ module Txgh
   autoload :ParseConfig,          'txgh/parse_config'
   autoload :ResourceCommitter,    'txgh/resource_committer'
   autoload :ResourceUpdater,      'txgh/resource_updater'
+  autoload :ResponseHelpers,      'txgh/response_helpers'
   autoload :TransifexApi,         'txgh/transifex_api'
   autoload :TransifexProject,     'txgh/transifex_project'
   autoload :TransifexRequestAuth, 'txgh/transifex_request_auth'

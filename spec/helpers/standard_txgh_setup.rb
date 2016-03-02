@@ -21,7 +21,8 @@ module StandardTxghSetup
       'api_password' => 'transifex_api_password',
       'push_translations_to' => repo_name,
       'name' => project_name,
-      'tx_config' => "raw://#{tx_config_raw}"
+      'tx_config' => "raw://#{tx_config_raw}",
+      'webhook_secret' => 'abc123'
     }
   end
 
@@ -31,7 +32,8 @@ module StandardTxghSetup
       'api_token' => 'github_api_token',
       'push_source_to' => project_name,
       'branch' => branch,
-      'name' => repo_name
+      'name' => repo_name,
+      'webhook_secret' => 'abc123'
     }
   end
 

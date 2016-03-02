@@ -1,10 +1,11 @@
 require 'spec_helper'
 require 'helpers/nil_logger'
+require 'helpers/standard_txgh_setup'
 
 include Txgh
-include Txgh::Handlers
+include Txgh::Handlers::Transifex
 
-describe TransifexHookHandler do
+describe HookHandler do
   include StandardTxghSetup
 
   let(:requested_resource_slug) do
@@ -12,7 +13,7 @@ describe TransifexHookHandler do
   end
 
   let(:handler) do
-    TransifexHookHandler.new(
+    HookHandler.new(
       project: transifex_project,
       repo: github_repo,
       resource_slug: requested_resource_slug,
@@ -22,7 +23,7 @@ describe TransifexHookHandler do
   end
 
   before(:each) do
-    expect(transifex_api).to(receive(:download)) do |resource, language|
+    allow(transifex_api).to(receive(:download)) do |resource, language|
       expect(resource.project_slug).to eq(project_name)
       expect(resource.resource_slug).to eq(requested_resource_slug)
       translations
@@ -36,7 +37,21 @@ describe TransifexHookHandler do
       )
     )
 
-    handler.execute
+    response = handler.execute
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
+  end
+
+  context 'with a non-existent resource' do
+    let(:requested_resource_slug) { 'foobarbazboo' }
+
+    it "responds with an error if the resource can't be found" do
+      response = handler.execute
+      expect(response.status).to eq(404)
+      expect(response.body).to eq(
+        [{ error: "Could not find configuration for resource '#{requested_resource_slug}'" }]
+      )
+    end
   end
 
   context 'when asked to process all branches' do
@@ -58,7 +73,9 @@ describe TransifexHookHandler do
         )
       )
 
-      handler.execute
+      response = handler.execute
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
     end
   end
 
@@ -72,7 +89,9 @@ describe TransifexHookHandler do
         )
       )
 
-      handler.execute
+      response = handler.execute
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
     end
   end
 end
