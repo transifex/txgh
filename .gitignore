@@ -22,3 +22,5 @@ config/initializers/secret_token.rb
 Gemfile.lock
 config/txgh_config.rb
 .env
+.byebug_history
+

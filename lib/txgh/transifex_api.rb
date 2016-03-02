@@ -63,6 +63,11 @@ module Txgh
       raise_error!(response)
     end
 
+    def delete(tx_resource)
+      url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
+      connection.delete(url)
+    end
+
     def update_content(tx_resource, content)
       content_io = get_content_io(tx_resource, content)
       payload = { content: content_io }
