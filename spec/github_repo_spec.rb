@@ -34,4 +34,52 @@ describe GithubRepo do
       end
     end
   end
+
+  describe '#should_process_branch?' do
+    context 'with all branches indicated' do
+      let(:branch) { 'all' }
+
+      it 'returns true if all branches should be processed' do
+        expect(repo.should_process_branch?('heads/foo')).to eq(true)
+      end
+    end
+
+    it 'returns true if the given branch matches the configured one' do
+      expect(repo.should_process_branch?('heads/master')).to eq(true)
+    end
+
+    it "returns false if the given branch doesn't match the configured one" do
+      expect(repo.should_process_branch?('heads/foo')).to eq(false)
+    end
+
+    it 'returns true if the branch contains the special L10N text' do
+      expect(repo.should_process_branch?('heads/L10N_foo')).to eq(true)
+    end
+  end
+
+  describe '#github_config_branch' do
+    context 'with all branches indicated' do
+      let(:branch) { 'all' }
+
+      it "doesn't modify the passed branch, i.e. returns 'all'" do
+        expect(repo.github_config_branch).to eq('all')
+      end
+    end
+
+    context 'with a nil branch' do
+      let(:branch) { nil }
+
+      it 'chooses master by default' do
+        expect(repo.github_config_branch).to eq('heads/master')
+      end
+    end
+
+    context 'with a configured branch' do
+      let(:branch) { 'foobar' }
+
+      it 'correctly prefixes the branch' do
+        expect(repo.github_config_branch).to eq('heads/foobar')
+      end
+    end
+  end
 end

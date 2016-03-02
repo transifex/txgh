@@ -32,12 +32,25 @@ describe DeleteHandler do
       expect(tx_resource.resource_slug).to eq(resource_slug_with_branch)
     end
 
-    handler.execute
+    response = handler.execute
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
   end
 
   it 'does not delete non-existent resources' do
     expect(transifex_api).to receive(:resource_exists?).and_return(false)
     expect(transifex_api).to_not receive(:delete)
-    handler.execute
+    response = handler.execute
+    expect(response.status).to eq(200)
+    expect(response.body).to eq(true)
+  end
+
+  it "responds with an error if the config can't be found" do
+    allow(handler).to receive(:tx_config).and_return(nil)
+    response = handler.execute
+    expect(response.status).to eq(404)
+    expect(response.body).to eq([
+      { error: "Could not find configuration for branch '#{ref}'" }
+    ])
   end
 end

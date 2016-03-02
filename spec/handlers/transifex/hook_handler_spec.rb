@@ -42,6 +42,15 @@ describe HookHandler do
     expect(response.body).to eq(true)
   end
 
+  it "responds with an error if the config can't be found" do
+    expect(handler).to receive(:tx_config).and_return(nil)
+    response = handler.execute
+    expect(response.status).to eq(404)
+    expect(response.body).to eq([
+      { error: "Could not find configuration for branch 'heads/#{branch}'" }
+    ])
+  end
+
   context 'with a non-existent resource' do
     let(:requested_resource_slug) { 'foobarbazboo' }
 

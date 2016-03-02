@@ -104,6 +104,18 @@ describe TransifexApi do
     end
   end
 
+  describe '#delete' do
+    it 'deletes the given resource' do
+      expect(connection).to receive(:delete) do |url|
+        expect(url).to(
+          end_with("project/#{project_name}/resource/#{resource_slug}/")
+        )
+      end
+
+      api.delete(resource)
+    end
+  end
+
   describe '#update_content' do
     it 'makes a request with the correct parameters' do
       expect(connection).to receive(:put) do |url, payload|
