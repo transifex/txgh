@@ -20,14 +20,20 @@ module Txgh
         def execute
           logger.info(resource_slug)
 
-          if tx_resource
-            committer = ResourceCommitter.new(project, repo, logger)
-            committer.commit_resource(tx_resource, branch, language)
+          if tx_config
+            if tx_resource
+              committer = ResourceCommitter.new(project, repo, logger)
+              committer.commit_resource(tx_resource, branch, language)
 
-            respond_with(200, true)
+              respond_with(200, true)
+            else
+              respond_with_error(
+                404, "Could not find resource '#{resource_slug}' in config"
+              )
+            end
           else
             respond_with_error(
-              404, "Could not find configuration for resource '#{resource_slug}'"
+              404, "Could not find configuration for branch '#{branch}'"
             )
           end
         end
@@ -36,6 +42,8 @@ module Txgh
 
         def tx_config
           @tx_config ||= Txgh::KeyManager.tx_config(project, repo, branch)
+        rescue ConfigNotFoundError, TxghError
+          nil
         end
 
         def branch

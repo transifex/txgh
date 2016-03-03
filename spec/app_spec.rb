@@ -195,7 +195,7 @@ describe Txgh::Hooks do
           receive(:execute).and_return(respond_with(200, true))
         )
 
-        payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
 
         sign_with payload.to_json
         header 'X-GitHub-Event', 'push'
@@ -205,7 +205,7 @@ describe Txgh::Hooks do
       end
 
       it 'returns unauthorized if not properly signed' do
-        payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
 
         header 'X-GitHub-Event', 'push'
         post '/github', payload.to_json
@@ -221,7 +221,7 @@ describe Txgh::Hooks do
       end
 
       it 'returns internal error on unexpected error' do
-        payload = GithubPayloadBuilder.webhook_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
 
         expect(Txgh::KeyManager).to(
           receive(:config_from_repo).and_raise(StandardError)

@@ -26,6 +26,10 @@ module Txgh
       !(webhook_secret || '').empty?
     end
 
+    def auto_delete_resources?
+      (config['auto_delete_resources'] || '').downcase == 'true'
+    end
+
     def tx_config_uri
       config['tx_config']
     end

@@ -19,6 +19,22 @@ module Txgh
       branch == 'all'
     end
 
+    def should_process_branch?(candidate)
+      process_all_branches? ||
+        candidate.include?(github_config_branch) ||
+        candidate.include?('L10N')
+    end
+
+    def github_config_branch
+      @github_config_branch ||= begin
+        if process_all_branches?
+          'all'
+        else
+          Utils.absolute_branch(branch || 'master')
+        end
+      end
+    end
+
     def webhook_secret
       config['webhook_secret']
     end

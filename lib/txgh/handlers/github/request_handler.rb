@@ -12,6 +12,8 @@ module Txgh
             case request.env['HTTP_X_GITHUB_EVENT']
               when 'push'
                 handle_push(request, logger)
+              when 'delete'
+                handle_delete(request, logger)
               else
                 handle_unexpected
             end
@@ -21,6 +23,11 @@ module Txgh
 
           def handle_push(request, logger)
             klass = Txgh::Handlers::Github::PushHandler
+            new(request, logger).handle(klass)
+          end
+
+          def handle_delete(request, logger)
+            klass = Txgh::Handlers::Github::DeleteHandler
             new(request, logger).handle(klass)
           end
 
@@ -73,9 +80,7 @@ module Txgh
         end
 
         def github_repo_name
-          owner = "#{payload['repository']['owner']['name']}"
-          repo = "#{payload['repository']['name']}"
-          "#{owner}/#{repo}"
+          payload['repository']['full_name']
         end
 
         def config

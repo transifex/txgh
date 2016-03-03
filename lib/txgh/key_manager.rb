@@ -82,7 +82,8 @@ module Txgh
                 'api_password' => ENV['TX_PASSWORD'],
                 'push_translations_to' => ENV['TX_PUSH_TRANSLATIONS_TO'],
                 'protected_branches' => ENV['PROTECTED_BRANCHES'],
-                'webhook_secret' => ENV['TX_WEBHOOK_SECRET']
+                'webhook_secret' => ENV['TX_WEBHOOK_SECRET'],
+                'auto_delete_resources' => ENV['AUTO_DELETE_RESOURCES']
               }
             }
           }

@@ -20,4 +20,21 @@ describe TransifexProject do
       )
     end
   end
+
+  describe '#auto_delete_resources' do
+    it 'returns false by default' do
+      project_config['auto_delete_resources'] = nil
+      expect(transifex_project.auto_delete_resources?).to eq(false)
+    end
+
+    it 'returns true if configured' do
+      project_config['auto_delete_resources'] = 'true'
+      expect(transifex_project.auto_delete_resources?).to eq(true)
+    end
+
+    it 'handles inconsistent casing' do
+      project_config['auto_delete_resources'] = 'tRuE'
+      expect(transifex_project.auto_delete_resources?).to eq(true)
+    end
+  end
 end

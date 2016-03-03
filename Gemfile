@@ -5,7 +5,7 @@ gemspec
 gem 'puma', '~> 2.15'
 
 group :development, :test do
-  gem 'pry-nav'
+  gem 'pry-byebug'
   gem 'rake'
 end
 

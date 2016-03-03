@@ -1,34 +1,23 @@
 require 'base64'
-require 'logger'
 
 module Txgh
   module Handlers
     module Github
-      class PushHandler
-        include ResponseHelpers
-
-        attr_reader :project, :repo, :payload, :logger
-
-        def initialize(options = {})
-          @project = options.fetch(:project)
-          @repo = options.fetch(:repo)
-          @payload = options.fetch(:payload)
-          @logger = options.fetch(:logger) { Logger.new(STDOUT) }
-        end
+      class PushHandler < Handler
 
         def execute
           # Check if the branch in the hook data is the configured branch we want
           logger.info("request github branch: #{branch}")
-          logger.info("config github branch: #{github_config_branch}")
+          logger.info("config github branch: #{repo.github_config_branch}")
 
-          if should_process_branch?
+          if repo.should_process_branch?(branch)
             logger.info('found branch in github request')
 
             tx_resources = tx_resources_for(branch)
             modified_resources = added_and_modified_resources_for(tx_resources)
             modified_resources.merge!(l10n_resources_for(tx_resources))
 
-            if github_config_branch.include?('tags/')
+            if repo.github_config_branch.include?('tags/')
               modified_resources.merge!(tag_resources_for(tx_resources))
             end
 
@@ -97,7 +86,7 @@ module Txgh
 
             # If we're processing by branch, create a branch resource. Otherwise,
             # use the original resource.
-            ret[resource.source_file] = if upload_by_branch?
+            ret[resource.source_file] = if repo.process_all_branches?
               TxBranchResource.new(resource, branch)  # maybe find instead?
             else
               resource
@@ -109,32 +98,10 @@ module Txgh
           @tx_config ||= KeyManager.tx_config(project, repo, branch)
         end
 
-        def should_process_branch?
-          process_all_branches? || (
-            branch.include?(github_config_branch) || branch.include?('L10N')
-          )
-        end
-
-        def github_config_branch
-          @github_config_branch = begin
-            if process_all_branches?
-              repo.branch
-            else
-              branch = repo.branch || 'master'
-              Utils.absolute_branch(branch)
-            end
-          end
-        end
-
-        def process_all_branches?
-          repo.process_all_branches?
-        end
-
-        alias_method :upload_by_branch?, :process_all_branches?
-
         def branch
           @ref ||= payload['ref'].sub(/^refs\//, '')
         end
+
       end
     end
   end

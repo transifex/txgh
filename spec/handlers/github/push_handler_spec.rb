@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'helpers/github_payload_builder'
-require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 
 include Txgh
@@ -19,7 +18,7 @@ describe PushHandler do
   end
 
   let(:payload) do
-    GithubPayloadBuilder.webhook_payload(repo_name, ref)
+    GithubPayloadBuilder.push_payload(repo_name, ref)
   end
 
   let(:modified_files) do

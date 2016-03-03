@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'pry-nav'
+require 'pry-byebug'
 require 'rake'
 require 'rspec'
 require 'txgh'

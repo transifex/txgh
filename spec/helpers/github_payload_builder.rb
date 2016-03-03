@@ -2,8 +2,12 @@ require 'json'
 
 class GithubPayloadBuilder
   class << self
-    def webhook_payload(*args)
-      GithubWebhookPayload.new(*args)
+    def push_payload(*args)
+      GithubPushPayload.new(*args)
+    end
+
+    def delete_payload(*args)
+      GithubDeletePayload.new(*args)
     end
   end
 end
@@ -37,7 +41,35 @@ class GithubPayload
   end
 end
 
-class GithubWebhookPayload < GithubPayload
+class GithubDeletePayload < GithubPayload
+  attr_reader :repo, :ref
+
+  def initialize(repo, ref)
+    @repo = repo
+    @ref = ref
+
+    @result = {
+      ref: "refs/#{ref}",
+      ref_type: 'branch',
+      pusher_type: 'user',
+
+      repository: {
+        name: repo.split('/').last,
+        full_name: repo,
+        owner: {
+          login: repo.split('/').first
+        }
+      },
+
+      sender: {
+        login: repo.split('/').first,
+        type: 'User'
+      }
+    }
+  end
+end
+
+class GithubPushPayload < GithubPayload
   attr_reader :repo, :ref, :before, :after
 
   DEFAULT_USER = {
