@@ -55,7 +55,7 @@ describe Txgh::Application do
     it "responds with not found when config can't be found" do
       message = 'Red alert!'
 
-      expect(Txgh::KeyManager).to(
+      expect(Txgh::Config::KeyManager).to(
         receive(:tx_config).and_raise(ConfigNotFoundError, message)
       )
 
@@ -70,7 +70,7 @@ describe Txgh::Application do
     it 'responds with internal error when an unexpected error occurs' do
       message = 'Red alert!'
 
-      expect(Txgh::KeyManager).to(
+      expect(Txgh::Config::KeyManager).to(
         receive(:tx_config).and_raise(StandardError, message)
       )
 
@@ -94,15 +94,15 @@ describe Txgh::Hooks do
   end
 
   let(:config) do
-    Txgh::Config.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, repo_config)
   end
 
   before(:each) do
-    allow(Txgh::KeyManager).to(
+    allow(Txgh::Config::KeyManager).to(
       receive(:config_from_project).with(project_name).and_return(config)
     )
 
-    allow(Txgh::KeyManager).to(
+    allow(Txgh::Config::KeyManager).to(
       receive(:config_from_repo).with(repo_name).and_return(config)
     )
   end
@@ -157,7 +157,7 @@ describe Txgh::Hooks do
     end
 
     it 'returns internal error on unexpected error' do
-      expect(Txgh::KeyManager).to(
+      expect(Txgh::Config::KeyManager).to(
         receive(:config_from_project).and_raise(StandardError)
       )
 
@@ -223,7 +223,7 @@ describe Txgh::Hooks do
       it 'returns internal error on unexpected error' do
         payload = GithubPayloadBuilder.push_payload(repo_name, ref)
 
-        expect(Txgh::KeyManager).to(
+        expect(Txgh::Config::KeyManager).to(
           receive(:config_from_repo).and_raise(StandardError)
         )
 
@@ -245,15 +245,15 @@ describe Txgh::Triggers do
   end
 
   let(:config) do
-    Txgh::Config.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, repo_config)
   end
 
   before(:each) do
-    allow(Txgh::KeyManager).to(
+    allow(Txgh::Config::KeyManager).to(
       receive(:config_from_project).with(project_name).and_return(config)
     )
 
-    allow(Txgh::KeyManager).to(
+    allow(Txgh::Config::KeyManager).to(
       receive(:config_from_repo).with(repo_name).and_return(config)
     )
   end

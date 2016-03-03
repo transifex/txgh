@@ -41,7 +41,7 @@ module Txgh
         private
 
         def tx_config
-          @tx_config ||= Txgh::KeyManager.tx_config(project, repo, branch)
+          @tx_config ||= Txgh::Config::KeyManager.tx_config(project, repo, branch)
         rescue ConfigNotFoundError, TxghError
           nil
         end

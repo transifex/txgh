@@ -64,7 +64,9 @@ describe 'hook integration tests', integration: true do
   end
 
   before(:each) do
-    allow(Txgh::KeyManager).to receive(:base_config).and_return(base_config)
+    allow(Txgh::Config::KeyManager).to(
+      receive(:base_config).and_return(base_config)
+    )
   end
 
   let(:payload_path) do
@@ -87,7 +89,7 @@ describe 'hook integration tests', integration: true do
   let(:repo_name) { 'txgh-bot/txgh-test-resources' }
 
   let(:config) do
-    Txgh::KeyManager.config_from(project_name, repo_name)
+    Txgh::Config::KeyManager.config_from(project_name, repo_name)
   end
 
   def sign_github_request(body)

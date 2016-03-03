@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
+include Txgh::Config
 
 describe TxConfig do
   include StandardTxghSetup

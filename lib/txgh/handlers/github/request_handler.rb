@@ -84,7 +84,7 @@ module Txgh
         end
 
         def config
-          @config ||= Txgh::KeyManager.config_from_repo(github_repo_name)
+          @config ||= Txgh::Config::KeyManager.config_from_repo(github_repo_name)
         end
 
         def repo
