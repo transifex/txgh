@@ -109,6 +109,13 @@ module Txgh
       JSON.parse(response.body)
     end
 
+    def get_resources(project_slug)
+      url = "#{API_ROOT}/project/#{project_slug}/resources/"
+      response = connection.get(url)
+      raise_error!(response)
+      JSON.parse(response.body)
+    end
+
     def get_languages(project_slug)
       url = "#{API_ROOT}/project/#{project_slug}/languages/"
       response = connection.get(url)

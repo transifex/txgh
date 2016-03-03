@@ -17,8 +17,17 @@ describe DeleteHandler do
     )
   end
 
+  # process all branches
+  let(:branch) { 'all' }
+
   let(:payload) do
     GithubPayloadBuilder.delete_payload(repo_name, ref)
+  end
+
+  let(:resource) { tx_config.resources.first }
+
+  let(:resource_api_response) do
+    [resource.to_api_h.merge('categories' => ["branch:#{ref}"])]
   end
 
   let(:resource_slug_with_branch) do
@@ -26,7 +35,10 @@ describe DeleteHandler do
   end
 
   it 'deletes the correct resource from transifex' do
-    expect(transifex_api).to receive(:resource_exists?).and_return(true)
+    expect(transifex_api).to(
+      receive(:get_resources).and_return(resource_api_response)
+    )
+
     expect(transifex_api).to receive(:delete) do |tx_resource|
       expect(tx_resource.project_slug).to eq(project_name)
       expect(tx_resource.resource_slug).to eq(resource_slug_with_branch)
@@ -37,8 +49,12 @@ describe DeleteHandler do
     expect(response.body).to eq(true)
   end
 
-  it 'does not delete non-existent resources' do
-    expect(transifex_api).to receive(:resource_exists?).and_return(false)
+  it "does not delete resources that don't have a matching branch" do
+    handler.payload['ref'] = 'heads/im_fake'
+    expect(transifex_api).to(
+      receive(:get_resources).and_return(resource_api_response)
+    )
+
     expect(transifex_api).to_not receive(:delete)
     response = handler.execute
     expect(response.status).to eq(200)
@@ -46,20 +62,10 @@ describe DeleteHandler do
   end
 
   it 'does not delete resources if auto resource deletions are disabled' do
-    allow(transifex_api).to receive(:resource_exists?).and_return(true)
     project_config['auto_delete_resources'] = 'false'
     expect(transifex_api).to_not receive(:delete)
     response = handler.execute
     expect(response.status).to eq(200)
     expect(response.body).to eq(true)
-  end
-
-  it "responds with an error if the config can't be found" do
-    allow(handler).to receive(:tx_config).and_return(nil)
-    response = handler.execute
-    expect(response.status).to eq(404)
-    expect(response.body).to eq([
-      { error: "Could not find configuration for branch '#{ref}'" }
-    ])
   end
 end

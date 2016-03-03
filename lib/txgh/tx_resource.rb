@@ -51,5 +51,14 @@ module Txgh
         translation_file: translation_file
       }
     end
+
+    def to_api_h
+      {
+        'slug' => resource_slug,
+        'i18n_type' => type,
+        'source_language_code' => source_lang,
+        'name' => translation_file
+      }
+    end
   end
 end

@@ -27,7 +27,7 @@ module Txgh
     end
 
     def auto_delete_resources?
-      config.fetch('auto_delete_resources', '').downcase == 'true'
+      (config['auto_delete_resources'] || '').downcase == 'true'
     end
 
     def tx_config_uri

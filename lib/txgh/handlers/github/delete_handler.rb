@@ -3,19 +3,11 @@ module Txgh
     module Github
       class DeleteHandler < Handler
 
+        include CategorySupport
+
         def execute
-          if should_handle_request?
-            if tx_config
-              delete_resources
-              respond_with(200, true)
-            else
-              respond_with_error(
-                404, "Could not find configuration for branch '#{branch}'"
-              )
-            end
-          else
-            respond_with(200, true)
-          end
+          delete_resources if should_handle_request?
+          respond_with(200, true)
         end
 
         private
@@ -27,20 +19,33 @@ module Txgh
           end
         end
 
-        def tx_config
-          @tx_config ||= Txgh::KeyManager.tx_config(project, repo, branch)
-        rescue ConfigNotFoundError, TxghError
-          nil
-        end
-
         def tx_resources
-          @tx_resources ||= tx_config.resources.map do |tx_resource|
-            branch_resource = tx_config.resource(tx_resource.resource_slug, branch)
+          project.api.get_resources(project.name).map do |resource_hash|
+            categories = deserialize_categories(resource_hash['categories'])
+            resource_branch = Utils.absolute_branch(categories['branch'])
 
-            if branch_resource && project.api.resource_exists?(branch_resource)
-              branch_resource
+            if resource_branch == branch
+              tx_branch_resource_from(resource_hash, branch)
             end
           end.compact
+        end
+
+        def tx_branch_resource_from(resource_hash, branch)
+          TxBranchResource.new(
+            tx_resource_from(resource_hash, branch), branch
+          )
+        end
+
+        # project_slug, resource_slug, type, source_lang, source_file, lang_map, translation_file
+        def tx_resource_from(resource_hash, branch)
+          TxResource.new(
+            project.name,
+            TxBranchResource.deslugify(resource_hash['slug'], branch),
+            resource_hash['i18n_type'],
+            resource_hash['source_language_code'],
+            resource_hash['name'],
+            '', nil
+          )
         end
 
         def should_handle_request?
