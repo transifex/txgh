@@ -55,7 +55,7 @@ describe Txgh::Application do
     it "responds with not found when config can't be found" do
       message = 'Red alert!'
 
-      expect(Txgh::Config::KeyManager).to(
+      expect(Txgh::Config::TxManager).to(
         receive(:tx_config).and_raise(ConfigNotFoundError, message)
       )
 
@@ -70,7 +70,7 @@ describe Txgh::Application do
     it 'responds with internal error when an unexpected error occurs' do
       message = 'Red alert!'
 
-      expect(Txgh::Config::KeyManager).to(
+      expect(Txgh::Config::TxManager).to(
         receive(:tx_config).and_raise(StandardError, message)
       )
 

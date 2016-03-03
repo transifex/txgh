@@ -21,4 +21,19 @@ module Txgh
   autoload :TxLogger,             'txgh/tx_logger'
   autoload :TxResource,           'txgh/tx_resource'
   autoload :Utils,                'txgh/utils'
+
+  class << self
+    def tx_manager
+      Txgh::Config::TxManager
+    end
+
+    def providers
+      Txgh::Config::Providers
+    end
+  end
+
+  # default set of tx config providers
+  tx_manager.register_provider(providers::FileProvider, Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::GitProvider,  Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::RawProvider,  Txgh::Config::TxConfig)
 end
