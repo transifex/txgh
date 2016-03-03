@@ -47,6 +47,18 @@ describe TxBranchResource do
     end
   end
 
+  describe '.deslugify' do
+    it 'removes the branch suffix from the resource slug' do
+      result = TxBranchResource.deslugify(resource_slug_with_branch, branch)
+      expect(result).to eq(resource_slug)
+    end
+
+    it 'hands back the original slug if no suffix' do
+      result = TxBranchResource.deslugify(resource_slug, branch)
+      expect(result).to eq(resource_slug)
+    end
+  end
+
   context 'with a resource' do
     let(:resource) do
       TxBranchResource.new(base_resource, branch)

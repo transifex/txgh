@@ -245,6 +245,29 @@ describe TransifexApi do
     end
   end
 
+  describe '#get_resources' do
+    it 'makes a request with the correct parameters' do
+      expect(connection).to receive(:get) do |url, payload|
+        expect(url).to(
+          end_with("project/#{project_name}/resources/")
+        )
+
+        response
+      end
+
+      expect(response).to receive(:status).and_return(200)
+      expect(response).to receive(:body).and_return('{"foo":"bar"}')
+      expect(api.get_resources(project_name)).to eq({ 'foo' => 'bar' })
+    end
+
+    it 'raises an exception if the api responds with an error code' do
+      allow(connection).to receive(:get).and_return(response)
+      allow(response).to receive(:status).and_return(404)
+      allow(response).to receive(:body).and_return('{}')
+      expect { api.get_resources(project_name) }.to raise_error(TransifexApiError)
+    end
+  end
+
   describe '#get_languages' do
     it 'makes a request with the correct parameters' do
       expect(connection).to receive(:get) do |url, payload|
