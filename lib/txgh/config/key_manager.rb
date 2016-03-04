@@ -26,15 +26,6 @@ module Txgh
 
         private
 
-        def split_uri(uri)
-          if uri =~ /\A[\w]+:\/\//
-            idx = uri.index('://')
-            [uri[0...idx], uri[(idx + 3)..-1]]
-          else
-            [nil, uri]
-          end
-        end
-
         def base_config
           {
             'github' => {
