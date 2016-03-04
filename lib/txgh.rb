@@ -1,4 +1,5 @@
 require 'txgh/errors'
+require 'yaml'
 
 module Txgh
   autoload :Application,          'txgh/app'
@@ -27,6 +28,10 @@ module Txgh
       Txgh::Config::TxManager
     end
 
+    def key_manager
+      Txgh::Config::KeyManager
+    end
+
     def providers
       Txgh::Config::Providers
     end
@@ -36,4 +41,8 @@ module Txgh
   tx_manager.register_provider(providers::FileProvider, Txgh::Config::TxConfig)
   tx_manager.register_provider(providers::GitProvider,  Txgh::Config::TxConfig)
   tx_manager.register_provider(providers::RawProvider,  Txgh::Config::TxConfig)
+
+  # default set of base config providers
+  key_manager.register_provider(providers::FileProvider, YAML)
+  key_manager.register_provider(providers::RawProvider,  YAML)
 end

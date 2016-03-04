@@ -6,6 +6,7 @@ require 'pathname'
 require 'rack/test'
 require 'helpers/integration_setup'
 require 'uri'
+require 'yaml'
 
 include Txgh
 
@@ -65,7 +66,7 @@ describe 'hook integration tests', integration: true do
 
   before(:each) do
     allow(Txgh::Config::KeyManager).to(
-      receive(:base_config).and_return(base_config)
+      receive(:raw_config).and_return("raw://#{YAML.dump(base_config)}")
     )
   end
 

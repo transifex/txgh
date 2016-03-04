@@ -1,4 +1,5 @@
 require 'helpers/nil_logger'
+require 'yaml'
 
 module StandardTxghSetup
   extend RSpec::SharedContext
@@ -58,7 +59,7 @@ module StandardTxghSetup
 
   before(:each) do
     allow(Txgh::Config::KeyManager).to(
-      receive(:base_config).and_return(base_config)
+      receive(:raw_config) { "raw://#{YAML.dump(base_config)}" }
     )
   end
 
