@@ -1,13 +1,13 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
+include Txgh::Config
 
-describe Txgh::Config do
+describe ConfigPair do
   include StandardTxghSetup
 
   let(:config) do
-    Txgh::Config.new(project_config, repo_config)
+    ConfigPair.new(project_config, repo_config)
   end
 
   describe '#github_repo' do

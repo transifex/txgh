@@ -40,6 +40,8 @@ module IntegrationSetup
   end
 
   before(:each) do
-    allow(Txgh::KeyManager).to receive(:base_config).and_return(base_config)
+    allow(Txgh::Config::KeyManager).to(
+      receive(:base_config).and_return(base_config)
+    )
   end
 end

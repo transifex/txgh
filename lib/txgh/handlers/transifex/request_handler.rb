@@ -62,7 +62,7 @@ module Txgh
         end
 
         def config
-          @config ||= Txgh::KeyManager.config_from_project(payload['project'])
+          @config ||= Txgh::Config::KeyManager.config_from_project(payload['project'])
         end
 
         def payload

@@ -53,11 +53,13 @@ module StandardTxghSetup
   end
 
   let(:tx_config) do
-    Txgh::TxConfig.load(tx_config_raw)
+    Txgh::Config::TxConfig.load(tx_config_raw)
   end
 
   before(:each) do
-    allow(Txgh::KeyManager).to receive(:base_config).and_return(base_config)
+    allow(Txgh::Config::KeyManager).to(
+      receive(:base_config).and_return(base_config)
+    )
   end
 
   let(:base_config) do

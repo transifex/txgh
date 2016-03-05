@@ -19,11 +19,11 @@ module Txgh
     end
 
     get '/config' do
-      config = Txgh::KeyManager.config_from_project(params[:project_slug])
+      config = Txgh::Config::KeyManager.config_from_project(params[:project_slug])
       branch = Utils.absolute_branch(params[:branch])
 
       begin
-        tx_config = Txgh::KeyManager.tx_config(
+        tx_config = Txgh::Config::KeyManager.tx_config(
           config.transifex_project, config.github_repo, branch
         )
 
@@ -87,10 +87,10 @@ module Txgh
     end
 
     patch '/push' do
-      config = Txgh::KeyManager.config_from_project(params[:project_slug])
+      config = Txgh::Config::KeyManager.config_from_project(params[:project_slug])
       branch = Utils.absolute_branch(params[:branch])
 
-      tx_config = Txgh::KeyManager.tx_config(
+      tx_config = Txgh::Config::KeyManager.tx_config(
         config.transifex_project, config.github_repo, branch
       )
 
@@ -106,10 +106,10 @@ module Txgh
     end
 
     patch '/pull' do
-      config = Txgh::KeyManager.config_from_project(params[:project_slug])
+      config = Txgh::Config::KeyManager.config_from_project(params[:project_slug])
       branch = Utils.absolute_branch(params[:branch])
 
-      tx_config = Txgh::KeyManager.tx_config(
+      tx_config = Txgh::Config::KeyManager.tx_config(
         config.transifex_project, config.github_repo, branch
       )
 
