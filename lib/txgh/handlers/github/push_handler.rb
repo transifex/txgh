@@ -95,7 +95,7 @@ module Txgh
         end
 
         def tx_config
-          @tx_config ||= TxManager.tx_config(project, repo, branch)
+          @tx_config ||= Txgh::Config::TxManager.tx_config(project, repo, branch)
         end
 
         def branch
