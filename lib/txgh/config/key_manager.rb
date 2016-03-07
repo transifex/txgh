@@ -6,14 +6,6 @@ module Txgh
   module Config
     class KeyManager
       class << self
-        def add_provider(provider)
-          providers << provider
-        end
-
-        def providers
-          @providers ||= []
-        end
-
         def config_from_project(project_name)
           project_config = project_config_for(project_name)
           repo_config = repo_config_for(project_config['push_translations_to'])
@@ -32,42 +24,7 @@ module Txgh
           ConfigPair.new(project_config, repo_config)
         end
 
-        def tx_config(transifex_project, github_repo, ref = nil)
-          scheme, payload = split_uri(transifex_project.tx_config_uri)
-
-          case scheme
-            when 'raw'
-              TxConfig.load(payload)
-            when 'file'
-              TxConfig.load_file(payload)
-            when 'git'
-              unless ref
-                raise TxghError,
-                  "TX_CONFIG specified a file from git but did not provide a ref."
-              end
-
-              begin
-                TxConfig.load(
-                  github_repo.api.download(github_repo.name, payload, ref)
-                )
-              rescue Octokit::NotFound
-                raise ConfigNotFoundError, "Config file #{payload} not found in #{ref}"
-              end
-          end
-        end
-
-        private :new
-
         private
-
-        def split_uri(uri)
-          if uri =~ /\A[\w]+:\/\//
-            idx = uri.index('://')
-            [uri[0...idx], uri[(idx + 3)..-1]]
-          else
-            [nil, uri]
-          end
-        end
 
         def base_config
           {
