@@ -3,6 +3,9 @@ module Txgh
     module Triggers
       class Handler
 
+        # includes response helpers in both the class and the singleton class
+        include ResponseHelpers
+
         class << self
           def handle_request(request, logger)
             handle_safely do
@@ -15,8 +18,6 @@ module Txgh
           end
 
           private
-
-          include ResponseHelpers
 
           def handle_safely
             yield
@@ -34,8 +35,6 @@ module Txgh
             )
           end
         end
-
-        include ResponseHelpers
 
         attr_reader :project, :repo, :branch, :resource_slug, :logger
 
