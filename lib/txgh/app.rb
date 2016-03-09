@@ -87,47 +87,15 @@ module Txgh
     end
 
     patch '/push' do
-      config = Txgh::Config::KeyManager.config_from_project(params[:project_slug])
-      branch = Utils.absolute_branch(params[:branch])
-
-      tx_config = Txgh::Config::TxManager.tx_config(
-        config.transifex_project, config.github_repo, branch
-      )
-
-      updater = Txgh::ResourceUpdater.new(
-        config.transifex_project, config.github_repo, settings.logger
-      )
-
-      resource = tx_config.resource(params[:resource_slug])
-      branch_resource = TxBranchResource.new(resource, branch)
-      ref = config.github_repo.api.get_ref(config.github_repo.name, branch)
-      updater.update_resource(branch_resource, ref[:object][:sha])
-      status 200
+      response = Txgh::Handlers::Triggers::PushHandler.handle_request(request, settings.logger)
+      status response.status
+      json response.body
     end
 
     patch '/pull' do
-      config = Txgh::Config::KeyManager.config_from_project(params[:project_slug])
-      branch = Utils.absolute_branch(params[:branch])
-
-      tx_config = Txgh::Config::TxManager.tx_config(
-        config.transifex_project, config.github_repo, branch
-      )
-
-      committer = Txgh::ResourceCommitter.new(
-        config.transifex_project, config.github_repo, settings.logger
-      )
-
-      resource = tx_config.resource(params[:resource_slug])
-      branch_resource = TxBranchResource.new(resource, branch)
-      languages = config.transifex_project.api.get_languages(params[:project_slug])
-
-      languages.each do |language|
-        committer.commit_resource(
-          branch_resource, branch, language['language_code']
-        )
-      end
-
-      status 200
+      response = Txgh::Handlers::Triggers::PullHandler.handle_request(request, settings.logger)
+      status response.status
+      json response.body
     end
   end
 end

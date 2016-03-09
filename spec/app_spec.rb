@@ -56,7 +56,7 @@ describe Txgh::Application do
       message = 'Red alert!'
 
       expect(Txgh::Config::TxManager).to(
-        receive(:tx_config).and_raise(ConfigNotFoundError, message)
+        receive(:tx_config).and_raise(Txgh::ConfigNotFoundError, message)
       )
 
       get '/config', project_slug: project_name
@@ -164,6 +164,9 @@ describe Txgh::Hooks do
       sign_with payload
       post '/transifex', payload
       expect(last_response.status).to eq(500)
+      expect(JSON.parse(last_response.body)).to eq([
+        'error' => 'Internal server error: StandardError'
+      ])
     end
   end
 
@@ -231,6 +234,9 @@ describe Txgh::Hooks do
         post '/github', payload.to_json
 
         expect(last_response.status).to eq(500)
+        expect(JSON.parse(last_response.body)).to eq([
+          'error' => 'Internal server error: StandardError'
+        ])
       end
     end
   end
@@ -259,6 +265,10 @@ describe Txgh::Triggers do
   end
 
   describe '/push' do
+    let(:params) do
+      { project_slug: project_name, resource_slug: resource_slug, branch: branch }
+    end
+
     it 'updates the expected resource' do
       updater = double(:updater)
       expect(Txgh::ResourceUpdater).to receive(:new).and_return(updater)
@@ -274,15 +284,29 @@ describe Txgh::Triggers do
         )
       end
 
-      patch '/push', {
-        project_slug: project_name, resource_slug: resource_slug, branch: branch
-      }
-
+      patch '/push', params
       expect(last_response).to be_ok
+    end
+
+    it 'returns internal error on unexpected error' do
+      expect(Txgh::Config::KeyManager).to(
+        receive(:config_from_project).and_raise(StandardError)
+      )
+
+      patch '/push', params
+
+      expect(last_response.status).to eq(500)
+      expect(JSON.parse(last_response.body)).to eq([
+        { 'error' => 'Internal server error: StandardError' }
+      ])
     end
   end
 
   describe '/pull' do
+    let(:params) do
+      { project_slug: project_name, resource_slug: resource_slug, branch: branch }
+    end
+
     it 'updates translations (in all locales) in the expected repo' do
       committer = double(:committer)
       languages = [{ 'language_code' => 'pt' }, { 'language_code' => 'ja' }]
@@ -302,11 +326,21 @@ describe Txgh::Triggers do
         end
       end
 
-      patch '/pull', {
-        project_slug: project_name, resource_slug: resource_slug, branch: branch
-      }
-
+      patch '/pull', params
       expect(last_response).to be_ok
+    end
+
+    it 'returns internal error on unexpected error' do
+      expect(Txgh::Config::KeyManager).to(
+        receive(:config_from_project).and_raise(StandardError)
+      )
+
+      patch '/pull', params
+
+      expect(last_response.status).to eq(500)
+      expect(JSON.parse(last_response.body)).to eq([
+        { 'error' => 'Internal server error: StandardError' }
+      ])
     end
   end
 end

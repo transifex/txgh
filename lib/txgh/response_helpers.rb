@@ -1,5 +1,7 @@
 module Txgh
   module ResponseHelpers
+    private
+
     def respond_with(status, body)
       Txgh::Handlers::Response.new(status, body)
     end
@@ -18,6 +20,11 @@ module Txgh
 
     def data(body)
       { data: body }
+    end
+
+    # includes these methods in the singleton class as well
+    def self.included(base)
+      base.extend(self)
     end
   end
 end
