@@ -82,7 +82,7 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
+      allow(response).to receive(:status).and_return(200)
       api.create(resource, 'new_content', ['abc', 'def'])
     end
 
@@ -92,7 +92,7 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
+      allow(response).to receive(:status).and_return(200)
       api.create(resource, 'new_content', ['abc', 'abc'])
     end
 
@@ -127,7 +127,7 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
+      allow(response).to receive(:status).and_return(200)
       api.update_content(resource, 'new_content')
     end
 
@@ -151,7 +151,7 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
+      allow(response).to receive(:status).and_return(200)
       api.update_details(resource, i18n_type: 'FOO', categories: ['abc'])
     end
 
@@ -173,7 +173,7 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
+      allow(response).to receive(:status).and_return(200)
       api.resource_exists?(resource)
     end
 
@@ -202,7 +202,7 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
+      allow(response).to receive(:status).and_return(200)
       allow(response).to receive(:body).and_return('{}')
       api.download(resource, language)
     end
@@ -232,8 +232,8 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
-      expect(response).to receive(:body).and_return('{"foo":"bar"}')
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"foo":"bar"}')
       expect(api.get_resource(*resource.slugs)).to eq({ 'foo' => 'bar' })
     end
 
@@ -255,8 +255,8 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
-      expect(response).to receive(:body).and_return('{"foo":"bar"}')
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"foo":"bar"}')
       expect(api.get_resources(project_name)).to eq({ 'foo' => 'bar' })
     end
 
@@ -278,8 +278,8 @@ describe TransifexApi do
         response
       end
 
-      expect(response).to receive(:status).and_return(200)
-      expect(response).to receive(:body).and_return('[{"language_code":"de"}]')
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('[{"language_code":"de"}]')
       expect(api.get_languages(project_name)).to eq([{ 'language_code' => 'de' }])
     end
 
@@ -288,6 +288,49 @@ describe TransifexApi do
       allow(response).to receive(:status).and_return(404)
       allow(response).to receive(:body).and_return('{}')
       expect { api.get_languages(project_name) }.to raise_error(TransifexApiError)
+    end
+  end
+
+  describe '#get_project' do
+    it 'makes a request with the correct parameters' do
+      expect(connection).to receive(:get) do |url, payload|
+        expect(url).to(
+          end_with("project/#{project_name}/")
+        )
+
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"slug":"projectslug"}')
+      expect(api.get_project(project_name)).to eq({ 'slug' => 'projectslug' })
+    end
+
+    it 'raises an exception if the api responds with an error code' do
+      allow(connection).to receive(:get).and_return(response)
+      allow(response).to receive(:status).and_return(404)
+      allow(response).to receive(:body).and_return('{}')
+      expect { api.get_project(project_name) }.to raise_error(TransifexApiError)
+    end
+  end
+
+  describe '#get_formats' do
+    it 'makes a request with the correct parameters' do
+      expect(connection).to receive(:get) do |url, payload|
+        expect(url).to end_with("formats/")
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{}')
+      expect(api.get_formats).to eq({})
+    end
+
+    it 'raises an exception if the api responds with an error code' do
+      allow(connection).to receive(:get).and_return(response)
+      allow(response).to receive(:status).and_return(404)
+      allow(response).to receive(:body).and_return('{}')
+      expect { api.get_formats }.to raise_error(TransifexApiError)
     end
   end
 end

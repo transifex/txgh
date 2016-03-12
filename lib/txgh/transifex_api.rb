@@ -123,6 +123,20 @@ module Txgh
       JSON.parse(response.body)
     end
 
+    def get_project(project_slug)
+      url = "#{API_ROOT}/project/#{project_slug}/"
+      response = connection.get(url)
+      raise_error!(response)
+      JSON.parse(response.body)
+    end
+
+    def get_formats
+      url = "#{API_ROOT}/formats/"
+      response = connection.get(url)
+      raise_error!(response)
+      JSON.parse(response.body)
+    end
+
     private
 
     def get_content_io(tx_resource, content)
@@ -134,7 +148,9 @@ module Txgh
     end
 
     def raise_error!(response)
-      if (response.status / 100) != 2
+      if response.status == 401
+        raise TransifexUnauthorizedError
+      elsif (response.status / 100) != 2
         raise TransifexApiError,
           "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
       end
