@@ -9,10 +9,10 @@ module Txgh
       def load(contents)
         tmp = Tempfile.new('parseconfig')
         tmp.write(contents)
-        tmp.flush
+        tmp.close
         load_file(tmp.path)
       ensure
-        tmp.close if tmp
+        tmp.unlink if tmp
       end
 
       def load_file(path)
