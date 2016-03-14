@@ -5,7 +5,8 @@ include Txgh
 describe GithubRepo do
   let(:repo_name) { 'my_org/my_repo' }
   let(:branch) { 'master' }
-  let(:config) { { 'name' => repo_name, 'branch' => branch } }
+  let(:tag) { 'tags/foo' }
+  let(:config) { { 'name' => repo_name, 'branch' => branch, 'tag' => tag } }
   let(:api) { :api }
   let(:repo) { GithubRepo.new(config, api) }
 
@@ -18,6 +19,12 @@ describe GithubRepo do
   describe '#branch' do
     it 'retrieves the branch name from the config' do
       expect(repo.branch).to eq(branch)
+    end
+  end
+
+  describe '#tag' do
+    it 'retrieves the tag name from the config' do
+      expect(repo.tag).to eq(tag)
     end
   end
 
@@ -35,25 +42,55 @@ describe GithubRepo do
     end
   end
 
-  describe '#should_process_branch?' do
+  describe '#process_all_tags?' do
+    it 'returns false if only one tag should be processed' do
+      expect(repo.process_all_tags?).to eq(false)
+    end
+
+    context 'with all tags indicated' do
+      let(:tag) { 'all' }
+
+      it 'returns true if all tags should be processed' do
+        expect(repo.process_all_tags?).to eq(true)
+      end
+    end
+  end
+
+  describe '#should_process_ref?' do
     context 'with all branches indicated' do
       let(:branch) { 'all' }
 
       it 'returns true if all branches should be processed' do
-        expect(repo.should_process_branch?('heads/foo')).to eq(true)
+        expect(repo.should_process_ref?('heads/foo')).to eq(true)
+      end
+    end
+
+    context 'with all tags indicated' do
+      let(:tag) { 'all' }
+
+      it 'returns true if all tags should be processed' do
+        expect(repo.should_process_ref?('tags/foo')).to eq(true)
       end
     end
 
     it 'returns true if the given branch matches the configured one' do
-      expect(repo.should_process_branch?('heads/master')).to eq(true)
+      expect(repo.should_process_ref?('heads/master')).to eq(true)
     end
 
     it "returns false if the given branch doesn't match the configured one" do
-      expect(repo.should_process_branch?('heads/foo')).to eq(false)
+      expect(repo.should_process_ref?('heads/foo')).to eq(false)
     end
 
     it 'returns true if the branch contains the special L10N text' do
-      expect(repo.should_process_branch?('heads/L10N_foo')).to eq(true)
+      expect(repo.should_process_ref?('heads/L10N_foo')).to eq(true)
+    end
+
+    it 'returns true if the given tag matches the configured one' do
+      expect(repo.should_process_ref?('tags/foo')).to eq(true)
+    end
+
+    it "returns false if the given tag doesn't match the configured one" do
+      expect(repo.should_process_ref?('heads/foobar')).to eq(false)
     end
   end
 
@@ -79,6 +116,32 @@ describe GithubRepo do
 
       it 'correctly prefixes the branch' do
         expect(repo.github_config_branch).to eq('heads/foobar')
+      end
+    end
+  end
+
+  describe '#github_config_tag' do
+    context 'with all tags indicated' do
+      let(:tag) { 'all' }
+
+      it "doesn't modify the passed tag, i.e. returns 'all'" do
+        expect(repo.github_config_tag).to eq('all')
+      end
+    end
+
+    context 'with a nil tag' do
+      let(:tag) { nil }
+
+      it 'returns nil' do
+        expect(repo.github_config_tag).to be_nil
+      end
+    end
+
+    context 'with a configured tag' do
+      let(:tag) { 'tags/foobar' }
+
+      it 'leaves the prefix intact' do
+        expect(repo.github_config_tag).to eq('tags/foobar')
       end
     end
   end

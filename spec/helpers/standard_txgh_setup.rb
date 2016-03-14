@@ -12,6 +12,7 @@ module StandardTxghSetup
   let(:resource_slug) { 'my_resource' }
   let(:repo_name) { 'my_org/my_repo' }
   let(:branch) { 'master' }
+  let(:tag) { 'all' }
   let(:ref) { 'heads/master' }
   let(:language) { 'ko_KR' }
   let(:translations) { 'translation file contents' }
@@ -34,6 +35,7 @@ module StandardTxghSetup
       'api_token' => 'github_api_token',
       'push_source_to' => project_name,
       'branch' => branch,
+      'tag' => tag,
       'name' => repo_name,
       'webhook_secret' => 'abc123'
     }
