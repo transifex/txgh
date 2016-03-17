@@ -19,6 +19,14 @@ module Txgh
       branch == 'all'
     end
 
+    def upload_diffs?
+      true  # @TODO: get this from config
+    end
+
+    def diff_point
+      'heads/master'  # @TODO: get this from config
+    end
+
     def should_process_branch?(candidate)
       process_all_branches? ||
         candidate.include?(github_config_branch) ||
