@@ -20,11 +20,11 @@ module Txgh
     end
 
     def upload_diffs?
-      true  # @TODO: get this from config
+      !(diff_point || '').empty?
     end
 
     def diff_point
-      'heads/master'  # @TODO: get this from config
+      config['diff_point']
     end
 
     def should_process_branch?(candidate)

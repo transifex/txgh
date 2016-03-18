@@ -26,7 +26,7 @@ module Txgh
           if repo.upload_diffs?
             upload_diff(tx_resource, file)
           else
-            upload_whole(tx_resource, file)
+            upload_whole(tx_resource, file, categories)
           end
         end
       end
@@ -34,11 +34,11 @@ module Txgh
 
     private
 
-    def upload_whole(tx_resource, file)
+    def upload_whole(tx_resource, file, categories)
       content = contents_of(file['sha'])
 
       if repo.process_all_branches?
-        upload_by_branch(tx_resource, content, categories_for(tx_resource))
+        upload_by_branch(tx_resource, content, categories)
       else
         upload(tx_resource, content)
       end

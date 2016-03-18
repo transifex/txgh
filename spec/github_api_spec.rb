@@ -107,7 +107,7 @@ describe GithubApi do
 
       expect(client).to receive(:ref).with(repo, branch).and_return(object: { sha: :branch_sha })
       expect(client).to receive(:commit).with(repo, :branch_sha).and_return(commit: { tree: { sha: :base_tree_sha } })
-      expect(client).to receive(:tree).with(repo, :base_tree_sha).and_return(
+      expect(client).to receive(:tree).with(repo, :base_tree_sha, recursive: 1).and_return(
         tree: [{ path: path, sha: :blob_sha }]
       )
 
