@@ -30,4 +30,15 @@ describe Utils do
       expect(Utils.absolute_branch(nil)).to eq(nil)
     end
   end
+
+  describe '.is_tag?' do
+    it 'returns true if given a tag' do
+      expect(Utils.is_tag?('tags/foo')).to eq(true)
+    end
+
+    it 'returns false if not given a tag' do
+      expect(Utils.is_tag?('heads/foo')).to eq(false)
+      expect(Utils.is_tag?('foo')).to eq(false)
+    end
+  end
 end

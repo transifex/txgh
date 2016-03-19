@@ -10,7 +10,7 @@ module Txgh
           logger.info("request github branch: #{branch}")
           logger.info("config github branch: #{repo.github_config_branch}")
 
-          if repo.should_process_branch?(branch)
+          if repo.should_process_ref?(branch)
             logger.info('found branch in github request')
 
             tx_resources = tx_resources_for(branch)

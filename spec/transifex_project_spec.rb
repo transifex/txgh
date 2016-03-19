@@ -19,6 +19,11 @@ describe TransifexProject do
         %w(heads/foo heads/bar heads/baz)
       )
     end
+
+    it "doesn't freak out if protected_branches is nil" do
+      project_config['protected_branches'] = nil
+      expect(transifex_project.protected_branches).to eq([])
+    end
   end
 
   describe '#auto_delete_resources' do
