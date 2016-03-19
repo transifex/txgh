@@ -6,6 +6,8 @@ module Txgh
       end
     end
 
+    INCLUDED_STATES = [:added, :modified]
+
     attr_reader :head_phrases, :diff_point_phrases
 
     def initialize(head_phrases, diff_point_phrases)
@@ -20,7 +22,7 @@ module Txgh
     private
 
     def join_diffs(diff1, diff2)
-      [:added, :removed, :modified].each_with_object({}) do |state, ret|
+      INCLUDED_STATES.each_with_object({}) do |state, ret|
         ret[state] = diff1[state] + diff2[state]
       end
     end
@@ -28,7 +30,7 @@ module Txgh
     def compare_head
       Hash.new { |hash, key| hash[key] = [] }.tap do |diff|
         head_to_diff_point.each do |phrase, state, old_phrase|
-          diff[state] << DiffEntry.new(phrase, state, old_phrase)
+          diff[state] << phrase
         end
       end
     end
@@ -36,7 +38,7 @@ module Txgh
     def compare_diff_point
       Hash.new { |hash, key| hash[key] = [] }.tap do |diff|
         diff_point_to_head.each do |phrase, state, old_phrase|
-          diff[state] << DiffEntry.new(phrase, state, old_phrase)
+          diff[state] << phrase
         end
       end
     end
@@ -58,8 +60,9 @@ module Txgh
           state = compare_at(idx, head_phrase)
           old_phrase = idx ? diff_point_phrases[idx] : nil
 
-          if state != :unmodified
-            yield head_phrase, state, old_phrase
+          case state
+            when *INCLUDED_STATES
+              yield head_phrase, state
           end
         end
       else

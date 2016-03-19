@@ -76,7 +76,7 @@ module Txgh
     end
 
     def serializer
-      id = SERIALIZER_MAP.fetch(type) do
+      id = SERIALIZER_MAP.fetch(tx_resource.type) do
         raise TxghInternalError,
           "'#{tx_resource.type}' is not a file type that is supported when "\
           "uploading diffs."
