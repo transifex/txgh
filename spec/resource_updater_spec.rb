@@ -19,8 +19,13 @@ describe ResourceUpdater do
     [{ 'path' => resource.source_file, 'sha' => 'def456' }]
   end
 
-  def translations_for(path)
-    "translations for #{path}"
+  def phrases_for(path)
+    YAML.load("|
+      en:
+        welcome: Hello
+        goodbye: Goodbye
+        new_phrase: I'm new
+    ")
   end
 
   before(:each) do
@@ -39,7 +44,7 @@ describe ResourceUpdater do
     )
 
     modified_files.each do |file|
-      translations = translations_for(file['path'])
+      translations = phrases_for(file['path'])
 
       allow(github_api).to(
         receive(:blob).with(repo_name, file['sha']) do
@@ -51,7 +56,7 @@ describe ResourceUpdater do
 
   it 'correctly uploads modified files to transifex' do
     modified_files.each do |file|
-      translations = translations_for(file['path'])
+      translations = phrases_for(file['path'])
 
       expect(transifex_api).to(
         receive(:create_or_update) do |resource, content|
@@ -72,7 +77,7 @@ describe ResourceUpdater do
       allow(transifex_api).to receive(:resource_exists?).and_return(false)
 
       modified_files.each do |file|
-        translations = translations_for(file['path'])
+        translations = phrases_for(file['path'])
 
         expect(transifex_api).to(
           receive(:create) do |resource, content, categories|
@@ -90,7 +95,7 @@ describe ResourceUpdater do
       expect(transifex_api).to receive(:resource_exists?).and_return(false)
 
       modified_files.each do |file|
-        translations = translations_for(file['path'])
+        translations = phrases_for(file['path'])
 
         expect(transifex_api).to(
           receive(:create) do |resource, content, categories|
@@ -100,6 +105,43 @@ describe ResourceUpdater do
       end
 
       updater.update_resource(resource, commit_sha, { 'foo' => 'bar' })
+    end
+  end
+
+  context 'when asked to upload diffs' do
+    let(:diff_point) { 'heads/diff_point' }
+    let(:resource) do
+      TxResource.new(
+        project_name, resource_slug, 'YAML',
+        'en', 'en.yml', '', 'translation_file'
+      )
+    end
+
+    it 'uploads a diff instead of the whole resource' do
+      expect(github_api).to(
+        receive(:download)
+          .with(repo_name, 'en.yml', diff_point)
+          .and_return(YAML.load("|
+            en:
+              welcome: Hello
+              goodbye: Goodbye
+          "))
+      )
+
+      diff = YAML.load(%Q(|
+        en:
+          new_phrase: ! "I'm new"
+      ))
+
+      allow(updater).to(
+        receive(:upload_by_branch).with(resource, diff, anything)
+      )
+
+      allow(updater).to(
+        receive(:categories_for).and_return({})
+      )
+
+      updater.update_resource(resource, commit_sha)
     end
   end
 end
