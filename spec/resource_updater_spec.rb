@@ -133,7 +133,7 @@ describe ResourceUpdater do
           new_phrase: ! "I'm new"
       ))
 
-      allow(updater).to(
+      expect(updater).to(
         receive(:upload_by_branch).with(resource, diff, anything)
       )
 
