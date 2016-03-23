@@ -2,9 +2,16 @@ require 'spec_helper'
 
 include Txgh
 
-# the YAML.loads here are used to strip off leading tabs and such
-
 describe DiffContentCalculator do
+  def outdent(str)
+    # The special YAML pipe operator treats the text that follows as literal,
+    # and includes newlines, tabs, and spaces. It also strips leading tabs and
+    # spaces. This means you can include a fully indented bit of, say, source
+    # code in your source code, and it will give you back a string with all the
+    # indentation preserved (but without any leading indentation).
+    YAML.load("|#{str}")
+  end
+
   describe '.diff_between' do
     let(:resource) do
       TxResource.new(
@@ -21,25 +28,25 @@ describe DiffContentCalculator do
 
     context 'with phrases added to HEAD' do
       let(:head_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome:
               message: Hello!
             goodbye:
               message: Goodbye!
-        ")
+        ))
       end
 
       let(:diff_point_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome:
               message: Hello!
-        ")
+        ))
       end
 
       it 'includes the added phrase' do
-        expect(diff).to eq(YAML.load(%Q(|
+        expect(diff).to eq(outdent(%Q(
           en:
             goodbye:
               message: ! "Goodbye!"
@@ -49,18 +56,18 @@ describe DiffContentCalculator do
 
     context 'with phrases removed from HEAD' do
       let(:head_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome: Hello
-        ")
+        ))
       end
 
       let(:diff_point_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome: Hello
             goodbye: Goodbye
-        ")
+        ))
       end
 
       it 'does not include any phrases (and returns nil)' do
@@ -70,23 +77,23 @@ describe DiffContentCalculator do
 
     context 'with phrases modified in HEAD' do
       let(:head_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome: Hello world
             goodbye: Goodbye
-        ")
+        ))
       end
 
       let(:diff_point_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome: Hello
             goodbye: Goodbye
-        ")
+        ))
       end
 
       it 'includes the modified phrase' do
-        expect(diff).to eq(YAML.load(%Q(|
+        expect(diff).to eq(outdent(%Q(
           en:
             welcome: ! "Hello world"
         )))
@@ -95,22 +102,22 @@ describe DiffContentCalculator do
 
     context 'with no modifications or additions' do
       let(:head_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome: Hello
             goodbye: Goodbye
-        ")
+        ))
       end
 
       let(:diff_point_contents) do
-        YAML.load("|
+        outdent(%Q(
           en:
             welcome: Hello
             goodbye: Goodbye
-        ")
+        ))
       end
 
-      it 'includes the modified phrase' do
+      it 'hands back an empty diff' do
         expect(diff).to eq(nil)
       end
     end
