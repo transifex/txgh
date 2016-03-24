@@ -6,9 +6,15 @@ describe GithubRepo do
   let(:repo_name) { 'my_org/my_repo' }
   let(:branch) { 'master' }
   let(:tag) { 'tags/foo' }
-  let(:config) { { 'name' => repo_name, 'branch' => branch, 'tag' => tag } }
   let(:api) { :api }
   let(:repo) { GithubRepo.new(config, api) }
+  let(:diff_point) { nil }
+  let(:config) do
+    {
+      'name' => repo_name, 'branch' => branch, 'tag' => tag,
+      'diff_point' => diff_point
+    }
+  end
 
   describe '#name' do
     it 'retrieves the repo name from the config' do
@@ -142,6 +148,30 @@ describe GithubRepo do
 
       it 'leaves the prefix intact' do
         expect(repo.github_config_tag).to eq('tags/foobar')
+      end
+    end
+  end
+
+  describe '#upload_diffs?' do
+    it 'returns false by default' do
+      expect(repo.upload_diffs?).to eq(false)
+    end
+
+    context 'with a configured diff point' do
+      let(:diff_point) { 'heads/master' }
+
+      it 'returns true when a diff point is configured' do
+        expect(repo.upload_diffs?).to eq(true)
+      end
+    end
+  end
+
+  describe '#diff_point' do
+    context 'with a configured diff point' do
+      let(:diff_point) { 'heads/master' }
+
+      it 'returns the provided diff point' do
+        expect(repo.diff_point).to eq(diff_point)
       end
     end
   end

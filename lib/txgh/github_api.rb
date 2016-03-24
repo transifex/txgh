@@ -67,7 +67,7 @@ module Txgh
     def download(repo, path, branch)
       master = client.ref(repo, branch)
       commit = client.commit(repo, master[:object][:sha])
-      tree = client.tree(repo, commit[:commit][:tree][:sha])
+      tree = client.tree(repo, commit[:commit][:tree][:sha], recursive: 1)
 
       if found = tree[:tree].find { |t| t[:path] == path }
         b = blob(repo, found[:sha])

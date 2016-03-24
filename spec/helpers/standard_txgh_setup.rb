@@ -16,6 +16,7 @@ module StandardTxghSetup
   let(:ref) { 'heads/master' }
   let(:language) { 'ko_KR' }
   let(:translations) { 'translation file contents' }
+  let(:diff_point) { nil }
 
   let(:project_config) do
     {
@@ -37,7 +38,8 @@ module StandardTxghSetup
       'branch' => branch,
       'tag' => tag,
       'name' => repo_name,
-      'webhook_secret' => 'abc123'
+      'webhook_secret' => 'abc123',
+      'diff_point' => diff_point
     }
   end
 

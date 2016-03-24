@@ -1,3 +1,5 @@
+require 'logger'
+
 module Txgh
   class ResourceUpdater
     include Txgh::CategorySupport
@@ -14,30 +16,50 @@ module Txgh
     # in Transifex.
     def update_resource(tx_resource, commit_sha, categories = {})
       logger.info('process updated resource')
-      github_api = repo.api
-      tree_sha = github_api.get_commit(repo.name, commit_sha)['commit']['tree']['sha']
-      tree = github_api.tree(repo.name, tree_sha)
+      tree_sha = repo.api.get_commit(repo.name, commit_sha)['commit']['tree']['sha']
+      tree = repo.api.tree(repo.name, tree_sha)
 
       tree['tree'].each do |file|
         logger.info("process each tree entry: #{file['path']}")
 
         if tx_resource.source_file == file['path']
-          logger.info("process resource file: #{tx_resource.source_file}")
-          blob = github_api.blob(repo.name, file['sha'])
-          content = blob['encoding'] == 'utf-8' ? blob['content'] : Base64.decode64(blob['content'])
-
-          if repo.process_all_branches?
-            upload_by_branch(tx_resource, content, categories)
+          if repo.upload_diffs?
+            upload_diff(tx_resource, file)
           else
-            upload(tx_resource, content)
+            upload_whole(tx_resource, file, categories)
           end
-
-          logger.info "updated tx_resource: #{tx_resource.inspect}"
         end
       end
     end
 
     private
+
+    def upload_whole(tx_resource, file, categories)
+      content = contents_of(file['sha'])
+
+      if repo.process_all_branches?
+        upload_by_branch(tx_resource, content, categories)
+      else
+        upload(tx_resource, content)
+      end
+    end
+
+    def upload_diff(tx_resource, file)
+      if content = diff_content(tx_resource, file)
+        upload_by_branch(tx_resource, content, categories_for(tx_resource))
+      end
+    end
+
+    def diff_content(tx_resource, file)
+      head_content = contents_of(file['sha'])
+      diff_point_content = repo.api.download(
+        repo.name, file['path'], repo.diff_point
+      )
+
+      DiffContentCalculator.diff_between(
+        head_content, diff_point_content, tx_resource
+      )
+    end
 
     def upload(tx_resource, content)
       project.api.create_or_update(tx_resource, content)
@@ -61,6 +83,16 @@ module Txgh
     def categories_for(tx_resource)
       resource = project.api.get_resource(*tx_resource.slugs)
       deserialize_categories(Array(resource['categories']))
+    end
+
+    def contents_of(sha)
+      blob = repo.api.blob(repo.name, sha)
+
+      if blob['encoding'] == 'utf-8'
+        blob['content']
+      else
+        Base64.decode64(blob['content'])
+      end
     end
   end
 end

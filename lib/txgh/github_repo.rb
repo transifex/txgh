@@ -23,6 +23,14 @@ module Txgh
       branch == 'all'
     end
 
+    def upload_diffs?
+      !(diff_point || '').empty?
+    end
+
+    def diff_point
+      config['diff_point']
+    end
+
     def process_all_tags?
       tag == 'all'
     end
