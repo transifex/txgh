@@ -17,10 +17,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'faraday', '~> 0.9'
   s.add_dependency 'faraday_middleware', '~> 0.10'
   s.add_dependency 'json', '~> 1.8'
+  s.add_dependency 'mime-types', '~> 2.0'
   s.add_dependency 'octokit', '~> 4.2'
   s.add_dependency 'parseconfig', '~> 1.0'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
+  s.add_dependency 'zipline', '~> 0.0'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'README.md', 'txgh.gemspec']
