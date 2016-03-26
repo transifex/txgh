@@ -41,4 +41,18 @@ describe Utils do
       expect(Utils.is_tag?('foo')).to eq(false)
     end
   end
+
+  describe '.index_on' do
+    it 'correctly converts an array of hashes' do
+      arr = [
+        { 'name' => 'Jean Luc Picard', 'starship' => 'Enterprise' },
+        { 'name' => 'Kathryn Janeway', 'starship' => 'Voyager' }
+      ]
+
+      expect(Utils.index_on('starship', arr)).to eq({
+        'Enterprise' => { 'name' => 'Jean Luc Picard', 'starship' => 'Enterprise' },
+        'Voyager' => { 'name' => 'Kathryn Janeway', 'starship' => 'Voyager' }
+      })
+    end
+  end
 end

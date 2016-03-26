@@ -11,6 +11,7 @@ module Txgh
   autoload :GithubRequestAuth,    'txgh/github_request_auth'
   autoload :Handlers,             'txgh/handlers'
   autoload :Hooks,                'txgh/app'
+  autoload :MergeCalculator,      'txgh/merge_calculator'
   autoload :ParseConfig,          'txgh/parse_config'
   autoload :ResourceCommitter,    'txgh/resource_committer'
   autoload :ResourceContents,     'txgh/resource_contents'
