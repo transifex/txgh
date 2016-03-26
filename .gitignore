@@ -24,3 +24,5 @@ config/txgh_config.rb
 .env
 .byebug_history
 .ruby-version
+tester.rb
+
