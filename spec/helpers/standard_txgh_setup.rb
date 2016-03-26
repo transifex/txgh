@@ -50,10 +50,10 @@ module StandardTxghSetup
     lang_map = pt-BR:pt, ko-KR:ko
 
     [#{project_name}.#{resource_slug}]
-    file_filter = translations/<lang>/sample.po
-    source_file = sample.po
+    file_filter = translations/<lang>/sample.yml
+    source_file = sample.yml
     source_lang = en
-    type = PO
+    type = YML
     """
   end
 
@@ -83,10 +83,10 @@ module StandardTxghSetup
   end
 
   let(:transifex_project) do
-    TransifexProject.new(project_config, transifex_api)
+    Txgh::TransifexProject.new(project_config, transifex_api)
   end
 
   let(:github_repo) do
-    GithubRepo.new(repo_config, github_api)
+    Txgh::GithubRepo.new(repo_config, github_api)
   end
 end

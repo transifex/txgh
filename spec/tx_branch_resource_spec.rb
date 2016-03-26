@@ -89,5 +89,11 @@ describe TxBranchResource do
         )
       end
     end
+
+    describe '#original_resource_slug' do
+      it 'returns the base slug, i.e. without the branch' do
+        expect(resource.original_resource_slug).to eq(resource_slug)
+      end
+    end
   end
 end

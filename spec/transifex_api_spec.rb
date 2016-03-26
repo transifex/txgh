@@ -58,7 +58,7 @@ describe TransifexApi do
 
           expect(payload[:slug]).to eq(resource_slug)
           expect(payload[:name]).to eq(resource.source_file)
-          expect(payload[:i18n_type]).to eq('PO')
+          expect(payload[:i18n_type]).to eq('YML')
 
           response
         end

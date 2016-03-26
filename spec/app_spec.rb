@@ -30,10 +30,10 @@ describe Txgh::Application do
       expect(config['resources'].first).to eq(
         'project_slug' => 'my_awesome_project',
         'resource_slug' => 'my_resource',
-        'type' => 'PO',
+        'type' => 'YML',
         'source_lang' => 'en',
-        'source_file' => 'sample.po',
-        'translation_file' => 'translations/<lang>/sample.po'
+        'source_file' => 'sample.yml',
+        'translation_file' => 'translations/<lang>/sample.yml'
       )
     end
 
@@ -45,10 +45,10 @@ describe Txgh::Application do
       expect(config['resources'].first).to eq(
         'project_slug' => 'my_awesome_project',
         'resource_slug' => 'my_resource',
-        'type' => 'PO',
+        'type' => 'YML',
         'source_lang' => 'en',
-        'source_file' => 'sample.po',
-        'translation_file' => 'translations/<lang>/sample.po'
+        'source_file' => 'sample.yml',
+        'translation_file' => 'translations/<lang>/sample.yml'
       )
     end
 
