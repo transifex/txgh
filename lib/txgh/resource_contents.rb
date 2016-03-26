@@ -83,6 +83,10 @@ module Txgh
       DiffCalculator.compare(phrases, other_contents.phrases)
     end
 
+    def merge(other_contents, diff_hash)
+      MergeCalculator.merge(other_contents, self, diff_hash)
+    end
+
     def empty?
       phrases.empty?
     end
