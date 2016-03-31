@@ -13,7 +13,7 @@ module Txgh
 
       unless language == tx_resource.source_lang
         file_name, translations = download(tx_resource, branch, language)
-        repo.api.commit(repo.name, branch, file_name, translations)
+        repo.api.commit(repo.name, branch, { file_name => translations })
       end
     end
 

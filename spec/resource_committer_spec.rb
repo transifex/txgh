@@ -21,7 +21,7 @@ describe ResourceCommitter do
 
       expect(github_api).to(
         receive(:commit).with(
-          repo_name, branch, file_name, :translations
+          repo_name, branch, { file_name => :translations }
         )
       )
 
