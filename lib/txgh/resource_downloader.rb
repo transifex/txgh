@@ -80,14 +80,10 @@ module Txgh
     def download_each
       each_resource do |resource|
         each_language do |language_code|
-          file_name = file_name_for(resource, language_code)
+          file_name = resource.translation_path(resource.lang_map(language_code))
           yield resource, language_code, file_name
         end
       end
-    end
-
-    def file_name_for(resource, language_code)
-      resource.translation_file.sub('<lang>', language_code)
     end
 
     def transifex_download(resource, language)
