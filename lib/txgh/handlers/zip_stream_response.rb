@@ -1,15 +1,8 @@
-require 'mime/types'
 require 'zipline'
 
 module Txgh
   module Handlers
-    class ZipStreamResponse
-      attr_reader :attachment, :enum
-
-      def initialize(attachment, enum)
-        @attachment = attachment
-        @enum = enum
-      end
+    class ZipStreamResponse < StreamResponse
 
       def write_to(stream)
         Zipline::OutputStream.open(stream) do |zipfile|
@@ -20,15 +13,8 @@ module Txgh
         end
       end
 
-      def headers
-        @headers ||= {
-          'Content-Disposition' => "attachment; filename=\"#{attachment}.zip\"",
-          'Content-Type' => MIME::Types.type_for('.zip').first.content_type
-        }
-      end
-
-      def streaming?
-        true
+      def file_extension
+        '.zip'
       end
     end
   end
