@@ -6,7 +6,7 @@ module Txgh
       end
     end
 
-    INCLUDED_STATES = [:added, :modified]
+    INCLUDED_STATES = [:added, :modified, :removed]
 
     attr_reader :head_phrases, :diff_point_phrases
 
