@@ -1,19 +1,11 @@
-require 'mime/types'
 require 'rubygems/package'
 require 'stringio'
 require 'zlib'
 
 module Txgh
   module Handlers
-    class TgzStreamResponse
+    class TgzStreamResponse < StreamResponse
       PERMISSIONS = 0644
-
-      attr_reader :attachment, :enum
-
-      def initialize(attachment, enum)
-        @attachment = attachment
-        @enum = enum
-      end
 
       def write_to(stream)
         Zlib::GzipWriter.wrap(stream) do |gz|
@@ -33,15 +25,8 @@ module Txgh
         end
       end
 
-      def streaming?
-        true
-      end
-
-      def headers
-        @headers ||= {
-          'Content-Disposition' => "attachment; filename=\"#{attachment}.tgz\"",
-          'Content-Type' => MIME::Types.type_for('.tgz').first.content_type
-        }
+      def file_extension
+        '.tgz'
       end
 
       private
