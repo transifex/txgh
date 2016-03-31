@@ -36,7 +36,7 @@ describe GithubApi do
   end
 
   describe '#commit' do
-    before(:each) do
+    def mock_for(path, content)
       allow(client).to receive(:create_blob).with(repo, :new_content).and_return(:blob_sha)
       allow(client).to receive(:ref).with(repo, branch).and_return(object: { sha: :branch_sha })
       allow(client).to receive(:commit).with(repo, :branch_sha).and_return(commit: { tree: { sha: :base_tree_sha } })
@@ -49,11 +49,23 @@ describe GithubApi do
       )
     end
 
+    before(:each) do
+      # @ TODO: call mock_for here
+    end
+
     let(:path) { 'path/to/translations' }
+    let(:other_path) { 'other/path/to/translations' }
 
     it 'creates a new commit and updates the branch' do
       expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-      api.commit(repo, branch, path, :new_content, true)
+      api.commit(repo, branch, { path => :new_content }, true)
+    end
+
+    it 'includes multiple files in the commit if asked' do
+      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
+      api.commit(
+        repo, branch, { path => :new_content, other_path => :other_content }, true
+      )
     end
 
     context 'with an empty commit' do
@@ -67,7 +79,7 @@ describe GithubApi do
 
       it 'does not allow empty commits by default' do
         expect(client).to_not receive(:update_ref)
-        api.commit(repo, branch, path, :new_content)
+        api.commit(repo, branch, { path => :new_content })
       end
     end
 
@@ -82,7 +94,7 @@ describe GithubApi do
 
       it 'updates the ref as expected' do
         expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-        api.commit(repo, branch, path, :new_content)
+        api.commit(repo, branch, { path => :new_content })
       end
     end
   end
