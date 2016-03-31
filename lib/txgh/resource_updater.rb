@@ -51,14 +51,20 @@ module Txgh
     end
 
     def diff_content(tx_resource, file)
-      head_content = contents_of(file['sha'])
-      diff_point_content = repo.api.download(
-        repo.name, file['path'], repo.diff_point
+      diff = head_content(tx_resource, file).diff(
+        diff_point_content(tx_resource, file)
       )
 
-      DiffContentCalculator.diff_between(
-        head_content, diff_point_content, tx_resource
-      )
+      diff.to_s unless diff.empty?
+    end
+
+    def head_content(tx_resource, file)
+      ResourceContents.from_string(tx_resource, contents_of(file['sha']))
+    end
+
+    def diff_point_content(tx_resource, file)
+      raw_content = repo.api.download(repo.name, file['path'], repo.diff_point)
+      ResourceContents.from_string(tx_resource, raw_content)
     end
 
     def upload(tx_resource, content)
