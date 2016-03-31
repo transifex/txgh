@@ -36,36 +36,39 @@ describe GithubApi do
   end
 
   describe '#commit' do
-    def mock_for(path, content)
+    let(:path) { 'path/to/translations' }
+    let(:other_path) { 'other/path/to/translations' }
+
+    before(:each) do
       allow(client).to receive(:create_blob).with(repo, :new_content).and_return(:blob_sha)
       allow(client).to receive(:ref).with(repo, branch).and_return(object: { sha: :branch_sha })
       allow(client).to receive(:commit).with(repo, :branch_sha).and_return(commit: { tree: { sha: :base_tree_sha } })
       allow(client).to receive(:create_tree).and_return(sha: :new_tree_sha)
+    end
 
+    it 'creates a new commit and updates the branch' do
       expect(client).to(
         receive(:create_commit)
           .with(repo, "Updating translations for #{path}", :new_tree_sha, :branch_sha)
           .and_return(sha: :new_commit_sha)
       )
-    end
 
-    before(:each) do
-      # @ TODO: call mock_for here
-    end
-
-    let(:path) { 'path/to/translations' }
-    let(:other_path) { 'other/path/to/translations' }
-
-    it 'creates a new commit and updates the branch' do
       expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
       api.commit(repo, branch, { path => :new_content }, true)
     end
 
-    it 'includes multiple files in the commit if asked' do
-      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-      api.commit(
-        repo, branch, { path => :new_content, other_path => :other_content }, true
+    it 'updates multiple files at a time' do
+      allow(client).to receive(:create_blob).with(repo, :other_content).and_return(:blob_sha_2)
+
+      expect(client).to(
+        receive(:create_commit)
+          .with(repo, "Updating translations for #{path}, #{other_path}", :new_tree_sha, :branch_sha)
+          .and_return(sha: :new_commit_sha)
       )
+
+      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
+      content_map = { path => :new_content, other_path => :other_content }
+      api.commit(repo, branch, content_map, true)
     end
 
     context 'with an empty commit' do
@@ -74,6 +77,12 @@ describe GithubApi do
           receive(:compare)
             .with(repo, :branch_sha, :new_commit_sha)
             .and_return(files: [])
+        )
+
+        expect(client).to(
+          receive(:create_commit)
+            .with(repo, "Updating translations for #{path}", :new_tree_sha, :branch_sha)
+            .and_return(sha: :new_commit_sha)
         )
       end
 
@@ -89,6 +98,12 @@ describe GithubApi do
           receive(:compare)
             .with(repo, :branch_sha, :new_commit_sha)
             .and_return(files: %w(abc def))
+        )
+
+        expect(client).to(
+          receive(:create_commit)
+            .with(repo, "Updating translations for #{path}", :new_tree_sha, :branch_sha)
+            .and_return(sha: :new_commit_sha)
         )
       end
 
