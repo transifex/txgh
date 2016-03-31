@@ -12,6 +12,7 @@ module Txgh
       # Provides an override list of languages. If not present, the downloader
       # will make an API call to fetch the list of languages for the project.
       @languages = options[:languages]
+      @resources = options[:resources]
     end
 
     def each(&block)
@@ -107,6 +108,7 @@ module Txgh
 
     def each_resource
       return to_enum(__method__) unless block_given?
+      return @resources.each if @resources
 
       ref = repo.process_all_branches? ? branch : nil
 
@@ -119,6 +121,7 @@ module Txgh
 
     def each_language
       return to_enum(__method__) unless block_given?
+      return @languages.each if @languages
 
       raw_languages.each do |lang|
         yield lang['language_code']

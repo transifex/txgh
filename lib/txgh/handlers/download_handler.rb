@@ -7,7 +7,7 @@ module Txgh
       include ResponseHelpers
 
       class << self
-        def handle_request(request, logger)
+        def handle_request(request, logger = nil)
           handle_safely do
             config = config_from(request)
             project, repo = [config.transifex_project, config.github_repo]
@@ -65,7 +65,7 @@ module Txgh
       end
 
       def format
-        params['format']
+        params.fetch('format', DEFAULT_FORMAT)
       end
 
       def response_class

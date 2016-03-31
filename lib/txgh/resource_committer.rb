@@ -15,7 +15,9 @@ module Txgh
 
       unless language == tx_resource.source_lang
         logger.info('request language matches resource')
-        downloader = ResourceDownloader.new(project, repo, branch, [language])
+        downloader = ResourceDownloader.new(
+          project, repo, branch, languages: [language]
+        )
       end
     end
 
