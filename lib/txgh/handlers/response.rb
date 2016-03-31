@@ -7,6 +7,10 @@ module Txgh
         @status = status
         @body = body
       end
+
+      def streaming?
+        false
+      end
     end
   end
 end
