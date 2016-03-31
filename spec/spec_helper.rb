@@ -8,7 +8,7 @@ require 'vcr'
 require 'webmock'
 require 'yaml'
 
-module Helpers
+module SpecHelpers
   def outdent(str)
     # The special YAML pipe operator treats the text that follows as literal,
     # and includes newlines, tabs, and spaces. It also strips leading tabs and
@@ -23,7 +23,7 @@ RSpec.configure do |config|
   config.filter_run(focus: true)
   config.run_all_when_everything_filtered = true
   config.filter_run_excluding(integration: true) unless ENV['FULL_SPEC']
-  config.include(Helpers)
+  config.include(SpecHelpers)
 end
 
 VCR.configure do |config|
