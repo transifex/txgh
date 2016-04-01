@@ -6,6 +6,8 @@ require 'sinatra/streaming'
 module Txgh
   module RespondWith
     def respond_with(resp)
+      env['txgh.response'] = resp
+
       if resp.streaming?
         response.headers.merge!(resp.headers)
 
@@ -36,7 +38,9 @@ module Txgh
     end
 
     get '/health_check' do
-      200
+      respond_with(
+        Response.new(200, {})
+      )
     end
 
     get '/config' do

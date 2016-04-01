@@ -2,16 +2,16 @@ module Txgh
   module ResponseHelpers
     private
 
-    def respond_with(status, body)
-      Txgh::Handlers::Response.new(status, body)
+    def respond_with(status, body, e = nil)
+      Txgh::Handlers::Response.new(status, body, e)
     end
 
     def respond_with_success(status, body)
       respond_with(status, data(body))
     end
 
-    def respond_with_error(status, message)
-      respond_with(status, error(message))
+    def respond_with_error(status, message, e = nil)
+      respond_with(status, error(message), e)
     end
 
     def error(message)
