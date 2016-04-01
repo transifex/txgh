@@ -15,6 +15,7 @@ module Txgh
   autoload :ParseConfig,          'txgh/parse_config'
   autoload :ResourceCommitter,    'txgh/resource_committer'
   autoload :ResourceContents,     'txgh/resource_contents'
+  autoload :ResourceDownloader,   'txgh/resource_downloader'
   autoload :ResourceUpdater,      'txgh/resource_updater'
   autoload :ResponseHelpers,      'txgh/response_helpers'
   autoload :TransifexApi,         'txgh/transifex_api'

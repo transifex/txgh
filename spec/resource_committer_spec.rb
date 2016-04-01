@@ -8,16 +8,20 @@ describe ResourceCommitter do
 
   let(:language) { 'es' }
   let(:resource) { tx_config.resource(resource_slug, branch) }
+  let(:downloader) { instance_double(ResourceDownloader) }
+  let(:file_name) { "translations/#{language}/sample.yml" }
   let(:committer) do
     ResourceCommitter.new(transifex_project, github_repo, logger)
   end
 
   describe '#commit_resource' do
     it 'commits translations to the git repo' do
-      expect(transifex_api).to receive(:download).and_return(:translations)
+      expect(ResourceDownloader).to receive(:new).and_return(downloader)
+      expect(downloader).to receive(:first).and_return([file_name, :translations])
+
       expect(github_api).to(
         receive(:commit).with(
-          repo_name, branch, resource.translation_path(language), :translations
+          repo_name, branch, { file_name => :translations }
         )
       )
 

@@ -33,17 +33,21 @@ module Txgh
       client.create_ref(repo, branch, sha) rescue false
     end
 
-    def commit(repo, branch, path, content, allow_empty = false)
-      blob = client.create_blob(repo, content)
+    def commit(repo, branch, content_map, allow_empty = false)
       parent = client.ref(repo, branch)
       base_commit = get_commit(repo, parent[:object][:sha])
 
-      tree_data = [{ path: path, mode: '100644', type: 'blob', sha: blob }]
+      tree_data = content_map.map do |path, content|
+        blob = client.create_blob(repo, content)
+        { path: path, mode: '100644', type: 'blob', sha: blob }
+      end
+
       tree_options = { base_tree: base_commit[:commit][:tree][:sha] }
 
       tree = client.create_tree(repo, tree_data, tree_options)
       commit = client.create_commit(
-        repo, "Updating translations for #{path}", tree[:sha], parent[:object][:sha]
+        repo, "Updating translations for #{content_map.keys.join(", ")}",
+        tree[:sha], parent[:object][:sha]
       )
 
       # don't update the ref if the commit introduced no new changes

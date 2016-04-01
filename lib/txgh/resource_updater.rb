@@ -24,7 +24,7 @@ module Txgh
 
         if tx_resource.source_file == file['path']
           if repo.upload_diffs?
-            upload_diff(tx_resource, file)
+            upload_diff(tx_resource, file, categories)
           else
             upload_whole(tx_resource, file, categories)
           end
@@ -44,9 +44,9 @@ module Txgh
       end
     end
 
-    def upload_diff(tx_resource, file)
+    def upload_diff(tx_resource, file, categories)
       if content = diff_content(tx_resource, file)
-        upload_by_branch(tx_resource, content, categories_for(tx_resource))
+        upload_by_branch(tx_resource, content, categories)
       end
     end
 
