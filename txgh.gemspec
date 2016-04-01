@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'parseconfig', '~> 1.0'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
-  s.add_dependency 'zipline', '~> 0.0'
+  s.add_dependency 'rubyzip', '>= 1.0', '<= 1.1.2'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'README.md', 'txgh.gemspec']

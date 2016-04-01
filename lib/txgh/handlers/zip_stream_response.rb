@@ -1,4 +1,4 @@
-require 'zipline'
+require 'ext/zipline/output_stream'
 
 module Txgh
   module Handlers
