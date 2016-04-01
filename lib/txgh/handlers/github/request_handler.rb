@@ -32,7 +32,7 @@ module Txgh
           end
 
           def handle_unexpected
-            respond_with_error(400, e.message)
+            respond_with_error(400, 'Unexpected event type')
           end
 
         end

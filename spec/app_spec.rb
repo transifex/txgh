@@ -17,7 +17,7 @@ describe Txgh::Application do
     it 'indicates the server is running, returns a 200' do
       get '/health_check'
       expect(last_response).to be_ok
-      expect(last_response.body).to be_empty
+      expect(JSON.parse(last_response.body)).to eq({})
     end
   end
 

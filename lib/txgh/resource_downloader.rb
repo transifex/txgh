@@ -38,8 +38,8 @@ module Txgh
         )
 
         source_diff = source_diff_hash(head_resource, diff_point_resource)
-        head_content = transifex_download(head_resource, language_code)
-        diff_point_content = transifex_download(diff_point_resource, language_code)
+        head_content = wrap(transifex_download(head_resource, language_code), head_resource)
+        diff_point_content = wrap(transifex_download(diff_point_resource, language_code), diff_point_resource)
         contents = diff_point_content.merge(head_content, source_diff)
 
         yield file_name, contents.to_s(language_code)
@@ -49,8 +49,8 @@ module Txgh
     def source_diff_hash(head_resource, diff_point_resource)
       cache_diff(head_resource, diff_point_resource) do
         br = repo.process_all_branches? ? branch : repo.branch
-        head_contents = git_download(head_resource, br)
-        diff_point_contents = git_download(diff_point_resource, repo.diff_point)
+        head_contents = wrap(git_download(head_resource, br), head_resource)
+        diff_point_contents = wrap(git_download(diff_point_resource, repo.diff_point), head_resource)
         head_contents.diff_hash(diff_point_contents)
       end
     end
@@ -73,7 +73,7 @@ module Txgh
 
       download_each do |resource, language_code, file_name|
         contents = transifex_download(resource, language_code)
-        yield file_name, contents.to_s(language_code)
+        yield file_name, contents
       end
     end
 
@@ -86,16 +86,16 @@ module Txgh
       end
     end
 
+    def wrap(string, resource)
+      ResourceContents.from_string(resource, string)
+    end
+
     def transifex_download(resource, language)
-      ResourceContents.from_string(
-        resource, transifex_api.download(resource, language)
-      )
+      transifex_api.download(resource, language)
     end
 
     def git_download(resource, branch)
-      ResourceContents.from_string(
-        resource, repo.api.download(repo.name, resource.source_file, branch)
-      )
+      repo.api.download(repo.name, resource.source_file, branch)
     end
 
     def transifex_api
