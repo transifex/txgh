@@ -32,7 +32,7 @@ module Txgh
           end
 
           def handle_unexpected
-            respond_with_error(400, 'Unexpected event type')
+            respond_with_error(400, e.message)
           end
 
         end
@@ -68,7 +68,7 @@ module Txgh
             respond_with_error(401, 'Unauthorized')
           end
         rescue => e
-          respond_with_error(500, "Internal server error: #{e.message}")
+          respond_with_error(500, "Internal server error: #{e.message}", e)
         end
 
         def payload

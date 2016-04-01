@@ -40,7 +40,7 @@ module Txgh
         def handle_safely
           yield
         rescue => e
-          respond_with_error(500, "Internal server error: #{e.message}")
+          respond_with_error(500, "Internal server error: #{e.message}", e)
         end
       end
 
