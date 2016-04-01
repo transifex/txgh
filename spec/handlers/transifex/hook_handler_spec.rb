@@ -33,7 +33,7 @@ describe HookHandler do
   it 'downloads translations and pushes them to the correct branch (head)' do
     expect(github_api).to(
       receive(:commit).with(
-        repo_name, "heads/#{branch}", "translations/#{language}/sample.po", translations
+        repo_name, "heads/#{branch}", "translations/#{language}/sample.yml", translations
       )
     )
 
@@ -78,7 +78,7 @@ describe HookHandler do
 
       expect(github_api).to(
         receive(:commit).with(
-          repo_name, ref, "translations/#{language}/sample.po", translations
+          repo_name, ref, "translations/#{language}/sample.yml", translations
         )
       )
 
@@ -94,7 +94,7 @@ describe HookHandler do
     it 'downloads translations and pushes them to the tag' do
       expect(github_api).to(
         receive(:commit).with(
-          repo_name, "tags/my_tag", "translations/#{language}/sample.po", translations
+          repo_name, "tags/my_tag", "translations/#{language}/sample.yml", translations
         )
       )
 

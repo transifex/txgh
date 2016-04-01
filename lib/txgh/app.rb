@@ -1,13 +1,34 @@
 require 'sinatra'
 require 'sinatra/json'
 require 'sinatra/reloader'
+require 'sinatra/streaming'
 
 module Txgh
+  module RespondWith
+    def respond_with(resp)
+      if resp.streaming?
+        response.headers.merge!(resp.headers)
+
+        stream do |out|
+          resp.write_to(out)
+        end
+      else
+        status resp.status
+        json resp.body
+      end
+    end
+  end
 
   class Application < Sinatra::Base
+    include Txgh::Handlers
 
-    configure :development do
-      register Sinatra::Reloader
+    helpers Sinatra::Streaming
+    helpers RespondWith
+
+    configure do
+      set :logging, nil
+      logger = Txgh::TxLogger.logger
+      set :logger, logger
     end
 
     def initialize(app = nil)
@@ -40,12 +61,20 @@ module Txgh
         json [{ error: e.message }]
       end
     end
+
+    get '/download.:format' do
+      respond_with(
+        DownloadHandler.handle_request(request, settings.logger)
+      )
+    end
   end
 
+  # Hooks are protected endpoints used for data integration between Github and
+  # Transifex. They live under the /hooks namespace (see config.ru)
   class Hooks < Sinatra::Base
     include Txgh::Handlers
-    # Hooks are unprotected endpoints used for data integration between Github and
-    # Transifex. They live under the /hooks namespace (see config.ru)
+
+    helpers RespondWith
 
     configure do
       set :logging, nil
@@ -61,21 +90,22 @@ module Txgh
       super(app)
     end
 
-
     post '/transifex' do
-      response = Transifex::RequestHandler.handle_request(request, settings.logger)
-      status response.status
-      json response.body
+      respond_with(
+        Transifex::RequestHandler.handle_request(request, settings.logger)
+      )
     end
 
     post '/github' do
-      response = Github::RequestHandler.handle_request(request, settings.logger)
-      status response.status
-      json response.body
+      respond_with(
+        Github::RequestHandler.handle_request(request, settings.logger)
+      )
     end
   end
 
   class Triggers < Sinatra::Base
+    helpers RespondWith
+
     configure do
       set :logging, nil
       logger = Txgh::TxLogger.logger
@@ -87,15 +117,15 @@ module Txgh
     end
 
     patch '/push' do
-      response = Txgh::Handlers::Triggers::PushHandler.handle_request(request, settings.logger)
-      status response.status
-      json response.body
+      respond_with(
+        Txgh::Handlers::Triggers::PushHandler.handle_request(request, settings.logger)
+      )
     end
 
     patch '/pull' do
-      response = Txgh::Handlers::Triggers::PullHandler.handle_request(request, settings.logger)
-      status response.status
-      json response.body
+      respond_with(
+        Txgh::Handlers::Triggers::PullHandler.handle_request(request, settings.logger)
+      )
     end
   end
 end

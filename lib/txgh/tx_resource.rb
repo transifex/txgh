@@ -3,6 +3,8 @@ module Txgh
     attr_reader :project_slug, :resource_slug, :type, :source_lang
     attr_reader :source_file, :translation_file
 
+    alias_method :original_resource_slug, :resource_slug
+
     def initialize(project_slug, resource_slug, type, source_lang, source_file,
         lang_map, translation_file)
       @project_slug = project_slug

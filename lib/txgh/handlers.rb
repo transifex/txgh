@@ -1,5 +1,6 @@
 module Txgh
   module Handlers
+    autoload :DownloadHandler,   'txgh/handlers/download_handler'
     autoload :Github,            'txgh/handlers/github'
     autoload :Response,          'txgh/handlers/response'
     autoload :StreamResponse,    'txgh/handlers/stream_response'

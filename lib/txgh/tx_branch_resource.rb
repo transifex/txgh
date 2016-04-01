@@ -6,7 +6,8 @@ module Txgh
 
     def_delegators :@resource, *[
       :project_slug, :type, :source_lang, :source_file, :L10N_resource_slug,
-      :translation_file, :lang_map, :translation_path
+      :translation_file, :lang_map, :translation_path, :original_resource_slug,
+      :to_h, :to_api_h
     ]
 
     attr_reader :resource, :branch
