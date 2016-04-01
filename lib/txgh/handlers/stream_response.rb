@@ -30,6 +30,10 @@ module Txgh
       def streaming?
         true
       end
+
+      def error
+        nil
+      end
     end
   end
 end
