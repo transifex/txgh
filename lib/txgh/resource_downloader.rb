@@ -48,8 +48,8 @@ module Txgh
 
     def source_diff_hash(head_resource, diff_point_resource)
       cache_diff(head_resource, diff_point_resource) do
-        branch = repo.process_all_branches? ? branch : repo.branch
-        head_contents = git_download(head_resource, branch)
+        br = repo.process_all_branches? ? branch : repo.branch
+        head_contents = git_download(head_resource, br)
         diff_point_contents = git_download(diff_point_resource, repo.diff_point)
         head_contents.diff_hash(diff_point_contents)
       end
@@ -102,9 +102,9 @@ module Txgh
       project.api
     end
 
-    def each_resource
+    def each_resource(&block)
       return to_enum(__method__) unless block_given?
-      return @resources.each if @resources
+      return @resources.each(&block) if @resources
 
       ref = repo.process_all_branches? ? branch : nil
 
@@ -115,9 +115,9 @@ module Txgh
       end
     end
 
-    def each_language
+    def each_language(&block)
       return to_enum(__method__) unless block_given?
-      return @languages.each if @languages
+      return @languages.each(&block) if @languages
 
       raw_languages.each do |lang|
         yield lang['language_code']
