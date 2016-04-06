@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version  = ::Txgh::VERSION
   s.authors  = ['Matthew Jackowski', 'Cameron Dutro']
   s.email    = ['mattjjacko@gmail.com', 'camertron@gmail.com']
-  s.homepage = "https://github.com/transifex/txgh"
+  s.homepage = 'https://github.com/lumoslabs/txgh'
 
   s.description = s.summary = 'A server that automatically syncs translation resources between Github and Transifex.'
 
@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rubyzip', '>= 1.0', '<= 1.1.2'
 
   s.require_path = 'lib'
-  s.files = Dir['{lib,spec}/**/*', 'README.md', 'txgh.gemspec']
+  s.files = Dir['{lib,spec}/**/*', 'README.md', 'txgh.gemspec', 'LICENSE']
 end
