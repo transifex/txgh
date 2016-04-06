@@ -148,11 +148,16 @@ module Txgh
     end
 
     def raise_error!(response)
-      if response.status == 401
-        raise TransifexUnauthorizedError
-      elsif (response.status / 100) != 2
-        raise TransifexApiError,
-          "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
+      case response.status
+        when 401
+          raise TransifexUnauthorizedError
+        when 404
+          raise TransifexNotFoundError
+        else
+          if (response.status / 100) != 2
+            raise TransifexApiError,
+              "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
+          end
       end
     end
   end

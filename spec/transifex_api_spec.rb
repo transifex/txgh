@@ -216,9 +216,18 @@ describe TransifexApi do
 
     it 'raises an exception if the api responds with an error code' do
       allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
+      allow(response).to receive(:status).and_return(401)
       allow(response).to receive(:body).and_return('{}')
       expect { api.download(resource, language) }.to raise_error(TransifexApiError)
+    end
+
+    it 'raises a specific exception if the api responds with a 404 not found' do
+      allow(connection).to receive(:get).and_return(response)
+      allow(response).to receive(:status).and_return(404)
+      allow(response).to receive(:body).and_return('{}')
+      expect { api.download(resource, language) }.to raise_error(
+        TransifexNotFoundError
+      )
     end
   end
 

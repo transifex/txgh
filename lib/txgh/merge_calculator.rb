@@ -37,13 +37,17 @@ module Txgh
 
     def update_added(phrase_hash)
       diff.fetch(:added, {}).each_pair do |key, phrase|
-        phrase_hash[key] = head_hash[key]
+        if val = head_hash[key]
+          phrase_hash[key] = val
+        end
       end
     end
 
     def update_modified(phrase_hash)
-      diff.fetch(:modified, {}).each_pair do |key, _|
-        phrase_hash[key] = head_hash[key]
+      diff.fetch(:modified, {}).each_pair do |key, phrase|
+        if val = head_hash[key]
+          phrase_hash[key] = val
+        end
       end
     end
 

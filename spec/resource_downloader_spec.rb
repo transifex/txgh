@@ -14,10 +14,6 @@ describe ResourceDownloader do
     ResourceDownloader.new(transifex_project, github_repo, ref)
   end
 
-  let(:api_resources) do
-    tx_config.resources.map(&:to_api_h)
-  end
-
   before(:each) do
     allow(transifex_api).to(
       receive(:get_languages).with(project_name).and_return(
@@ -25,12 +21,6 @@ describe ResourceDownloader do
           { 'language_code' => language_code }
         end
       )
-    )
-
-    allow(transifex_api).to(
-      receive(:get_resources)
-        .with(project_name)
-        .and_return(api_resources)
     )
 
     allow(transifex_api).to(
@@ -78,23 +68,26 @@ describe ResourceDownloader do
 
     context 'when told to process all branches' do
       let(:branch) { 'all' }
-      let(:api_resources) do
-        [
-          { 'slug' => "#{resource_slug}-#{Txgh::Utils.slugify(ref)}" },
-          { 'slug' => "#{resource_slug}_second" }
-        ]
-      end
 
-      it 'only includes resources that match the branch (ref)' do
+      it 'includes all resources' do
         resource = tx_config.resource(resource_slug)
-        expect(downloader.each.to_a).to eq(
-          api_languages.map do |language|
-            [
-              "translations/#{language}/sample.yml",
-              translations_for(resource, language)
-            ]
-          end
-        )
+        actual_results = downloader.each.to_a
+
+        expected_results = api_languages.map do |language|
+          [
+            "translations/#{language}/sample.yml",
+            translations_for(resource, language)
+          ]
+        end
+
+        expected_results += api_languages.map do |language|
+          [
+            "translations/#{language}/sample2.yml",
+            translations_for(resource, language)
+          ]
+        end
+
+        expect(actual_results).to eq(expected_results)
       end
     end
   end
@@ -177,6 +170,32 @@ describe ResourceDownloader do
                 picard: ! "enterprise (dp trans)"
                 janeway: ! "uss voyager (head trans)"
                 sisko: ! "deep space nine (head trans)"
+            })
+          ]
+        end
+      )
+    end
+
+    it "works even if the resource doesn't exist in transifex" do
+      allow(transifex_api).to(
+        receive(:download) do |resource, language|
+          if resource.respond_to?(:branch)
+            translations_for(resource, language)
+          else
+            raise TransifexNotFoundError
+          end
+        end
+      )
+
+      results = downloader.each.to_a
+      expect(results).to eq(
+        api_languages.map do |language|
+          [
+            "translations/#{language}/sample.yml",
+            outdent(%Q{
+              #{language}:
+                picard: ! "enterprise (dp trans)"
+                janeway: ! "voyager (dp trans)"
             })
           ]
         end
