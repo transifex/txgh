@@ -29,7 +29,9 @@ module Txgh
         private
 
         def raw_config
-          ENV['TXGH_CONFIG']
+          # gsub replaces non-breaking spaces at beginning of each line
+          # can be a problem on heroku
+          ENV['TXGH_CONFIG'].gsub(/^[[:space:]]*/) { |s| ' ' * s.size }
         end
 
         def base_config
