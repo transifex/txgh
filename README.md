@@ -30,6 +30,42 @@ Use the following table to determine if Txgh will work for your git and translat
 |**Multi-branch**<br>* Your team is small or everyone works from the same branch<br>* Translations should change when code changes|You might want to consider <br>multi-branch with diffs (below)<br> since your translators may see<br> a number of duplicate strings<br> in Transifex using this workflow.|
 |**Multi-branch with Diffs**<br>* Your team uses git branches for feature development<br>* Translations should change when code changes|This is the recommended workflow<br> if you'd like to manage translations<br> in an agile way, i.e. "continuous<br> translation." Only new and changed<br> phrases are uploaded to Transifex.|
 
+Getting Started
+---
+
+Txgh supports a significant number of configuration options, and you'll need to familiarize yourself with them to ensure you're setting Txgh up to serve your particular needs. That said, we've whipped up a couple of templates with sensible defaults to get you started more quickly. If you're thinking about deploying with Docker, take a look at our [Docker template](https://github.com/lumoslabs/txgh-docker-template). If you want more flexibility (i.e. the ability to add custom middleware, etc), take a look at our [ruby template](https://github.com/lumoslabs/txgh-ruby-template). The rest of the setup steps below assume you're using one of these templates.
+
+1. Open a terminal window and run `./bin/configure`. Follow the instructions to add a new project to `config.yml`. You'll need to have some version of Ruby installed on your system to run the configuration script. Refer to the section marked "Configuring Txgh" below for a detailed explanation of each option.
+
+2. Create a file in your repository named `.tx/config` and add appropriate tx config. Txgh uses this information to know which files should be watched for changes. Refer to the section marked "Tx Config" below for more information.
+
+3. If you've configured Txgh to upload diffs, visit your project's page in Transifex and upload each of the files described in your tx config. Use Transifex's categories feature to add a category of `branch:heads/master` to each resource. These full resources will provide the base set of translations for your project.
+
+3. At this point, you're ready to deploy Txgh. There are a number of ways to do this, including using a host like AWS or Heroku. It's important your Txgh instance is publicly accessible over the Internet, because the next few steps involve setting up webhooks, which rely on being able to reach it.
+
+4. Visit the settings page for your Github repository, click on "Webhooks and Services," then click the "Add webhook" button. Under payload URL, fill in the URL of your publicly accessible Txgh instance and the path to the Github hook. For example, `http://mytxgh.herokuapp.com/hooks/github`. Fill in the "Secret" field with the Github `webhook_secret` generated for you in `config.yml`. Make sure to enable the "push" event, and also the "delete" event if you have configured Txgh to automatically delete resources. When the webhook is first created, Github will send your Txgh instance a "ping" test event. Your Txgh instance should respond with a 200 OK.
+
+5. Visit the Manage -> Edit Project page for your Transifex project. Scroll down to the "Features" header and look for the "Web Hook URL" field. Fill it in with the URL of your publicly accessible Txgh instance and the path to the Transifex hook. For example, `http://mytxgh.herokuapp.com/hooks/transifex`. Fill in the "Secret Key" field with the Transifex `webhook_secret` generated for you in `config.yml`.
+
+6. Congratulations, you now have a running, fully configured Txgh instance! Note that the configuration script you ran in step 1 automatically configured Txgh to process all branches, so you should be able to create a test branch, modify some translations, and push your changes. Txgh is configured correctly if a new resource appears in Transifex with the new branch name attached.
+
+Available Endpoints
+---
+
+Txgh exposes the following endpoints:
+
+* **`POST /hooks/github`**: Receives and processes Github webhook requests. Request body is expected to be a Github webhook payload in JSON format. Uploads any modified translatable content to Transifex. This endpoint is protected by shared secret signature authorization.
+
+* **`POST /hooks/transifex`**: Receives and processes Transifex webhook requests. Request body is expected to be a Transifex webhook payload in JSON format. Commits translations back to the Github repository. This endpoint is protected by shared secret signature authorization.
+
+* **`PATCH /push?project_slug=[slug]&branch=[branch]`**: Causes translatable content from Github to be pushed to Transifex. This endpoint is designed to emulate receiving a Github webhook, but doesn't require the usual massive Github webhook payload. Currently this endpoint is not protected (but it should be).
+
+* **`PATCH /pull?project_slug=[slug]&branch=[branch]`**: Causes translations from Transifex to be committed to Github. This endpoint is designed to emulate receiving a Transifex webhook, but doesn't require the usual Transifex webhook payload. Currently this endpoint is not protected (but it should be).
+
+* **`GET /config?project_slug=[slug]&branch=[branch]`**: Returns the tx config in JSON format for the given project and branch.
+
+* **`GET /health_check`**: Simply returns an HTTP 200 OK.
+
 Configuring Txgh
 ---
 
@@ -92,7 +128,7 @@ transifex:
 
 ### Loading Config
 
-Txgh supports two different ways of accessing configuration, raw text and a file path. In both cases, config is passed via the `TXGH_CONFIG` environment variable. You'll prefix the raw text or file path with the appropriate scheme, `raw://` or `file://`, to indicate which strategy Txgh should use.
+Txgh supports two different ways of accessing configuration, raw text and a file path. In both cases, config is passed via the `TXGH_CONFIG` environment variable. Prefix the raw text or file path with the appropriate scheme, `raw://` or `file://`, to indicate which strategy Txgh should use.
 
 #### Raw Config
 
@@ -114,7 +150,7 @@ export TXGH_CONFIG="file://path/to/config.yml"
 
 When Txgh runs, it will read and parse the file at the path that comes after `file://`.
 
-Of course, in both the file and the raw case, environment variables can be specified via `export` or inline when starting Txgh. See the "Running Txgh" section below for more information.
+Of course, in both the file and the raw cases, environment variables can be specified via `export` or inline when starting Txgh. See the "Running Txgh" section below for more information.
 
 Tx Config
 ---
@@ -133,7 +169,7 @@ host = https://www.transifex.com
 lang_map =
 
 # Create one such section per file/resource
-[projectslug.resourceslug]
+[myproject.enyml]
 file_filter = config/locales/<lang>.yml
 source_file = config/locales/en.yml
 source_lang = en
@@ -179,6 +215,8 @@ Txgh is distributed as a [Docker image](https://quay.io/repository/lumoslabs/txg
 
 Using Docker to run Txgh is pretty straightforward (keep in mind you'll need to have the Docker server set up wherever you want to run Txgh).
 
+NOTE: You might consider using this [Docker template](https://github.com/lumoslabs/txgh-docker-template) instead of following the instructions below. The template contains all the files and scripts you need to get up and running quickly.
+
 First, pull the Txgh image:
 
 ```bash
@@ -214,8 +252,12 @@ curl -v 192.168.99.100:9292/health_check
 
 Docker is by far the easiest way to run Txgh, but a close runner-up is via Rubygems. You'll need to have at least Ruby 2.1 installed as well as the [bundler gem](http://bundler.io/). Installing ruby and bundler are outside the scope of this README, but I'd suggest using a ruby installer like [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to get the job done. Once ruby is installed, executing `gem install bundler` should be enough to install the bundler gem.
 
+NOTE: You might consider using this [ruby template](https://github.com/lumoslabs/txgh-ruby-template) instead of following the instructions below. The template contains all the files and scripts you need to get up and running quickly.
+
 1. Create a new directory for your Txgh instance.
-2. Inside the new directory, create a file named `Gemfile`. This file is a manifest of all your ruby dependencies.
+
+2. Inside the new directory, create a file named `Gemfile`. This file is a manifest of  all your ruby dependencies.
+
 3. Inside `Gemfile`, add the following lines:
 
   ```ruby
