@@ -1,3 +1,7 @@
+== 1.0.1
+
+* Heroku button compatibility.
+
 == 1.0.0
 
 * Birthday!
