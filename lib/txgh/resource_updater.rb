@@ -15,6 +15,9 @@ module Txgh
     # For each modified resource, get its content and update the content
     # in Transifex.
     def update_resource(tx_resource, commit_sha, categories = {})
+      # don't process the resource unless the project slugs are the same
+      return unless tx_resource.project_slug == project.name
+
       logger.info('process updated resource')
       tree_sha = repo.api.get_commit(repo.name, commit_sha)['commit']['tree']['sha']
       tree = repo.api.tree(repo.name, tree_sha)
