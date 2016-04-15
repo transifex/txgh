@@ -137,6 +137,13 @@ module Txgh
       JSON.parse(response.body)
     end
 
+    def get_stats(project_slug, resource_slug)
+      url = "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/stats/"
+      response = connection.get(url)
+      raise_error!(response)
+      JSON.parse(response.body)
+    end
+
     private
 
     def get_content_io(tx_resource, content)

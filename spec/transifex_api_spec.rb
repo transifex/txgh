@@ -342,4 +342,26 @@ describe TransifexApi do
       expect { api.get_formats }.to raise_error(TransifexApiError)
     end
   end
+
+  describe '#get_stats' do
+    it 'makes a request with the correct parameters' do
+      expect(connection).to receive(:get) do |url, payload|
+        expect(url).to end_with("stats/")
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{}')
+      expect(api.get_stats(project_name, resource_slug)).to eq({})
+    end
+
+    it 'raises an exception if the api responds with an error code' do
+      allow(connection).to receive(:get).and_return(response)
+      allow(response).to receive(:status).and_return(404)
+      allow(response).to receive(:body).and_return('{}')
+      expect { api.get_stats(project_name, resource_slug) }.to(
+        raise_error(TransifexApiError)
+      )
+    end
+  end
 end
