@@ -179,7 +179,7 @@ describe ResourceDownloader do
     it "works even if the resource doesn't exist in transifex" do
       allow(transifex_api).to(
         receive(:download) do |resource, language|
-          if resource.respond_to?(:branch)
+          if resource.branch
             translations_for(resource, language)
           else
             raise TransifexNotFoundError

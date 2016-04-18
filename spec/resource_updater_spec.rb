@@ -19,7 +19,7 @@ describe ResourceUpdater do
     [{ 'path' => resource.source_file, 'sha' => 'def456' }]
   end
 
-  def phrases_for(path)
+  let(:translations) do
     YAML.load("|
       en:
         welcome: Hello
@@ -44,8 +44,6 @@ describe ResourceUpdater do
     )
 
     modified_files.each do |file|
-      translations = phrases_for(file['path'])
-
       allow(github_api).to(
         receive(:blob).with(repo_name, file['sha']) do
           { 'content' => translations, 'encoding' => 'utf-8' }
@@ -56,8 +54,6 @@ describe ResourceUpdater do
 
   it 'correctly uploads modified files to transifex' do
     modified_files.each do |file|
-      translations = phrases_for(file['path'])
-
       expect(transifex_api).to(
         receive(:create_or_update) do |resource, content|
           expect(resource.source_file).to eq(file['path'])
@@ -77,8 +73,6 @@ describe ResourceUpdater do
       allow(transifex_api).to receive(:resource_exists?).and_return(false)
 
       modified_files.each do |file|
-        translations = phrases_for(file['path'])
-
         expect(transifex_api).to(
           receive(:create) do |resource, content, categories|
             expect(resource.source_file).to eq(file['path'])
@@ -95,8 +89,6 @@ describe ResourceUpdater do
       expect(transifex_api).to receive(:resource_exists?).and_return(false)
 
       modified_files.each do |file|
-        translations = phrases_for(file['path'])
-
         expect(transifex_api).to(
           receive(:create) do |resource, content, categories|
             expect(categories).to include('foo:bar')
@@ -109,11 +101,16 @@ describe ResourceUpdater do
   end
 
   context 'when asked to upload diffs' do
+    let(:branch) { 'all' }
+    let(:ref) { 'heads/my_branch' }
     let(:diff_point) { 'heads/diff_point' }
     let(:resource) do
-      TxResource.new(
-        project_name, resource_slug, 'YAML',
-        'en', 'en.yml', '', 'translation_file'
+      TxBranchResource.new(
+        TxResource.new(
+          project_name, resource_slug, 'YAML',
+          'en', 'en.yml', '', 'translation_file'
+        ),
+        ref
       )
     end
 
@@ -137,11 +134,19 @@ describe ResourceUpdater do
         receive(:upload_by_branch).with(resource, diff, anything)
       )
 
-      allow(updater).to(
-        receive(:categories_for).and_return({})
-      )
-
       updater.update_resource(resource, commit_sha)
+    end
+
+    context 'when asked to upload the diff point' do
+      let(:ref) { diff_point }
+
+      it 'uploads the whole resource' do
+        expect(updater).to(
+          receive(:upload_by_branch).with(resource, translations, anything)
+        )
+
+        updater.update_resource(resource, commit_sha)
+      end
     end
   end
 end

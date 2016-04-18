@@ -62,5 +62,9 @@ module Txgh
         'name' => translation_file
       }
     end
+
+    def branch
+      nil
+    end
   end
 end

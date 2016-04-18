@@ -26,6 +26,7 @@ module Txgh
         logger.info("process each tree entry: #{file['path']}")
 
         if tx_resource.source_file == file['path']
+          binding.pry
           if repo.upload_diffs?
             upload_diff(tx_resource, file, categories)
           else
@@ -48,8 +49,13 @@ module Txgh
     end
 
     def upload_diff(tx_resource, file, categories)
-      if content = diff_content(tx_resource, file)
-        upload_by_branch(tx_resource, content, categories)
+      # if uploading to master (i.e. the diff point), then upload the full resource
+      if Utils.branches_equal?(tx_resource.branch, repo.diff_point)
+        upload_whole(tx_resource, file, categories)
+      else
+        if content = diff_content(tx_resource, file)
+          upload_by_branch(tx_resource, content, categories)
+        end
       end
     end
 

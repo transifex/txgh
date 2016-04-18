@@ -15,6 +15,10 @@ module Txgh
       end
     end
 
+    def branches_equal?(first, second)
+      absolute_branch(first) == absolute_branch(second)
+    end
+
     def is_tag?(ref)
       ref.include?('tags/')
     end
