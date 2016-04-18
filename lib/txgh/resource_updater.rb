@@ -26,7 +26,6 @@ module Txgh
         logger.info("process each tree entry: #{file['path']}")
 
         if tx_resource.source_file == file['path']
-          binding.pry
           if repo.upload_diffs?
             upload_diff(tx_resource, file, categories)
           else
