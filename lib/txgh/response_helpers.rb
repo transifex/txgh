@@ -6,10 +6,6 @@ module Txgh
       Txgh::Handlers::Response.new(status, body, e)
     end
 
-    def respond_with_success(status, body)
-      respond_with(status, data(body))
-    end
-
     def respond_with_error(status, message, e = nil)
       respond_with(status, error(message), e)
     end

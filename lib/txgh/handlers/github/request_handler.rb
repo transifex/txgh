@@ -14,6 +14,8 @@ module Txgh
                 handle_push(request, logger)
               when 'delete'
                 handle_delete(request, logger)
+              when 'ping'
+                handle_ping(request, logger)
               else
                 handle_unexpected
             end
@@ -28,6 +30,11 @@ module Txgh
 
           def handle_delete(request, logger)
             klass = Txgh::Handlers::Github::DeleteHandler
+            new(request, logger).handle(klass)
+          end
+
+          def handle_ping(request, logger)
+            klass = Txgh::Handlers::Github::PingHandler
             new(request, logger).handle(klass)
           end
 
