@@ -59,13 +59,19 @@ namespace :version do
     # update constant in case other rake tasks run in this process afterwards
     Txgh::VERSION.replace(new_version)
   end
+
+  task :commit_and_push do
+    system "git add lib/txgh/version.rb"
+    system "git commit -m 'Bumping version to #{Txgh::VERSION}'"
+    system "git push origin HEAD"
+  end
 end
 
 DOCKER_REPO = 'quay.io/lumoslabs/txgh'
 
 namespace :publish do
   task :all => %w(
-    version:bump
+    version:bump version:commit_and_push
     publish:tag publish:build_docker publish:publish_docker
     publish:build_gem publish:publish_gem
   )
