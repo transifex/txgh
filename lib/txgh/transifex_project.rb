@@ -33,5 +33,13 @@ module Txgh
     def tx_config_uri
       config['tx_config']
     end
+
+    def languages
+      config.fetch('languages', [])
+    end
+
+    def supported_language?(language)
+      languages.include?(language)
+    end
   end
 end

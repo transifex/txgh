@@ -5,6 +5,8 @@ module Txgh
 
         def execute
           languages.each do |language|
+            next unless project.supported_language?(language['language_code'])
+
             committer.commit_resource(
               branch_resource, branch, language['language_code']
             )

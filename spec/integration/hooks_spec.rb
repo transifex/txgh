@@ -45,7 +45,8 @@ describe 'hook integration tests', integration: true do
             'api_username' => 'txgh.bot',
             'api_password' => '2aqFGW99fPRKWvXBPjbrxkdiR',
             'push_translations_to' => 'txgh-bot/txgh-test-resources',
-            'webhook_secret' => 'fce95b1748fd638c22174d34200f10cf'
+            'webhook_secret' => 'fce95b1748fd638c22174d34200f10cf',
+            'languages' => ['el_GR']
           }
         }
       }

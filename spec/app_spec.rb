@@ -310,6 +310,7 @@ describe Txgh::Triggers do
     it 'updates translations (in all locales) in the expected repo' do
       committer = double(:committer)
       languages = [{ 'language_code' => 'pt' }, { 'language_code' => 'ja' }]
+      project_config['languages'] = %w(pt ja)
       expect(Txgh::ResourceCommitter).to receive(:new).and_return(committer)
       expect(Txgh::TransifexApi).to receive(:new).and_return(transifex_api)
       expect(transifex_api).to receive(:get_languages).and_return(languages)

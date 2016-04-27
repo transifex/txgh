@@ -54,7 +54,10 @@ module Txgh
       end
 
       def execute
-        downloader = ResourceDownloader.new(project, repo, params['branch'])
+        downloader = ResourceDownloader.new(
+          project, repo, params['branch'], languages: project.languages
+        )
+
         response_class.new(attachment, downloader.each)
       end
 

@@ -77,5 +77,15 @@ describe DownloadHandler do
         expect(handler.execute).to be_a(TgzStreamResponse)
       end
     end
+
+    context 'with a set of languages' do
+      let(:supported_languages) { %w(is fr) }
+
+      it "downloads translations for the project's supported languages" do
+        allow(transifex_api).to receive(:download)
+        files = handler.execute.enum.to_a.map(&:first)
+        expect(files).to eq(%w(translations/is/sample.yml translations/fr/sample.yml))
+      end
+    end
   end
 end

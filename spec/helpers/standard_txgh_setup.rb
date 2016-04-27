@@ -15,6 +15,7 @@ module StandardTxghSetup
   let(:tag) { 'all' }
   let(:ref) { 'heads/master' }
   let(:language) { 'ko_KR' }
+  let(:supported_languages) { [language] }
   let(:translations) { 'translation file contents' }
   let(:diff_point) { nil }
 
@@ -26,7 +27,8 @@ module StandardTxghSetup
       'name' => project_name,
       'tx_config' => "raw://#{tx_config_raw}",
       'webhook_secret' => 'abc123',
-      'auto_delete_resources' => 'true'
+      'auto_delete_resources' => 'true',
+      'languages' => supported_languages
     }
   end
 

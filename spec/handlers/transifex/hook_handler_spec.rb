@@ -112,4 +112,17 @@ describe HookHandler do
       expect(response.body).to eq(true)
     end
   end
+
+  context 'with an unsupported language' do
+    let(:language) { 'pt' }
+    let(:supported_languages) { ['ja'] }
+
+    it "doesn't make a commit" do
+      expect(github_api).to_not receive(:commit)
+
+      response = handler.execute
+      expect(response.status).to eq(304)
+      expect(response.body).to eq(true)
+    end
+  end
 end
