@@ -42,6 +42,15 @@ module Txgh
         ret[hash[key]] = hash
       end
     end
+
+    def booleanize(obj)
+      case obj
+        when String
+          obj.downcase == 'true'
+        when TrueClass, FalseClass
+          obj
+      end
+    end
   end
 
   Utils.extend(Utils)

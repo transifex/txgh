@@ -32,7 +32,12 @@ describe TransifexProject do
       expect(transifex_project.auto_delete_resources?).to eq(false)
     end
 
-    it 'returns true if configured' do
+    it 'returns true if configured with bool' do
+      project_config['auto_delete_resources'] = true
+      expect(transifex_project.auto_delete_resources?).to eq(true)
+    end
+
+    it 'returns true if configured with string' do
       project_config['auto_delete_resources'] = 'true'
       expect(transifex_project.auto_delete_resources?).to eq(true)
     end

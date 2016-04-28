@@ -55,4 +55,21 @@ describe Utils do
       })
     end
   end
+
+  describe '.booleanize' do
+    it 'converts a string into a bool' do
+      expect(Utils.booleanize('true')).to eq(true)
+      expect(Utils.booleanize('false')).to eq(false)
+    end
+
+    it 'converts a badly-cased string into a bool' do
+      expect(Utils.booleanize('TrUe')).to eq(true)
+      expect(Utils.booleanize('faLSE')).to eq(false)
+    end
+
+    it "doesn't convert bools" do
+      expect(Utils.booleanize(true)).to eq(true)
+      expect(Utils.booleanize(false)).to eq(false)
+    end
+  end
 end

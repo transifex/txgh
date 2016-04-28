@@ -11,6 +11,10 @@ module Txgh
       config['name']
     end
 
+    def organization
+      config['organization']
+    end
+
     def webhook_secret
       config['webhook_secret']
     end
@@ -27,7 +31,7 @@ module Txgh
     end
 
     def auto_delete_resources?
-      (config['auto_delete_resources'] || '').downcase == 'true'
+      Utils.booleanize(config['auto_delete_resources'] || 'false')
     end
 
     def tx_config_uri
