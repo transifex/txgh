@@ -60,8 +60,16 @@ namespace :version do
     Txgh::VERSION.replace(new_version)
   end
 
+  task :history do
+    history = File.read('History.txt')
+    history = "== #{Txgh::VERSION}\n* \n\n#{history}"
+    File.write('History.txt', history)
+    system "vi History.txt"
+  end
+
   task :commit_and_push do
     system "git add lib/txgh/version.rb"
+    system "git add History.txt"
     system "git commit -m 'Bumping version to #{Txgh::VERSION}'"
     system "git push origin HEAD"
   end
@@ -71,7 +79,7 @@ DOCKER_REPO = 'quay.io/lumoslabs/txgh'
 
 namespace :publish do
   task :all => %w(
-    version:bump version:commit_and_push
+    version:bump version:history version:commit_and_push
     publish:tag publish:build_docker publish:publish_docker
     publish:build_gem publish:publish_gem
   )
