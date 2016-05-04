@@ -50,9 +50,15 @@ module Txgh
     end
 
     def create(tx_resource, content, categories = [])
+      name = if tx_resource.branch
+        "#{tx_resource.source_file} (#{tx_resource.branch})"
+      else
+        tx_resource.source_file
+      end
+
       payload = {
         slug: tx_resource.resource_slug,
-        name: tx_resource.source_file,
+        name: name,
         i18n_type: tx_resource.type,
         categories: CategorySupport.join_categories(categories.uniq),
         content: get_content_io(tx_resource, content)

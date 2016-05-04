@@ -8,7 +8,7 @@ describe TransifexApi do
 
   let(:connection) { double(:connection) }
   let(:api) { TransifexApi.create_from_connection(connection) }
-  let(:resource) { tx_config.resources.first }
+  let(:resource) { tx_config.resource(resource_slug) }
   let(:response) { double(:response) }
 
   describe '#create_or_update' do
@@ -77,6 +77,7 @@ describe TransifexApi do
           end_with("project/#{project_name}/resources/")
         )
 
+        expect(payload[:name]).to eq('sample.yml')
         expect(payload[:content].io.string).to eq('new_content')
         expect(payload[:categories]).to eq('abc def')
         response
@@ -101,6 +102,20 @@ describe TransifexApi do
       allow(response).to receive(:status).and_return(404)
       allow(response).to receive(:body).and_return('{}')
       expect { api.create(resource, 'new_content') }.to raise_error(TransifexApiError)
+    end
+
+    context 'with a branch-based resource' do
+      let(:resource) { tx_config.resource(resource_slug, ref) }
+
+      it "includes the branch in the resource's name" do
+        expect(connection).to receive(:post) do |url, payload|
+          expect(payload[:name]).to eq('sample.yml (heads/master)')
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        api.create(resource, 'new_content')
+      end
     end
   end
 
