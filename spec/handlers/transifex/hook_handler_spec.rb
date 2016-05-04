@@ -31,6 +31,10 @@ describe HookHandler do
     allow(downloader).to(receive(:first)).and_return([
       "translations/#{language}/sample.yml", translations
     ])
+
+    allow(github_api).to receive(:get_ref).and_return(
+      object: { sha: '123abcshashasha' }
+    )
   end
 
   it 'downloads translations and pushes them to the correct branch (head)' do

@@ -18,6 +18,7 @@ module StandardTxghSetup
   let(:supported_languages) { [language] }
   let(:translations) { 'translation file contents' }
   let(:diff_point) { nil }
+  let(:organization) { 'myorg' }
 
   let(:project_config) do
     {
@@ -28,7 +29,8 @@ module StandardTxghSetup
       'tx_config' => "raw://#{tx_config_raw}",
       'webhook_secret' => 'abc123',
       'auto_delete_resources' => 'true',
-      'languages' => supported_languages
+      'languages' => supported_languages,
+      'organization' => organization
     }
   end
 

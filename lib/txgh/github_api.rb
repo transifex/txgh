@@ -79,5 +79,9 @@ module Txgh
       end
     end
 
+    def create_status(repo, sha, state, options = {})
+      client.create_status(repo, sha, state, options)
+    end
+
   end
 end

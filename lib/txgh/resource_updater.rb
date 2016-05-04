@@ -31,11 +31,21 @@ module Txgh
           else
             upload_whole(tx_resource, file, categories)
           end
+
+          fire_event_for(tx_resource, commit_sha)
         end
       end
     end
 
     private
+
+    def fire_event_for(tx_resource, commit_sha)
+      Txgh.events.publish(
+        'transifex.resource.updated', {
+          project: project, repo: repo, resource: tx_resource, sha: commit_sha
+        }
+      )
+    end
 
     def upload_whole(tx_resource, file, categories)
       content = contents_of(file['sha'])

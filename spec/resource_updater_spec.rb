@@ -65,6 +65,23 @@ describe ResourceUpdater do
     updater.update_resource(resource, commit_sha)
   end
 
+  it 'fires the transifex.resource.updated event' do
+    allow(transifex_api).to receive(:create_or_update)
+
+    expect { updater.update_resource(resource, commit_sha) }.to(
+      change { Txgh.events.published.size }.by(1)
+    )
+
+    event = Txgh.events.published.first
+    expect(event[:channel]).to eq('transifex.resource.updated')
+
+    options = event[:options]
+    expect(options[:project].name).to eq(project_name)
+    expect(options[:repo].name).to eq(repo_name)
+    expect(options[:sha]).to eq(commit_sha)
+    expect(options[:resource].original_resource_slug).to eq(resource_slug)
+  end
+
   context 'when asked to process all branches' do
     let(:branch) { 'all' }
     let(:ref) { 'heads/master' }

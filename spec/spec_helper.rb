@@ -8,6 +8,8 @@ require 'vcr'
 require 'webmock'
 require 'yaml'
 
+require 'helpers/test_events'
+
 module SpecHelpers
   def outdent(str)
     # The special YAML pipe operator treats the text that follows as literal,
@@ -24,6 +26,10 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run_excluding(integration: true) unless ENV['FULL_SPEC']
   config.include(SpecHelpers)
+
+  config.before(:each) do
+    Txgh.instance_variable_set(:@events, TestEvents.new)
+  end
 end
 
 VCR.configure do |config|

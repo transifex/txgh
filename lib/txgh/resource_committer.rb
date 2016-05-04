@@ -16,11 +16,24 @@ module Txgh
 
         if translations
           repo.api.commit(repo.name, branch, { file_name => translations })
+          fire_event_for(tx_resource, branch, language)
         end
       end
     end
 
     private
+
+    def fire_event_for(tx_resource, branch, language)
+      head = repo.api.get_ref(repo.name, branch)
+      sha = head[:object][:sha]
+
+      Txgh.events.publish(
+        'github.resource.committed', {
+          project: project, repo: repo, resource: tx_resource, sha: sha,
+          language: language
+        }
+      )
+    end
 
     def download(tx_resource, branch, language)
       downloader = ResourceDownloader.new(

@@ -7,9 +7,11 @@ module Txgh
   autoload :Config,                'txgh/config'
   autoload :DiffCalculator,        'txgh/diff_calculator'
   autoload :EmptyResourceContents, 'txgh/empty_resource_contents'
+  autoload :Events,                'txgh/events'
   autoload :GithubApi,             'txgh/github_api'
   autoload :GithubRepo,            'txgh/github_repo'
   autoload :GithubRequestAuth,     'txgh/github_request_auth'
+  autoload :GithubStatus,          'txgh/github_status'
   autoload :Handlers,              'txgh/handlers'
   autoload :Hooks,                 'txgh/app'
   autoload :MergeCalculator,       'txgh/merge_calculator'
@@ -40,6 +42,18 @@ module Txgh
     def providers
       Txgh::Config::Providers
     end
+
+    def events
+      @events ||= Events.new
+    end
+
+    def update_status_callback(options)
+      project = options.fetch(:project)
+      repo = options.fetch(:repo)
+      resource = options.fetch(:resource)
+
+      GithubStatus.new(project, repo, resource).update(options.fetch(:sha))
+    end
   end
 
   # default set of tx config providers
@@ -50,4 +64,12 @@ module Txgh
   # default set of base config providers
   key_manager.register_provider(providers::FileProvider, YAML)
   key_manager.register_provider(providers::RawProvider,  YAML)
+
+  events.subscribe('transifex.resource.updated') do |options|
+    update_status_callback(options)
+  end
+
+  events.subscribe('github.resource.committed') do |options|
+    update_status_callback(options)
+  end
 end
