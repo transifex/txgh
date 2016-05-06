@@ -30,6 +30,8 @@ module Txgh
   autoload :TxResource,            'txgh/tx_resource'
   autoload :Utils,                 'txgh/utils'
 
+  DEFAULT_ENV = 'development'
+
   class << self
     def tx_manager
       Txgh::Config::TxManager
@@ -53,6 +55,10 @@ module Txgh
       resource = options.fetch(:resource)
 
       GithubStatus.new(project, repo, resource).update(options.fetch(:sha))
+    end
+
+    def env
+      ENV.fetch('TXGH_ENV', DEFAULT_ENV)
     end
   end
 
