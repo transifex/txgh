@@ -10,7 +10,7 @@ module Txgh
           logger.info("request github branch: #{branch}")
           logger.info("config github branch: #{repo.github_config_branch}")
 
-          if repo.should_process_ref?(branch)
+          if should_process?
             logger.info('found branch in github request')
 
             tx_resources = tx_resources_for(branch)
@@ -100,6 +100,20 @@ module Txgh
 
         def branch
           @ref ||= payload['ref'].sub(/^refs\//, '')
+        end
+
+        def should_process?
+          should_process_branch? && should_process_commit?
+        end
+
+        def should_process_branch?
+          repo.should_process_ref?(branch)
+        end
+
+        def should_process_commit?
+          # return false if 'after' commit sha is all zeroes (indicates branch
+          # has been deleted)
+          !(payload.fetch('after', '') =~ /\A0+\z/)
         end
 
       end

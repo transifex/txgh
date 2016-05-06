@@ -35,7 +35,7 @@ describe PushHandler do
       modified: modified_files.map { |f| f['path'] }
     )
 
-    expect(ResourceUpdater).to receive(:new).and_return(updater)
+    allow(ResourceUpdater).to receive(:new).and_return(updater)
   end
 
   it 'correctly uploads modified resources to transifex' do
@@ -67,6 +67,24 @@ describe PushHandler do
           repo_name, 'heads/L10N', payload.head_commit[:id]
         )
       )
+
+      response = handler.execute
+      expect(response.status).to eq(200)
+      expect(response.body).to eq(true)
+    end
+  end
+
+  context 'with a deleted branch' do
+    let(:before) { nil }
+    let(:after) { '0' * 40 }
+
+    let(:payload) do
+      GithubPayloadBuilder.push_payload(repo_name, ref, before, after)
+    end
+
+    it "doesn't upload anything" do
+      expect(updater).to_not receive(:update_resource)
+      expect(github_api).to_not receive(:create_ref)
 
       response = handler.execute
       expect(response.status).to eq(200)
