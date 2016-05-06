@@ -33,7 +33,7 @@ module Txgh
       client.create_ref(repo, branch, sha) rescue false
     end
 
-    def commit(repo, branch, content_map, allow_empty = false)
+    def commit(repo, branch, content_map, message, allow_empty = false)
       parent = client.ref(repo, branch)
       base_commit = get_commit(repo, parent[:object][:sha])
 
@@ -46,8 +46,7 @@ module Txgh
 
       tree = client.create_tree(repo, tree_data, tree_options)
       commit = client.create_commit(
-        repo, "Updating translations for #{content_map.keys.join(", ")}",
-        tree[:sha], parent[:object][:sha]
+        repo, message, tree[:sha], parent[:object][:sha]
       )
 
       # don't update the ref if the commit introduced no new changes

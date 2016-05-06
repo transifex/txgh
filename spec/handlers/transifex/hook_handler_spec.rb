@@ -26,6 +26,10 @@ describe HookHandler do
     instance_double(ResourceDownloader)
   end
 
+  let(:file_name) do
+    "translations/#{language}/sample.yml"
+  end
+
   before(:each) do
     allow(ResourceDownloader).to receive(:new).and_return(downloader)
     allow(downloader).to(receive(:first)).and_return([
@@ -40,9 +44,9 @@ describe HookHandler do
   it 'downloads translations and pushes them to the correct branch (head)' do
     expect(github_api).to(
       receive(:commit).with(
-        repo_name, "heads/#{branch}", {
-          "translations/#{language}/sample.yml" => translations
-        }
+        repo_name, "heads/#{branch}",
+        { "translations/#{language}/sample.yml" => translations },
+        "Updating #{language} translations in #{file_name}"
       )
     )
 
@@ -87,9 +91,9 @@ describe HookHandler do
 
       expect(github_api).to(
         receive(:commit).with(
-          repo_name, ref, {
-            "translations/#{language}/sample.yml" => translations
-          }
+          repo_name, ref,
+          { "translations/#{language}/sample.yml" => translations },
+          "Updating #{language} translations in #{file_name}"
         )
       )
 
@@ -105,9 +109,9 @@ describe HookHandler do
     it 'downloads translations and pushes them to the tag' do
       expect(github_api).to(
         receive(:commit).with(
-          repo_name, "tags/my_tag", {
-            "translations/#{language}/sample.yml" => translations
-          }
+          repo_name, "tags/my_tag",
+          { "translations/#{language}/sample.yml" => translations },
+          "Updating #{language} translations in #{file_name}"
         )
       )
 

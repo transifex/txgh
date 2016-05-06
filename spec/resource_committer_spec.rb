@@ -14,6 +14,10 @@ describe ResourceCommitter do
     ResourceCommitter.new(transifex_project, github_repo, logger)
   end
 
+  let(:commit_message) do
+    "Updating #{language} translations in #{file_name}"
+  end
+
   before(:each) do
     allow(github_api).to receive(:get_ref).and_return(
       object: { sha: 'abc123shashasha' }
@@ -28,7 +32,7 @@ describe ResourceCommitter do
 
         expect(github_api).to(
           receive(:commit).with(
-            repo_name, branch, { file_name => :translations }
+            repo_name, branch, { file_name => :translations }, commit_message
           )
         )
       end
@@ -51,6 +55,15 @@ describe ResourceCommitter do
         expect(options[:sha]).to eq('abc123shashasha')
         expect(options[:resource].original_resource_slug).to eq(resource_slug)
         expect(options[:language]).to eq(language)
+      end
+
+      context 'with a custom commit message' do
+        let(:commit_message_template) { "foo %{language}" }
+        let(:commit_message) { "foo #{language}" }
+
+        it 'uses the custom commit message' do
+          committer.commit_resource(resource, branch, language)
+        end
       end
     end
 

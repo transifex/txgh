@@ -71,6 +71,10 @@ module Txgh
       !(webhook_secret || '').empty?
     end
 
+    def commit_message
+      config['commit_message']
+    end
+
     private
 
     def should_process_branch?(candidate)

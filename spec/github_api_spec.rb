@@ -49,12 +49,12 @@ describe GithubApi do
     it 'creates a new commit and updates the branch' do
       expect(client).to(
         receive(:create_commit)
-          .with(repo, "Updating translations for #{path}", :new_tree_sha, :branch_sha)
+          .with(repo, 'message', :new_tree_sha, :branch_sha)
           .and_return(sha: :new_commit_sha)
       )
 
       expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-      api.commit(repo, branch, { path => :new_content }, true)
+      api.commit(repo, branch, { path => :new_content }, 'message', true)
     end
 
     it 'updates multiple files at a time' do
@@ -62,13 +62,13 @@ describe GithubApi do
 
       expect(client).to(
         receive(:create_commit)
-          .with(repo, "Updating translations for #{path}, #{other_path}", :new_tree_sha, :branch_sha)
+          .with(repo, 'message', :new_tree_sha, :branch_sha)
           .and_return(sha: :new_commit_sha)
       )
 
       expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
       content_map = { path => :new_content, other_path => :other_content }
-      api.commit(repo, branch, content_map, true)
+      api.commit(repo, branch, content_map, 'message', true)
     end
 
     context 'with an empty commit' do
@@ -81,14 +81,14 @@ describe GithubApi do
 
         expect(client).to(
           receive(:create_commit)
-            .with(repo, "Updating translations for #{path}", :new_tree_sha, :branch_sha)
+            .with(repo, 'message', :new_tree_sha, :branch_sha)
             .and_return(sha: :new_commit_sha)
         )
       end
 
       it 'does not allow empty commits by default' do
         expect(client).to_not receive(:update_ref)
-        api.commit(repo, branch, { path => :new_content })
+        api.commit(repo, branch, { path => :new_content }, 'message')
       end
     end
 
@@ -102,14 +102,14 @@ describe GithubApi do
 
         expect(client).to(
           receive(:create_commit)
-            .with(repo, "Updating translations for #{path}", :new_tree_sha, :branch_sha)
+            .with(repo, 'message', :new_tree_sha, :branch_sha)
             .and_return(sha: :new_commit_sha)
         )
       end
 
       it 'updates the ref as expected' do
         expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-        api.commit(repo, branch, { path => :new_content })
+        api.commit(repo, branch, { path => :new_content }, 'message')
       end
     end
   end

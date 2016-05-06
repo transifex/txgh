@@ -19,6 +19,7 @@ module StandardTxghSetup
   let(:translations) { 'translation file contents' }
   let(:diff_point) { nil }
   let(:organization) { 'myorg' }
+  let(:commit_message_template) { nil }  # i.e. use the default
 
   let(:project_config) do
     {
@@ -43,7 +44,8 @@ module StandardTxghSetup
       'tag' => tag,
       'name' => repo_name,
       'webhook_secret' => 'abc123',
-      'diff_point' => diff_point
+      'diff_point' => diff_point,
+      'commit_message' => commit_message_template
     }
   end
 
