@@ -1,3 +1,8 @@
+== 2.2.0
+* Skip deleted branches when processing github push events
+* Add configuration option for custom commit message
+* Add environment
+
 == 2.1.0
 * Annotate commits on github with translation statuses
 * Include the branch in the resource's name
