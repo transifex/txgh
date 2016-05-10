@@ -1,3 +1,6 @@
+== 2.3.0
+* Make the raw:// tx config scheme the default
+
 == 2.2.0
 * Skip deleted branches when processing github push events
 * Add configuration option for custom commit message
