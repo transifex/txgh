@@ -22,4 +22,11 @@ describe Txgh do
       end
     end
   end
+
+  describe 'providers' do
+    it 'defaults to the raw tx config provider' do
+      instance = Txgh.tx_manager.provider_for('foo')
+      expect(instance.provider.scheme).to eq('raw')
+    end
+  end
 end

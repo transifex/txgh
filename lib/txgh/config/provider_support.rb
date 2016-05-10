@@ -1,8 +1,8 @@
 module Txgh
   module Config
     module ProviderSupport
-      def register_provider(provider, parser)
-        providers << ProviderInstance.new(provider, parser)
+      def register_provider(provider, parser, options = {})
+        providers << ProviderInstance.new(provider, parser, options)
       end
 
       def providers
@@ -10,7 +10,8 @@ module Txgh
       end
 
       def provider_for(scheme)
-        providers.find { |provider| provider.supports?(scheme) }
+        provider = providers.find { |provider| provider.supports?(scheme) }
+        provider || providers.find(&:default?)
       end
 
       def split_uri(uri)

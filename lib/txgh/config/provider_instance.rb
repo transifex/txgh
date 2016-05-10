@@ -1,11 +1,12 @@
 module Txgh
   module Config
     class ProviderInstance
-      attr_reader :provider, :parser
+      attr_reader :provider, :parser, :options
 
-      def initialize(provider, parser)
+      def initialize(provider, parser, options = {})
         @provider = provider
         @parser = parser
+        @options = options
       end
 
       def supports?(*args)
@@ -14,6 +15,10 @@ module Txgh
 
       def load(payload, options = {})
         provider.load(payload, parser, options)
+      end
+
+      def default?
+        !!(options[:default])
       end
     end
   end

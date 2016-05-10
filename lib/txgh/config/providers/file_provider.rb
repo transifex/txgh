@@ -12,6 +12,10 @@ module Txgh
           def load(payload, parser, options = {})
             parser.load_file(payload)
           end
+
+          def scheme
+            SCHEME
+          end
         end
       end
     end

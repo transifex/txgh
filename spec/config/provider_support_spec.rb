@@ -50,6 +50,24 @@ describe ProviderSupport do
         expect(instance.provider).to eq(provider)
         expect(instance.parser).to eq(:fake_parser)
       end
+
+      it 'returns nil when passed an unrecognizable scheme' do
+        expect(klass.provider_for('foo')).to be_nil
+      end
+    end
+  end
+
+  context 'with a default registered provider' do
+    before(:each) do
+      klass.register_provider(provider, :fake_parser, default: true)
+    end
+
+    describe '#provider_for' do
+      it 'returns the default provider when passed an unrecognizable scheme' do
+        instance = klass.provider_for('foo')
+        expect(instance.provider).to eq(provider)
+        expect(instance.parser).to eq(:fake_parser)
+      end
     end
   end
 end

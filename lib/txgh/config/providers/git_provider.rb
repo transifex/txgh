@@ -12,6 +12,10 @@ module Txgh
           def load(payload, parser, options = {})
             new(payload, parser, options).config
           end
+
+          def scheme
+            SCHEME
+          end
         end
 
         attr_reader :payload, :parser

@@ -21,6 +21,20 @@ describe ProviderInstance do
     end
   end
 
+  describe '#default' do
+    it 'returns false if not the default provider' do
+      expect(instance).to_not be_default
+    end
+
+    context 'with a default provider' do
+      let(:instance) { ProviderInstance.new(provider, parser, default: true) }
+
+      it 'returns true if marked as the default provider' do
+        expect(instance).to be_default
+      end
+    end
+  end
+
   describe '#load' do
     it "calls the provider's load method passing the parser and options" do
       expect(provider).to receive(:load).with(payload, parser, options)
