@@ -78,11 +78,28 @@ end
 DOCKER_REPO = 'quay.io/lumoslabs/txgh'
 
 namespace :publish do
-  task :all => %w(
-    version:bump version:history version:commit_and_push
-    publish:tag publish:build_docker publish:publish_docker
-    publish:build_gem publish:publish_gem
-  )
+  task :all do
+    task_names = %w(
+      version:bump version:history version:commit_and_push
+      publish:tag publish:build_docker publish:publish_docker
+      publish:build_gem publish:publish_gem
+    )
+
+    task_names.each do |task_name|
+      STDOUT.write "About to execute #{task_name}, continue? (yes/no/skip): "
+      answer = STDIN.gets
+
+      case answer.downcase
+        when /ye?s?/
+          Rake::Task[task_name].invoke
+        when /no?/
+          puts "Exiting!"
+          exit 0
+        else
+          puts "Skipping #{task_name}"
+      end
+    end
+  end
 
   task :tag do
     system("git tag -a v#{Txgh::VERSION} && git push origin --tags")
