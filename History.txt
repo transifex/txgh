@@ -1,3 +1,6 @@
+== 3.0.0
+* Upgrade abroad to v3.0.0 to take advantage of more consistent YAML scalar serialization 
+
 == 2.4.0
 * Bump abroad to v2.0 to take advantage of pretty JSON serialization
 
