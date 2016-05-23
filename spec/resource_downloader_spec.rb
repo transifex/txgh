@@ -33,7 +33,7 @@ describe ResourceDownloader do
   def translations_for(resource, language)
     outdent(%Q{
       #{language}:
-        string: ! "translation"
+        string: "translation"
     })
   end
 
@@ -114,18 +114,18 @@ describe ResourceDownloader do
       # picard unmodified, janeway modified, sisko added, sulu removed
       outdent(%Q{
         en:
-          picard: ! "enterprise"
-          janeway: ! "uss voyager"
-          sisko: ! "deep space nine"
+          picard: "enterprise"
+          janeway: "uss voyager"
+          sisko: "deep space nine"
       })
     end
 
     def diff_point_source_for(branch)
       outdent(%Q{
         en:
-          picard: ! "enterprise"
-          janeway: ! "voyager"
-          sulu: ! "excelsior"
+          picard: "enterprise"
+          janeway: "voyager"
+          sulu: "excelsior"
       })
     end
 
@@ -143,9 +143,9 @@ describe ResourceDownloader do
     def head_translations_for(language)
       outdent(%Q{
         #{language}:
-          picard: ! "enterprise (head trans)"
-          janeway: ! "uss voyager (head trans)"
-          sisko: ! "deep space nine (head trans)"
+          picard: "enterprise (head trans)"
+          janeway: "uss voyager (head trans)"
+          sisko: "deep space nine (head trans)"
       })
     end
 
@@ -153,9 +153,9 @@ describe ResourceDownloader do
       # diff point strings (i.e. strings in master)
       outdent(%Q{
         #{language}:
-          picard: ! "enterprise (dp trans)"
-          janeway: ! "voyager (dp trans)"
-          sulu: ! "excelsior (dp trans)"
+          picard: "enterprise (dp trans)"
+          janeway: "voyager (dp trans)"
+          sulu: "excelsior (dp trans)"
       })
     end
 
@@ -167,9 +167,9 @@ describe ResourceDownloader do
             "translations/#{language}/sample.yml",
             outdent(%Q{
               #{language}:
-                picard: ! "enterprise (dp trans)"
-                janeway: ! "uss voyager (head trans)"
-                sisko: ! "deep space nine (head trans)"
+                picard: "enterprise (dp trans)"
+                janeway: "uss voyager (head trans)"
+                sisko: "deep space nine (head trans)"
             })
           ]
         end
@@ -194,8 +194,8 @@ describe ResourceDownloader do
             "translations/#{language}/sample.yml",
             outdent(%Q{
               #{language}:
-                picard: ! "enterprise (dp trans)"
-                janeway: ! "voyager (dp trans)"
+                picard: "enterprise (dp trans)"
+                janeway: "voyager (dp trans)"
             })
           ]
         end

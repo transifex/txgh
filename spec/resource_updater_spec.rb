@@ -144,7 +144,7 @@ describe ResourceUpdater do
 
       diff = YAML.load(%Q(|
         en:
-          new_phrase: ! "I'm new"
+          new_phrase: "I'm new"
       ))
 
       expect(updater).to(

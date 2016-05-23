@@ -50,9 +50,9 @@ describe ResourceContents do
       expect(stream.string).to eq(outdent(%Q(
         en:
           welcome:
-            message: ! "Hello!"
+            message: "Hello!"
           goodbye:
-            message: ! "Goodbye!"
+            message: "Goodbye!"
       )))
     end
 
@@ -65,12 +65,12 @@ describe ResourceContents do
       expect(stream.string).to eq(outdent(%Q(
         en:
           welcome:
-            message: ! "Hello!"
+            message: "Hello!"
           goodbye:
-            message: ! "Goodbye!"
+            message: "Goodbye!"
           foo:
             bar:
-              baz: ! "boo"
+              baz: "boo"
       )))
     end
   end
@@ -80,9 +80,9 @@ describe ResourceContents do
       expect(contents.to_s).to eq(outdent(%Q(
         en:
           welcome:
-            message: ! "Hello!"
+            message: "Hello!"
           goodbye:
-            message: ! "Goodbye!"
+            message: "Goodbye!"
       )))
     end
   end
