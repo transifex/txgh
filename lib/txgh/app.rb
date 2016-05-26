@@ -55,12 +55,21 @@ module Txgh
       payload = Hash[URI.decode_www_form(request.body.read)]
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
+      if payload.key?('translated')
+        trigger = 'translated'
+      end
+
+      if payload.key?('reviewed')
+        trigger = 'reviewed'
+      end
+
       if authenticated_transifex_request?(config.transifex_project, request)
         handler = transifex_handler_for(
           project: config.transifex_project,
           repo: config.github_repo,
           resource_slug: request['resource'],
           language: payload['language'],
+          trigger: trigger,
           logger: settings.logger
         )
 
