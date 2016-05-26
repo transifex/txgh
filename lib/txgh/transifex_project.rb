@@ -11,6 +11,10 @@ module Txgh
     def name
       config['name']
     end
+
+    def push_trigger
+      config['push_trigger']
+    end
     
     def webhook_secret
       config['webhook_secret']

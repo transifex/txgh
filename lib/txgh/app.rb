@@ -56,11 +56,11 @@ module Txgh
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
       if payload.key?('translated')
-        trigger = 'translated'
+        tx_hook_trigger = 'translated'
       end
 
       if payload.key?('reviewed')
-        trigger = 'reviewed'
+        tx_hook_trigger = 'reviewed'
       end
 
       if authenticated_transifex_request?(config.transifex_project, request)
@@ -69,7 +69,7 @@ module Txgh
           repo: config.github_repo,
           resource_slug: request['resource'],
           language: payload['language'],
-          trigger: trigger,
+          tx_hook_trigger: tx_hook_trigger,
           logger: settings.logger
         )
 

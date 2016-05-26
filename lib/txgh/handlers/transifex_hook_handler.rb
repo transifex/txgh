@@ -5,21 +5,21 @@ module Txgh
     class TransifexHookHandler
       include Txgh::CategorySupport
 
-      attr_reader :project, :repo, :resource_slug, :language, :trigger, :logger
+      attr_reader :project, :repo, :resource_slug, :language, :tx_hook_trigger, :logger
 
       def initialize(options = {})
         @project = options.fetch(:project)
         @repo = options.fetch(:repo)
         @resource_slug = options.fetch(:resource_slug)
         @language = options.fetch(:language)
-        @trigger = options.fetch(:trigger)
+        @tx_hook_trigger = options.fetch(:tx_hook_trigger)
         @logger = options.fetch(:logger) { Logger.new(STDOUT) }
       end
 
       def execute
         logger.info(resource_slug)
 
-        if tx_resource && trigger=='reviewed'
+        if tx_resource && tx_hook_trigger==project.push_trigger
         # Do not update the source
           unless language == tx_resource.source_lang
             logger.info('request language matches resource')
@@ -41,8 +41,8 @@ module Txgh
             )
           end
         elsif 
-          trigger=='translated'
-          logger.info("did not process changes because trigger was '#{trigger}'")
+          tx_hook_trigger!=project.push_trigger
+          logger.info("did not process changes because trigger was '#{tx_hook_trigger}' and push trigger was set to '#{project.push_trigger}'")
         else
           raise TxghError,
             "Could not find configuration for resource '#{resource_slug}'"
