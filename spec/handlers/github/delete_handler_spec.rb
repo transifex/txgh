@@ -39,7 +39,7 @@ describe DeleteHandler do
       receive(:get_resources).and_return(resource_api_response)
     )
 
-    expect(transifex_api).to receive(:delete) do |tx_resource|
+    expect(transifex_api).to receive(:delete_resource) do |tx_resource|
       expect(tx_resource.project_slug).to eq(project_name)
       expect(tx_resource.resource_slug).to eq(resource_slug_with_branch)
     end

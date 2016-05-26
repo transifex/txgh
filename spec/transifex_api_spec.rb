@@ -4,12 +4,37 @@ require 'helpers/standard_txgh_setup'
 include Txgh
 
 describe TransifexApi do
+  FakeEnv = Struct.new(:url)
+  FakeRequest = Struct.new(:body)
+  FakeResponse = Struct.new(:env, :status, :body)
+
+  class FakeConnection
+    %w(get post put delete).each do |verb|
+      define_method(:"on_#{verb}") do |&block|
+        callbacks[verb] = block
+      end
+
+      define_method(verb) do |url, body = nil|
+        env = FakeEnv.new(url)
+        request = FakeRequest.new(body)
+        response = FakeResponse.new(env)
+        callbacks[verb].call(request, response)
+        response
+      end
+    end
+
+    private
+
+    def callbacks
+      @callbacks ||= {}
+    end
+  end
+
   include StandardTxghSetup
 
-  let(:connection) { double(:connection) }
+  let(:connection) { FakeConnection.new }
   let(:api) { TransifexApi.create_from_connection(connection) }
   let(:resource) { tx_config.resource(resource_slug) }
-  let(:response) { double(:response) }
 
   describe '#create_or_update' do
     context 'with a preexisting resource' do
@@ -48,159 +73,188 @@ describe TransifexApi do
     context 'with a non-existent resource' do
       before(:each) do
         expect(api).to receive(:resource_exists?).and_return(false)
+        expect(connection).to receive(:post).and_call_original
       end
 
       it 'makes a request with the correct parameters' do
-        expect(connection).to receive(:post) do |url, payload|
-          expect(url).to(
+        connection.on_post do |request, response|
+          response.status = 200
+          response.body = '{}'
+
+          expect(response.env.url).to(
             end_with("project/#{project_name}/resources/")
           )
 
-          expect(payload[:slug]).to eq(resource_slug)
-          expect(payload[:name]).to eq(resource.source_file)
-          expect(payload[:i18n_type]).to eq('YML')
-
-          response
+          expect(request.body[:slug]).to eq(resource_slug)
+          expect(request.body[:name]).to eq(resource.source_file)
+          expect(request.body[:i18n_type]).to eq('YML')
         end
 
-        allow(response).to receive(:status).and_return(200)
-        allow(response).to receive(:body).and_return("{}")
         api.create_or_update(resource, 'new_content')
       end
     end
   end
 
   describe '#create' do
+    before(:each) do
+      expect(connection).to receive(:post).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:post) do |url, payload|
-        expect(url).to(
+      connection.on_post do |request, response|
+        response.status = 200
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resources/")
         )
 
-        expect(payload[:name]).to eq('sample.yml')
-        expect(payload[:content].io.string).to eq('new_content')
-        expect(payload[:categories]).to eq('abc def')
-        response
+        expect(request.body[:name]).to eq('sample.yml')
+        expect(request.body[:content].io.string).to eq('new_content')
+        expect(request.body[:categories]).to eq('abc def')
       end
 
-      allow(response).to receive(:status).and_return(200)
       api.create(resource, 'new_content', ['abc', 'def'])
     end
 
     it 'submits de-duped categories' do
-      expect(connection).to receive(:post) do |url, payload|
-        expect(payload[:categories]).to eq('abc')
-        response
+      connection.on_post do |request, response|
+        response.status = 200
+        expect(request.body[:categories]).to eq('abc')
       end
 
-      allow(response).to receive(:status).and_return(200)
       api.create(resource, 'new_content', ['abc', 'abc'])
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:post).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.create(resource, 'new_content') }.to raise_error(TransifexApiError)
+      connection.on_post do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.create(resource, 'new_content') }.to(
+        raise_error(TransifexApiError)
+      )
     end
 
     context 'with a branch-based resource' do
       let(:resource) { tx_config.resource(resource_slug, ref) }
 
       it "includes the branch in the resource's name" do
-        expect(connection).to receive(:post) do |url, payload|
-          expect(payload[:name]).to eq('sample.yml (heads/master)')
-          response
+        connection.on_post do |request, response|
+          response.status = 200
+          expect(request.body[:name]).to eq('sample.yml (heads/master)')
         end
 
-        allow(response).to receive(:status).and_return(200)
         api.create(resource, 'new_content')
       end
     end
   end
 
-  describe '#delete' do
+  describe '#delete_resource' do
+    before(:each) do
+      expect(connection).to receive(:delete).and_call_original
+    end
+
     it 'deletes the given resource' do
-      expect(connection).to receive(:delete) do |url|
-        expect(url).to(
+      connection.on_delete do |_, response|
+        response.status = 200
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resource/#{resource_slug}/")
         )
       end
 
-      api.delete(resource)
+      api.delete_resource(resource)
     end
   end
 
   describe '#update_content' do
+    before(:each) do
+      expect(connection).to receive(:put).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:put) do |url, payload|
-        expect(url).to(
+      connection.on_put do |request, response|
+        response.status = 200
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resource/#{resource_slug}/content/")
         )
 
-        expect(payload[:content].io.string).to eq('new_content')
-        response
+        expect(request.body[:content].io.string).to eq('new_content')
       end
 
-      allow(response).to receive(:status).and_return(200)
       api.update_content(resource, 'new_content')
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:put).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.update_content(resource, 'new_content') }.to raise_error(TransifexApiError)
+      connection.on_put do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.update_content(resource, 'new_content') }.to(
+        raise_error(TransifexApiError)
+      )
     end
   end
 
   describe '#update_details' do
+    before(:each) do
+      expect(connection).to receive(:put).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:put) do |url, payload|
-        expect(url).to(
+      connection.on_put do |request, response|
+        response.status = 200
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resource/#{resource_slug}/")
         )
 
-        expect(payload[:i18n_type]).to eq('FOO')
-        expect(payload[:categories]).to eq(['abc'])
-        response
+        expect(request.body[:i18n_type]).to eq('FOO')
+        expect(request.body[:categories]).to eq(['abc'])
       end
 
-      allow(response).to receive(:status).and_return(200)
       api.update_details(resource, i18n_type: 'FOO', categories: ['abc'])
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:put).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.update_details(resource, {}) }.to raise_error(TransifexApiError)
+      connection.on_put do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.update_details(resource, {}) }.to(
+        raise_error(TransifexApiError)
+      )
     end
   end
 
   describe '#resource_exists?' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url|
-        expect(url).to(
+      connection.on_get do |_, response|
+        response.status = 200
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resource/#{resource_slug}/")
         )
-
-        response
       end
 
-      allow(response).to receive(:status).and_return(200)
       api.resource_exists?(resource)
     end
 
     it 'returns true if the api responds with a 200 status code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(200)
+      connection.on_get { |_, response| response.status = 200 }
       expect(api.resource_exists?(resource)).to eq(true)
     end
 
     it 'returns false if the api does not respond with a 200 status code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
+      connection.on_get { |_, response| response.status = 404 }
       expect(api.resource_exists?(resource)).to eq(false)
     end
   end
@@ -208,38 +262,40 @@ describe TransifexApi do
   describe '#download' do
     let(:language) { 'pt-BR' }
 
-    it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url|
-        expect(url).to(
-          end_with("project/#{project_name}/resource/#{resource_slug}/translation/#{language}/")
-        )
-
-        response
-      end
-
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{}')
-      api.download(resource, language)
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
     end
 
-    it 'parses and returns the response content' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{"content": "foobar"}')
+    it 'makes a request with the correct parameters' do
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '{"content": "foobar"}'
+
+        expect(response.env.url).to(
+          end_with("project/#{project_name}/resource/#{resource_slug}/translation/#{language}/")
+        )
+      end
+
       expect(api.download(resource, language)).to eq('foobar')
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(401)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.download(resource, language) }.to raise_error(TransifexApiError)
+      connection.on_get do |_, response|
+        response.status = 401
+        response.body = '{}'
+      end
+
+      expect { api.download(resource, language) }.to(
+        raise_error(TransifexApiError)
+      )
     end
 
     it 'raises a specific exception if the api responds with a 404 not found' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
       expect { api.download(resource, language) }.to raise_error(
         TransifexNotFoundError
       )
@@ -247,136 +303,218 @@ describe TransifexApi do
   end
 
   describe '#get_resource' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url, payload|
-        expect(url).to(
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '{"foo":"bar"}'
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resource/#{resource_slug}/")
         )
-
-        response
       end
 
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{"foo":"bar"}')
       expect(api.get_resource(*resource.slugs)).to eq({ 'foo' => 'bar' })
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.get_resource(*resource.slugs) }.to raise_error(TransifexApiError)
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.get_resource(*resource.slugs) }.to(
+        raise_error(TransifexApiError)
+      )
     end
   end
 
   describe '#get_resources' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url, payload|
-        expect(url).to(
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '{"foo":"bar"}'
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/resources/")
         )
-
-        response
       end
 
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{"foo":"bar"}')
       expect(api.get_resources(project_name)).to eq({ 'foo' => 'bar' })
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.get_resources(project_name) }.to raise_error(TransifexApiError)
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.get_resources(project_name) }.to(
+        raise_error(TransifexApiError)
+      )
     end
   end
 
   describe '#get_languages' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url, payload|
-        expect(url).to(
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '[{"language_code":"de"}]'
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/languages/")
         )
-
-        response
       end
 
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('[{"language_code":"de"}]')
       expect(api.get_languages(project_name)).to eq([{ 'language_code' => 'de' }])
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.get_languages(project_name) }.to raise_error(TransifexApiError)
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.get_languages(project_name) }.to(
+        raise_error(TransifexApiError)
+      )
     end
   end
 
   describe '#get_project' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url, payload|
-        expect(url).to(
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '{"slug":"projectslug"}'
+
+        expect(response.env.url).to(
           end_with("project/#{project_name}/")
         )
-
-        response
       end
 
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{"slug":"projectslug"}')
       expect(api.get_project(project_name)).to eq({ 'slug' => 'projectslug' })
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
-      expect { api.get_project(project_name) }.to raise_error(TransifexApiError)
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.get_project(project_name) }.to(
+        raise_error(TransifexApiError)
+      )
     end
   end
 
   describe '#get_formats' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url, payload|
-        expect(url).to end_with("formats/")
-        response
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '{}'
+
+        expect(response.env.url).to(
+          end_with('formats/')
+        )
       end
 
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{}')
       expect(api.get_formats).to eq({})
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
       expect { api.get_formats }.to raise_error(TransifexApiError)
     end
   end
 
   describe '#get_stats' do
+    before(:each) do
+      expect(connection).to receive(:get).and_call_original
+    end
+
     it 'makes a request with the correct parameters' do
-      expect(connection).to receive(:get) do |url, payload|
-        expect(url).to end_with("stats/")
-        response
+      connection.on_get do |_, response|
+        response.status = 200
+        response.body = '{}'
+
+        expect(response.env.url).to(
+          end_with('stats/')
+        )
       end
 
-      allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{}')
       expect(api.get_stats(project_name, resource_slug)).to eq({})
     end
 
     it 'raises an exception if the api responds with an error code' do
-      allow(connection).to receive(:get).and_return(response)
-      allow(response).to receive(:status).and_return(404)
-      allow(response).to receive(:body).and_return('{}')
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
       expect { api.get_stats(project_name, resource_slug) }.to(
         raise_error(TransifexApiError)
       )
+    end
+  end
+
+  describe 'errors' do
+    it 'includes the URL in the error message on 401' do
+      connection.on_get do |_, response|
+        response.status = 401
+        response.body = '{}'
+      end
+
+      expect { api.get_formats }.to raise_error do |error|
+        expect(error).to be_a(TransifexUnauthorizedError)
+        expect(error.message).to eq('401 Unauthorized: /api/2/formats/')
+      end
+    end
+
+    it 'includes the URL in the error message on 404' do
+      connection.on_get do |_, response|
+        response.status = 404
+        response.body = '{}'
+      end
+
+      expect { api.get_formats }.to raise_error do |error|
+        expect(error).to be_a(TransifexNotFoundError)
+        expect(error.message).to eq('404 Not Found: /api/2/formats/')
+      end
+    end
+
+    it 'includes the URL in the error message on unexpected error' do
+      connection.on_get do |_, response|
+        response.status = 422
+        response.body = '{}'
+      end
+
+      expect { api.get_formats }.to raise_error do |error|
+        expect(error).to be_a(TransifexApiError)
+        expect(error.message).to eq('HTTP 422: /api/2/formats/, body: {}')
+      end
     end
   end
 end

@@ -15,7 +15,7 @@ module Txgh
         def delete_resources
           tx_resources.each do |tx_resource|
             logger.info("Deleting #{tx_resource.resource_slug}")
-            project.api.delete(tx_resource)
+            project.api.delete_resource(tx_resource)
           end
         end
 

@@ -65,92 +65,104 @@ module Txgh
       }
 
       url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resources/"
-      response = connection.post(url, payload)
-      raise_error!(response)
+      post(url, payload)
     end
 
-    def delete(tx_resource)
+    def delete_resource(tx_resource)
       url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
-      connection.delete(url)
+      delete(url)
     end
 
     def update_content(tx_resource, content)
       content_io = get_content_io(tx_resource, content)
       payload = { content: content_io }
       url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/content/"
-      response = connection.put(url, payload)
-      raise_error!(response)
+      put(url, payload)
     end
 
     def update_details(tx_resource, details = {})
       url = "#{API_ROOT}/project/#{tx_resource.project_slug}/resource/#{tx_resource.resource_slug}/"
-      response = connection.put(url, details)
-      raise_error!(response)
+      put(url, details)
     end
 
     def resource_exists?(tx_resource)
       project = tx_resource.project_slug
       slug = tx_resource.resource_slug
-      response = connection.get("#{API_ROOT}/project/#{project}/resource/#{slug}/")
+      response = get("#{API_ROOT}/project/#{project}/resource/#{slug}/")
       response.status == 200
+    rescue TransifexNotFoundError
+      false
     end
 
     def download(tx_resource, lang)
       project_slug = tx_resource.project_slug
       resource_slug = tx_resource.resource_slug
-      response = connection.get(
+
+      json_data = get_json(
         "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/translation/#{lang}/"
       )
 
-      raise_error!(response)
-
-      json_data = JSON.parse(response.body)
       json_data['content']
     end
 
     def get_resource(project_slug, resource_slug)
       url = "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/"
-      response = connection.get(url)
-      raise_error!(response)
-      JSON.parse(response.body)
+      get_json(url)
     end
 
     def get_resources(project_slug)
       url = "#{API_ROOT}/project/#{project_slug}/resources/"
-      response = connection.get(url)
-      raise_error!(response)
-      JSON.parse(response.body)
+      get_json(url)
     end
 
     def get_languages(project_slug)
       url = "#{API_ROOT}/project/#{project_slug}/languages/"
-      response = connection.get(url)
-      raise_error!(response)
-      JSON.parse(response.body)
+      get_json(url)
     end
 
     def get_project(project_slug)
       url = "#{API_ROOT}/project/#{project_slug}/"
-      response = connection.get(url)
-      raise_error!(response)
-      JSON.parse(response.body)
+      get_json(url)
     end
 
     def get_formats
       url = "#{API_ROOT}/formats/"
-      response = connection.get(url)
-      raise_error!(response)
-      JSON.parse(response.body)
+      get_json(url)
     end
 
     def get_stats(project_slug, resource_slug)
       url = "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/stats/"
-      response = connection.get(url)
-      raise_error!(response)
-      JSON.parse(response.body)
+      get_json(url)
     end
 
     private
+
+    def get(url)
+      act(:get, url)
+    end
+
+    def post(url, body)
+      act(:post, url, body)
+    end
+
+    def put(url, body)
+      act(:put, url, body)
+    end
+
+    def delete(url)
+      act(:delete, url)
+    end
+
+    def get_json(url)
+      response = get(url)
+      JSON.parse(response.body)
+    end
+
+    def act(verb, url, body = nil)
+      response = connection.send(verb, url, body)
+      raise_error!(response)
+      response
+    end
 
     def get_content_io(tx_resource, content)
       content_io = StringIO::new(content)
@@ -163,16 +175,15 @@ module Txgh
     def raise_error!(response)
       case response.status
         when 401
-          raise TransifexUnauthorizedError
+          raise TransifexUnauthorizedError, "401 Unauthorized: #{response.env.url}"
         when 404
-          raise TransifexNotFoundError
+          raise TransifexNotFoundError, "404 Not Found: #{response.env.url}"
         else
           if (response.status / 100) != 2
             raise TransifexApiError,
-              "Failed Transifex API call - returned status code: #{response.status}, body: #{response.body}"
+              "HTTP #{response.status}: #{response.env.url}, body: #{response.body}"
           end
       end
     end
   end
 end
-
