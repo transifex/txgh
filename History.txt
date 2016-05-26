@@ -1,3 +1,8 @@
+== 4.0.0
+* Refactor TransifexApi to reduce duplication.
+* Rename TransifexApi#delete to #delete_resource (means major version bump).
+* Include more information when raising TransifexApiError and subclasses.
+
 == 3.0.0
 * Upgrade abroad to v3.0.0 to take advantage of more consistent YAML scalar serialization 
 
