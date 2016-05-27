@@ -18,8 +18,15 @@ module Txgh
 
       def execute
         logger.info(resource_slug)
-
-        if tx_resource && tx_hook_trigger==project.push_trigger
+        # Check if push trigger is set in project config
+        if project.push_trigger_set?
+          trigger = project.push_trigger
+        # If not set trigger to current payload trigger value
+        else
+          trigger = tx_hook_trigger
+        end
+        # Only execute if trigger matches TX hook trigger
+        if tx_resource && tx_hook_trigger==trigger
         # Do not update the source
           unless language == tx_resource.source_lang
             logger.info('request language matches resource')

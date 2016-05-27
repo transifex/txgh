@@ -16,6 +16,10 @@ module Txgh
       config['push_trigger']
     end
     
+    def push_trigger_set?
+      !(push_trigger || '').empty?
+    end
+    
     def webhook_secret
       config['webhook_secret']
     end
