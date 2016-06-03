@@ -14,4 +14,5 @@ txgh:
         api_username: "<%= ENV['TX_USERNAME'] %>"
         api_password: "<%= ENV['TX_PASSWORD'] %>"
         push_translations_to: "<%= ENV['TX_PUSH_TRANSLATIONS_TO'] %>"
+        push_trigger: "<%= ENV['TX_PUSH_TRIGGER_REVIEWED_OR_TRANSLATED'] %>"
         webhook_secret: "<%= ENV['TX_WEBHOOK_SECRET'] %>"
