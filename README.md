@@ -3,33 +3,62 @@ Transifex Txgh
 
 [![Build Status](https://travis-ci.org/transifex/txgh.svg?branch=devel)](https://travis-ci.org/transifex/txgh)
 
-A Sinatra server that integrates Transifex with Github
+Description
+---
+A lightweight web server that integrates Transifex with Github.  Txgh acts as an agent for developers by automatically uploading source files to Transifex.  It also acts as an agent for translators by pushing translation files to GitHub that have been 100% translated in Transifex.
 
+Installation
+---
+To setup locally, clone this repository and install the dependencies from the Gemfile. You can place a txgh.yml file in your home directory to bootstrap configuration of the server.  The quickest way to get started is to clone the repository, update your configuration, and then run the puma web server on a specific port.
+```ruby
+puma -p 9292
 ```
-+- app
-    |
-    +- app.rb # the main Sinatra app, includes both web service endpoints
+
+Additionally we have already setup Txgh on some other popular hosting platforms, specific instructions below:
+
+- [Amazon AWS setup instructions](http://docs.transifex.com/integrations/github/#sample-setup-of-txgh)
+- [Heroku setup instructions](https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/)
+- Docker - Build your own image (kitchen sink version): [Dockerfile](https://github.com/transifex/txgh/blob/devel/Dockerfile)
+- Docker - Pre-made image (heavily opinionated): [DockerHub](https://hub.docker.com/r/mjjacko/txgh/)
+
+Directory Layout
+---
+```
+.
+|-- config
+|   |-- tx.config   # sample config file
+|   `-- txgh.yml    # ERB template for flexible config
+|-- lib
+|   |-- txgh
+|   |   |-- handlers # Logic specific to endpoint hooks
+|   |   |   |-- ...
+|   |   |
+|   |   |-- app.rb  # the main Sinatra app, includes both web service endpoints
+|   |   |-- category_support.rb
+|   |   |-- config.rb
+|   |   |-- errors.rb
+|   |   |-- github_api.rb               # Wrapper for GitHub REST API
+|   |   |-- github_repo.rb              # GitHub repository object
+|   |   |-- github_request_auth.rb      # GitHub webhook Auth
+|   |   |-- handlers.rb
+|   |   |-- key_manager.rb              # Loads configuration
+|   |   |-- parse_config.rb
+|   |   |-- transifex_api.rb            # Wrapper for Tx REST API
+|   |   |-- transifex_project.rb        # Tx Project Object
+|   |   |-- transifex_request_auth.rb   # Tx webhook auth
+|   |   |-- tx_branch_resource.rb       # Support for branches
+|   |   |-- tx_config.rb                # Loads tx.config
+|   |   |-- tx_logger.rb
+|   |   |-- tx_resource.rb              #Tx resource Object
+|   |   `-- utils.rb
+|   `-- txgh.rb     # includes for app dependencies
+|-- spec # spec unit and integration tests
+|   |-- ...
 |
-+- config
-    |
-    +- key_manager.rb # library responsible for loading config
-    |
-    +- tx.config # this is the Transifex flavored resource map file
-    |
-    +- txgh.yml # this is the main application configuration
-|
-+- lib  # all the libraries
-    |
-    + ...
-+- tests # rack/test integration tests
-    |
-    + ...
-|
-+- Rakefile # bootstrap for TravisCI
-|
-+- bootstrap.rb # includes for application paths
-|
-+- config.ru bootstrap for Sinatra
+|-- Dockerfile      # DIY Docker base
+|-- Rakefile        # rake tasks to run tests
+|-- bootstrap.rb    # includes for application paths
+`-- config.ru       # bootstrap for web server
 ```
 
 
@@ -52,29 +81,27 @@ Currently there are 4 use cases that are supported:
 ![Txgh Use Cases](https://www.gliffy.com/go/publish/image/9483799/L.png)
 
 
-How run it
+Notes
 ---
 
-In order to run the server, you need to have Ruby 2.1.5 and bundler installed.
+We recommend running it using Ruby 2.2.2 and installing dependencies via bundler.
 
 There are 2 important configuration files.
 
-txgh.yml - This is the base configuration for the service.  For 12 factor app support, this file should pull it's settings from the Ruby ENV.  Additionally, this file can be located in the users $HOME directory to support running the server with hard coded values.
+txgh.yml - This is the base configuration for the service.  To avoid needing to checkin sensitive password information, this file should pull it's settings from the Ruby ENV in production.  Additionally, this file can be located in the users HOME directory to support running the server with local values.
 
 
 tx.config - This is a configuration which maps the source file, languages, and target translation files.  It is based on this specification: http://docs.transifex.com/client/config/#txconfig
 
-
-AWS
+Getting Help
 ---
+You can always get additional help via [GitHub Issues](https://github.com/transifex/txgh/issues) or [Transifex support email](support@transifex.com)
 
-https://github.com/transifex/txgh/issues/14
-
-
-Heroku
+License
 ---
+Txgh is primarily distributed under the terms of the Apache License (Version 2.0).
 
-https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/
+See [LICENSE](https://github.com/transifex/txgh/blob/master/LICENSE) for details.
 
 
 
