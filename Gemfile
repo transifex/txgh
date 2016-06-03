@@ -22,6 +22,6 @@ end
 group :test do
   gem 'rack-test'
   gem 'rspec'
-  gem 'vcr'
-  gem 'webmock'
+  gem 'vcr','~> 3.0.1'
+  gem 'webmock','~> 1.24.6'
 end
