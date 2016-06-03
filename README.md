@@ -95,7 +95,7 @@ tx.config - This is a configuration which maps the source file, languages, and t
 
 Getting Help
 ---
-You can always get additional help via [GitHub Issues](https://github.com/transifex/txgh/issues) or [Transifex support email](support@transifex.com)
+You can always get additional help via [GitHub issues](https://github.com/transifex/transifex-client/issues) or [Transifex support](https://www.transifex.com/contact/)
 
 License
 ---
