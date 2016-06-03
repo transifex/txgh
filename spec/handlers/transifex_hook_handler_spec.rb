@@ -16,6 +16,7 @@ describe TransifexHookHandler do
       project: transifex_project,
       repo: github_repo,
       resource_slug: requested_resource_slug,
+      tx_hook_trigger: tx_hook_trigger,
       language: language,
       logger: logger
     )
