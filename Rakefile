@@ -81,8 +81,8 @@ namespace :publish do
   task :all do
     task_names = %w(
       version:bump version:history version:commit_and_push
-      publish:tag publish:build_docker publish:publish_docker
-      publish:build_gem publish:publish_gem
+      publish:tag publish:update_docker_base_image publish:build_docker
+      publish:publish_docker publish:build_gem publish:publish_gem
     )
 
     task_names.each do |task_name|
@@ -103,6 +103,10 @@ namespace :publish do
 
   task :tag do
     system("git tag -a v#{Txgh::VERSION} && git push origin --tags")
+  end
+
+  task :update_docker_base_image do
+    system("docker pull ruby:2.3")
   end
 
   task :build_docker do
