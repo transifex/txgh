@@ -48,6 +48,12 @@ describe PushHandler do
           expect(categories).to eq('author' => 'Test User')
         end
       )
+
+      expect(github_api).to(
+        receive(:get_ref).with(repo_name, ref).and_return(
+          object: { sha: payload.head_commit[:id] }
+        )
+      )
     end
 
     response = handler.execute
@@ -65,6 +71,12 @@ describe PushHandler do
       expect(github_api).to(
         receive(:create_ref).with(
           repo_name, 'heads/L10N', payload.head_commit[:id]
+        )
+      )
+
+      expect(github_api).to(
+        receive(:get_ref).with(repo_name, ref).and_return(
+          object: { sha: payload.head_commit[:id] }
         )
       )
 

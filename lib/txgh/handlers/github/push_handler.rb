@@ -1,4 +1,5 @@
 require 'base64'
+require 'set'
 
 module Txgh
   module Handlers
@@ -14,11 +15,12 @@ module Txgh
             logger.info('found branch in github request')
 
             tx_resources = tx_resources_for(branch)
+
             modified_resources = added_and_modified_resources_for(tx_resources)
-            modified_resources.merge!(l10n_resources_for(tx_resources))
+            modified_resources += l10n_resources_for(tx_resources)
 
             if repo.github_config_branch.include?('tags/')
-              modified_resources.merge!(tag_resources_for(tx_resources))
+              modified_resources += tag_resources_for(tx_resources)
             end
 
             # Handle DBZ 'L10N' special case
@@ -33,9 +35,10 @@ module Txgh
 
             updater = ResourceUpdater.new(project, repo, logger)
             categories = { 'author' => payload['head_commit']['committer']['name'] }
+            ref = repo.api.get_ref(repo.name, branch)
 
-            modified_resources.each_pair do |resource, commit_sha|
-              updater.update_resource(resource, commit_sha, categories)
+            modified_resources.each do |resource|
+              updater.update_resource(resource, ref[:object][:sha], categories)
             end
           end
 
@@ -45,35 +48,34 @@ module Txgh
         private
 
         def tag_resources_for(tx_resources)
-          payload['head_commit']['modified'].each_with_object({}) do |modified, ret|
+          payload['head_commit']['modified'].each_with_object(Set.new) do |modified, ret|
             logger.info("processing modified file: #{modified}")
 
             if tx_resources.include?(modified)
-              ret[tx_resources[modified]] = payload['head_commit']['id']
+              ret << tx_resources[modified]
             end
           end
         end
 
         def l10n_resources_for(tx_resources)
-          payload['head_commit']['modified'].each_with_object({}) do |modified, ret|
+          payload['head_commit']['modified'].each_with_object(Set.new) do |modified, ret|
             if tx_resources.include?(modified)
               logger.info("setting new resource: #{tx_resources[modified].L10N_resource_slug}")
-              ret[tx_resources[modified]] = payload['head_commit']['id']
+              ret << tx_resources[modified]
             end
           end
         end
 
-        # Finds the updated resources and maps the most recent commit in which
-        # each was modified
+        # finds the resources that were updated in each commit
         def added_and_modified_resources_for(tx_resources)
-          payload['commits'].each_with_object({}) do |commit, ret|
+          payload['commits'].each_with_object(Set.new) do |commit, ret|
             logger.info('processing commit')
 
             (commit['modified'] + commit['added']).each do |file|
               logger.info("processing added/modified file: #{file}")
 
               if tx_resources.include?(file)
-                ret[tx_resources[file]] = commit['id']
+                ret << tx_resources[file]
               end
             end
           end
