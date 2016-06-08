@@ -1,3 +1,7 @@
+== 5.0.0
+* Use tip of branch instead of commit sha when updating Transifex resources.
+* Library now raises more specific config errors.
+
 == 4.0.0
 * Refactor TransifexApi to reduce duplication.
 * Rename TransifexApi#delete to #delete_resource (means major version bump).
