@@ -32,7 +32,7 @@ describe TxManager do
       it "raises an error if the git repo doesn't contain the requested config file" do
         expect(repo.api).to receive(:download).and_raise(Octokit::NotFound)
         expect { TxManager.tx_config(project, repo, 'my_branch') }.to(
-          raise_error(ConfigNotFoundError)
+          raise_error(GitConfigNotFoundError)
         )
       end
 

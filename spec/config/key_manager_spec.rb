@@ -18,6 +18,23 @@ describe KeyManager do
       expect(config.project_config).to eq(project_config)
       expect(config.repo_config).to eq(repo_config)
     end
+
+    it "raises an error if config can't be found" do
+      expect { KeyManager.config_from_project('justkidding') }.to(
+        raise_error(Txgh::ProjectConfigNotFoundError)
+      )
+    end
+
+    it "raises an error if the scheme can't be recognized" do
+      # remove the scheme
+      allow(Txgh::Config::KeyManager).to(
+        receive(:raw_config).and_return(YAML.dump(base_config))
+      )
+
+      expect { KeyManager.config_from_project(project_name) }.to(
+        raise_error(Txgh::InvalidProviderError)
+      )
+    end
   end
 
   describe '.config_from_repo' do
@@ -30,6 +47,23 @@ describe KeyManager do
       config = KeyManager.config_from_repo(repo_name)
       expect(config.project_config).to eq(project_config)
       expect(config.repo_config).to eq(repo_config)
+    end
+
+    it "raises an error if config can't be found" do
+      expect { KeyManager.config_from_repo('hahayeahright') }.to(
+        raise_error(Txgh::RepoConfigNotFoundError)
+      )
+    end
+
+    it "raises an error if the scheme can't be recognized" do
+      # remove the scheme
+      allow(Txgh::Config::KeyManager).to(
+        receive(:raw_config).and_return(YAML.dump(base_config))
+      )
+
+      expect { KeyManager.config_from_repo(repo_name) }.to(
+        raise_error(InvalidProviderError)
+      )
     end
   end
 
