@@ -1,4 +1,3 @@
-require 'erb'
 require 'etc'
 require 'yaml'
 
@@ -24,6 +23,14 @@ module Txgh
           project_config = project_config_for(project_name)
           repo_config = repo_config_for(repo_name)
           ConfigPair.new(project_config, repo_config)
+        end
+
+        def project_names
+          base_config['transifex']['projects'].keys
+        end
+
+        def repo_names
+          base_config['github']['repos'].keys
         end
 
         private
