@@ -1,3 +1,7 @@
+== 5.1.0
+* Catch errors that occur during response streaming.
+* Provide methods to get list of projects and repos in KeyManager. 
+
 == 5.0.0
 * Use tip of branch instead of commit sha when updating Transifex resources.
 * Library now raises more specific config errors.
