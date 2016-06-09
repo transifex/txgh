@@ -24,8 +24,6 @@ module Txgh
       channel_hash.keys
     end
 
-    private
-
     def publish_error(e)
       # if nobody has subscribed to error events, raise original error
       callbacks = channel_hash.fetch(ERROR_CHANNEL) { raise e }

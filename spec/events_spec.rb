@@ -42,4 +42,14 @@ describe Events do
       expect { events.publish('foo.bar') }.to raise_error('jelly beans')
     end
   end
+
+  describe '#publish_error' do
+    it 'publishes the given error over the error channel' do
+      errors = []
+      events.subscribe('errors') { |e| errors << e }
+      events.publish_error(begin; raise 'foo'; rescue => e; e; end)
+      expect(errors.size).to eq(1)
+      expect(errors.first.message).to eq('foo')
+    end
+  end
 end

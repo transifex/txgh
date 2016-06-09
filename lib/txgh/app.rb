@@ -12,7 +12,12 @@ module Txgh
         response.headers.merge!(resp.headers)
 
         stream do |out|
-          resp.write_to(out)
+          begin
+            resp.write_to(out)
+          rescue => e
+            Txgh.events.publish_error(e)
+            raise e
+          end
         end
       else
         status resp.status
