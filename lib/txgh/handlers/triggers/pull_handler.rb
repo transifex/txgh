@@ -11,7 +11,7 @@ module Txgh
         private
 
         def puller
-          Txgh::Puller.new(project, repo, branch)
+          @puller ||= Txgh::Puller.new(project, repo, branch)
         end
 
       end
