@@ -46,20 +46,6 @@ module Txgh
           @logger = options[:logger]
         end
 
-        private
-
-        def branch_resource
-          @branch_resource ||= TxBranchResource.new(resource, branch)
-        end
-
-        def resource
-          @resource ||= tx_config.resource(resource_slug)
-        end
-
-        def tx_config
-          @tx_config ||= Txgh::Config::TxManager.tx_config(project, repo, branch)
-        end
-
       end
     end
   end
