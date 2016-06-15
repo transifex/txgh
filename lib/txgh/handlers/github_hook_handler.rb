@@ -61,7 +61,7 @@ module Txgh
           resource_source_file = tx_resource.source_file || tx_resource.translation_file.gsub(/<lang>/, tx_resource.source_lang)
 
           tree['tree'].each do |file|
-            logger.info("process each tree entry: #{file['path']}")
+            logger.debug("process each tree entry: #{file['path']}")
 
             if resource_source_file == file['path']
               logger.info("process resource file: #{resource_source_file}")
