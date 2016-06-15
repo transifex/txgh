@@ -58,12 +58,13 @@ module Txgh
           github_api = repo.api
           tree_sha = github_api.get_commit(repo.name, commit_sha)['commit']['tree']['sha']
           tree = github_api.tree(repo.name, tree_sha)
+          resource_source_file = tx_resource.source_file || tx_resource.translation_file.gsub(/<lang>/, tx_resource.source_lang)
 
           tree['tree'].each do |file|
             logger.info("process each tree entry: #{file['path']}")
 
-            if tx_resource.source_file == file['path']
-              logger.info("process resource file: #{tx_resource.source_file}")
+            if resource_source_file == file['path']
+              logger.info("process resource file: #{resource_source_file}")
               blob = github_api.blob(repo.name, file['sha'])
               content = blob['encoding'] == 'utf-8' ? blob['content'] : Base64.decode64(blob['content'])
 
@@ -80,7 +81,7 @@ module Txgh
       end
 
       def upload(tx_resource, content)
-        logger.info("uploading to transifex resource: #{tx_resource}")
+        logger.info("uploading to transifex resource: #{tx_resource.inspect}")
         project.api.create_or_update(tx_resource, content)
       end
 
