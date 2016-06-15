@@ -24,6 +24,9 @@ module Txgh
           logger.info('found branch in github request')
 
           tx_resources = tx_resources_for(branch)
+
+          logger.debug("TX resources for branch '#{branch}':\n\n#{tx_resources.inspect}\n")
+
           modified_resources = modified_resources_for(tx_resources)
           modified_resources.merge!(l10n_resources_for(tx_resources))
 
@@ -77,6 +80,7 @@ module Txgh
       end
 
       def upload(tx_resource, content)
+        logger.info("uploading to transifex resource: #{tx_resource}")
         project.api.create_or_update(tx_resource, content)
       end
 
@@ -136,6 +140,9 @@ module Txgh
 
             if tx_resources.include?(modified)
               ret[tx_resources[modified]] = commit['id']
+              logger.debug("marking TX resource for update: #{tx_resources[modified]}")
+            else
+              logger.debug("TX resources does not include modified file: #{modified}")
             end
           end
         end
@@ -144,11 +151,14 @@ module Txgh
       # Build an index of known Tx resources, by source file
       def tx_resources_for(branch)
         project.resources.each_with_object({}) do |resource, ret|
-          logger.info('processing resource')
+          logger.info("processing resource: #{resource.inspect}")
+
+          # If source_file is provided, use as key, otherwise generate from file_filter and source_lang
+          key = resource.source_file || resource.translation_file.gsub(/<lang>/, resource.source_lang)
 
           # If we're processing by branch, create a branch resource. Otherwise,
           # use the original resource.
-          ret[resource.source_file] = if upload_by_branch?
+          ret[key] = if upload_by_branch?
             TxBranchResource.new(resource, branch)
           else
             resource
