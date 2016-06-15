@@ -8,7 +8,9 @@ capybara-*.html
 .rvmrc
 /.bundle
 /vendor/bundle
-/log/*
+/log/development.log
+/log/production.log
+/log/staging.log
 /tmp/*
 /db/*.sqlite3
 /public/system/*
