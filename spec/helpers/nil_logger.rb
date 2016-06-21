@@ -1,4 +1,7 @@
 class NilLogger
+  def debug(*args)
+  end
+
   def info(*args)
   end
 
