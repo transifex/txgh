@@ -100,6 +100,28 @@ module Txgh
       end
     end
 
+    post '/project' do
+      settings.logger.info('Processing request at /hooks/project')
+
+      project = params[:project]
+      config = Txgh::KeyManager.config_from_project(project)
+
+      if authenticated_transifex_request?(config.transifex_project, request)
+        new_config = params[:new_config]
+
+        handler = transifex_project_handler_for(
+          project: config.transifex_project,
+          new_config: new_config,
+          logger: settings.logger
+        )
+
+        handler.execute
+        status 200
+      else
+        status 401
+      end
+    end
+
     private
 
     def authenticated_github_request?(repo, request)
@@ -128,6 +150,10 @@ module Txgh
 
     def github_handler_for(options)
       Txgh::Handlers::GithubHookHandler.new(options)
+    end
+
+    def transifex_project_handler_for(options)
+      Txgh::Handlers::TransifexProjectHookHandler.new(options)
     end
   end
 end

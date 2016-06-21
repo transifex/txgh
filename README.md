@@ -1,25 +1,14 @@
 Transifex Txgh
 ====
 
-[![Build Status](https://travis-ci.org/transifex/txgh.svg?branch=devel)](https://travis-ci.org/transifex/txgh)
-
 Description
 ---
 A lightweight web server that integrates Transifex with Github.  Txgh acts as an agent for developers by automatically uploading source files to Transifex.  It also acts as an agent for translators by pushing translation files to GitHub that have been 100% translated in Transifex.
 
 Installation
 ---
-To setup locally, clone this repository and install the dependencies from the Gemfile. You can place a txgh.yml file in your home directory to bootstrap configuration of the server.  The quickest way to get started is to clone the repository, update your configuration, and then run the puma web server on a specific port.
-```ruby
-puma -p 9292
-```
 
-Additionally we have already setup Txgh on some other popular hosting platforms, specific instructions below:
-
-- [Amazon AWS setup instructions](http://docs.transifex.com/integrations/github/#sample-setup-of-txgh)
-- [Heroku setup instructions](https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/)
-- Docker - Build your own image (kitchen sink version): [Dockerfile](https://github.com/transifex/txgh/blob/devel/Dockerfile)
-- Docker - Pre-made image (heavily opinionated): [DockerHub](https://hub.docker.com/r/mjjacko/txgh/)
+Server can be provisioned from [base_infrastructure](https://github.com/controlshift/base_infrastructure) running `./provision shared_apply`. See that project's [README.md](https://github.com/controlshift/base_infrastructure/blob/master/README.md) for more details.
 
 Directory Layout
 ---
