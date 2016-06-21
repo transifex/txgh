@@ -106,4 +106,27 @@ describe Txgh::Hooks do
       }
     end
   end
+
+  describe '/project' do
+    let(:handler) { double(:handler) }
+    let(:tx_config_on_payload) { File.read(Pathname(File.dirname(__FILE__)).join('integration/config/tx.config')) }
+
+    it 'creates a handler and executes it' do
+      expect(app).to(
+        receive(:transifex_project_handler_for) do |options|
+          expect(options[:project].name).to eq (project_name)
+          expect(options[:new_config]).to eq(tx_config_on_payload)
+          handler
+        end
+      )
+
+      expect(handler).to receive(:execute)
+
+      params = {
+        'project' => project_name
+      }
+
+      post '/project', project: project_name, new_config: tx_config_on_payload
+    end
+  end
 end

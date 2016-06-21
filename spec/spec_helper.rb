@@ -30,7 +30,8 @@ module StandardTxghSetup
       'api_username' => 'transifex_api_username',
       'api_password' => 'transifex_api_password',
       'push_translations_to' => repo_name,
-      'name' => project_name
+      'name' => project_name,
+      'tx_config' => "config/#{project_name}.config"
     }
   end
 

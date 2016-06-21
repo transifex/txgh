@@ -4,6 +4,7 @@ require 'json'
 require 'pathname'
 require 'rack/test'
 require 'uri'
+require 'fileutils'
 
 include Txgh
 
@@ -34,6 +35,10 @@ describe 'integration tests', integration: true do
 
   let(:github_postbody_l10n) do
     File.read(payload_path.join('github_postbody_l10n.json'))
+  end
+
+  let(:transifex_project_new_configuration) do
+    File.read(payload_path.join('transifex_project_new_configuration.config'))
   end
 
   let(:project_name) { 'test-project-88' }
@@ -100,6 +105,34 @@ describe 'integration tests', integration: true do
       header 'content-type', 'application/x-www-form-urlencoded'
       post '/github', github_postbody_l10n
       expect(last_response).to be_ok
+    end
+  end
+
+  context 'project config update' do
+    around(:each) do |example|
+      begin
+        FileUtils.cp('config/tx.config', 'config/tx.config.bkp')
+        example.run
+      ensure
+        FileUtils.cp('config/tx.config.bkp', 'config/tx.config')
+      end
+    end
+
+    it 'verifies the transifex project hook endpoint works' do
+      params = {
+        project: 'test-project-88',
+        new_config: transifex_project_new_configuration
+      }
+
+      payload = URI.encode_www_form(params.to_a)
+      sign_transifex_request(payload)
+
+      post '/project', payload
+
+      expect(last_response).to be_ok
+
+      config = File.read('./config/tx.config')
+      expect(config).to eq(transifex_project_new_configuration)
     end
   end
 end
