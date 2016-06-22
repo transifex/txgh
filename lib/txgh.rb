@@ -16,6 +16,8 @@ module Txgh
   autoload :Hooks,                 'txgh/app'
   autoload :MergeCalculator,       'txgh/merge_calculator'
   autoload :ParseConfig,           'txgh/parse_config'
+  autoload :Puller,                'txgh/puller'
+  autoload :Pusher,                'txgh/pusher'
   autoload :ResourceCommitter,     'txgh/resource_committer'
   autoload :ResourceContents,      'txgh/resource_contents'
   autoload :ResourceDownloader,    'txgh/resource_downloader'
