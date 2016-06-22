@@ -1,3 +1,6 @@
+== 5.2.0
+* Moving pull/push logic into separate classes.
+
 == 5.1.0
 * Catch errors that occur during response streaming.
 * Provide methods to get list of projects and repos in KeyManager. 
