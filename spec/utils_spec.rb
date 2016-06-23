@@ -11,6 +11,10 @@ describe Utils do
     it 'does not replace underscores' do
       expect(Utils.slugify('abc_def/ghi')).to eq('abc_def_ghi')
     end
+
+    it 'does not allow periods' do
+      expect(Utils.slugify('abc/def-4.0.13')).to eq('abc_def-4013')
+    end
   end
 
   describe '.absolute_branch' do

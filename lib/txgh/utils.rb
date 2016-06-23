@@ -1,7 +1,10 @@
 module Txgh
   module Utils
-    def slugify(str)
-      str.gsub('/', '_')
+    def slugify(text)
+      text
+        .gsub('/', '_')
+        .gsub(/[^\w\s_-]/, '')
+        .gsub(/[-\s]+/, '-')
     end
 
     def absolute_branch(branch)
