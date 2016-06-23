@@ -1,3 +1,6 @@
+== 5.2.1
+* Correct slugify algorithm.
+
 == 5.2.0
 * Moving pull/push logic into separate classes.
 
