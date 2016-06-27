@@ -1,3 +1,6 @@
+== 5.2.2
+* Correct issue with numeric YAML keys by upgrading to Abroad 4.0. 
+
 == 5.2.1
 * Correct slugify algorithm.
 
