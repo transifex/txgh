@@ -2,11 +2,12 @@ Implementation on AWS EC2
 =========================
 
 What you need:
-1. A [Amazon EC2 instance](http://aws.amazon.com/ec2/). The basic Amazon Linux AMI should be enough. It comes with Ruby, Git and pretty much all you need. If you don't want to use EC2, you can use any kind of server with a recent version of Ruby installed with the ability to receive and send HTTP API traffic from the internet.
 
-2. Maintainer access to your Transifex project.
+- A [Amazon EC2 instance](http://aws.amazon.com/ec2/). The basic Amazon Linux AMI should be enough. It comes with Ruby, Git and pretty much all you need. If you don't want to use EC2, you can use any kind of server with a recent version of Ruby installed with the ability to receive and send HTTP API traffic from the internet.
 
-3. The ability to add Service Hooks to your Github repo.
+- Administrator access to your Transifex project.
+
+- The ability to add Service Hooks to your Github repo.
 
 Once you've got your EC2 instance, [connect to it using ssh](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html). You'll do all your work from there. Take a note of its public DNS name, as you'll need it later.
 
@@ -52,7 +53,7 @@ Here is a sample yml file which you can fit to your configuration:
                     push_translations_to: <full/github/repo/name>
 
 
-If your Transifex project currently uses the Transifex Command Line Client, you probably have a Transifex config file checked into your repo. Its default location is under a `.tx/` folder in the root of your git repo. If it doesn't contain one, use [this support article](/client/setup#installation) to create one, or use this template:
+If your Transifex project currently uses the Transifex Command Line Client, you probably have a Transifex config file checked into your repo. Its default location is under a `.tx/` folder in the root of your git repo. If it doesn't contain one, use [this support article](http://docs.transifex.com/client/setup#installation) to create one, or use this template:
 
 
     [main]
@@ -86,5 +87,7 @@ To configure your webhooks in Transifex, you will need to go to your project man
 
     http://<public DNS name>:9292/hooks/transifex
 
-That's it! While this starts the server in development mode in a free ec2 server, if you do any kind of larger scale development, you would probably want to run this on a more stable instance, in production mode, with appropriate monitoring. But once you've configured the webhooks, any change that makes a file be 100% translated in Transifex will trigger the server to push a new commit to Github with the updated translations files and any change in Github to the source files will trigger the server to update the source content in Transifex.
+That's it! 
+
+While this starts the server in development mode in a EC2 server, if you do any kind of larger scale development, you would probably want to run this on a more stable instance, in production mode, with appropriate monitoring. But once you've configured the webhooks, any change that makes a file be 100% translated in Transifex will trigger the server to push a new commit to Github with the updated translations files and any change in Github to the source files will trigger the server to update the source content in Transifex.
 
