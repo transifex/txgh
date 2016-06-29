@@ -34,11 +34,9 @@ To https://git.heroku.com/nameless-eyrie-4025.git
  * [new branch]      master -> master
 ```
 
-You can verify the success of the deployment by opening the Heroku dashboard in your web browser and navigating to the newly created dyno:
+You can verify the success of the deployment by opening the Heroku dashboard in your web browser and navigating to the newly created dyno.
 
-Heroku dyno
-
-Updating the Configuration
+##Updating the Configuration
 
 Before you can start pushing updates between GitHub and Transifex, you’ll need to provide the Heroku app with information on how to access each service. Txgh uses a set of environment variables to manage connections between each service. The name and description of these variables is shown in the table below:
 ```
@@ -64,7 +62,7 @@ Open the Heroku dashboard in your web browser. Click on the Settings tab and scr
 
 - Config vars
 
-Note that the RACK_ENV variable defaults to production, but in order for it to work with Txgh we need to set it to test.
+**Note** The RACK_ENV variable defaults to production, but in order for it to work with Txgh we need to set it to test.
 
 Add Environment Variables Using txgh_config.rb
 The txgh_config.rb file stores our environment variables inside of the Txgh folder. To create the file, copy and paste the following into a new text file. Replace the placeholder values with your actual values and save the file in the config directory as txgh_config.rb.
@@ -99,58 +97,51 @@ transifex_project_config_api_password:         12345678
 transifex_project_config_api_username:         txuser
 transifex_project_config_push_translations_to: ghuser/nodejs-test
 transifex_project_config_tx_config:            ./config/tx.config
-This command updates the configuration of your Heroku app with the values specified in txgh_config.rb. If you have any issues running the rake command, run bundle install in the Txgh project’s root directory. This compiles and installs the Ruby gems required by Txgh. Once the install completes, run the rake command again.
 ```
 
-Since this file contains sensitive information, you should avoid committing it to your Heroku repository or to your GitHub repository.
+This command updates the configuration of your Heroku app with the values specified in `txgh_config.rb` If you have any issues running the rake command, run bundle install in the Txgh project’s root directory. This compiles and installs the Ruby gems required by Txgh. Once the install completes, run the rake command again.
+
+
+**Note** Since this file contains sensitive information, you should avoid committing it to your Heroku repository or to your GitHub repository.
 
 Once the rake command has completed successfully, open the Heroku dashboard, navigate to the application’s settings and click Reveal Config Vars.
 
-#Final Configuration Steps
+##Final Configuration Steps
 The last step is to change the value of the RACK_ENV variable. By default, Heroku sets the value of RACK_ENV to production. However, we recommend testing Txgh by setting this value to test. If you haven’t already, open your application’s environment variables in a web browser and change the value of RACK_ENV from production to test. When you’re ready to deploy, you can change this value back to production.
-
-config-vars-fixed
 
 Meanwhile, check the values of your other variables. If any values seem incorrect, you can edit them in your browser or edit and re-apply the txgh_config.rb file using rake. Once everything looks good, you can add your webhooks to Transifex and GitHub.
 
-#Connecting Transifex and GitHub to Txgh
+##Connecting Transifex and GitHub to Txgh
 
-Txgh synchronizes your Transifex and GitHub projects using webhooks, allowing Txgh to respond immediately to changes in either service. The webhook URLs follow the format https://.herokuapp.com/hooks/, where is the name of your deployed Heroku app and is either “transifex” or “github.” For instance, we’ll use the following URL with Transifex:
+Txgh synchronizes your Transifex and GitHub projects using webhooks, allowing Txgh to respond immediately to changes in either service. The webhook URLs follow the format https://.herokuapp.com/hooks/, where is the name of your deployed Heroku app and is either “transifex” or “github.” 
+
+For instance, we’ll use the following URL with Transifex:
 
 https://nameless-eyrie-4025.herokuapp.com/hooks/transifex
+
 and the following URL with GitHub:
 
 https://nameless-eyrie-4025.herokuapp.com/hooks/github
-Connecting Your Transifex Project
+
 Open your project in Transifex. Under More Project Options, click Manage.
 
-- Transifex manage
-
 In the Features section at the bottom of the screen is a text box titled Web Hook URL. Enter in the URL you created from your Heroku app, then click Save Project. Secret keys are currently unsupported, so leave the field blank for now.
-
-- Transifex webhook
 
 Connecting Your GitHub Repository
 Connecting a GitHub repository is similar. Open your repository in a web browser and click Settings.
 
-- GitHub repository
-
 Under Webhooks & services, click to add a webhook. You may be asked to confirm your password. Enter the Heroku app URL for the Payload URL and change the Content type to application/x-www-form-urlencoded. Just like with Transifex, keep the Secret token field blank.
-
-- GitHub add webhook
 
 Click Add webhook to create your new webhook. GitHub will ping the URL to test its validity. You can check whether the ping was successful by reloading the page.
 
 Next, we’ll test out the integration by moving translations between GitHub and Transifex.
 
-#Testing It Out
+##Testing It Out
 
 To test the integration, we’ll push a new commit to GitHub, then we’ll use the new commit to update translations in Transifex.
 
 First, add a new string to the language source file in your Transifex project. Save your changes, then push the code to your GitHub repository. The push will automatically trigger the webhook. You can verify that webhook was successful by opening GitHub in a browser, navigating to the Webhooks & services, clicking on the webhook URL, and reviewing Recent Deliveries.
 
 If successful, you should see the new source strings in your Transifex project.
-
-Transifex new strings
 
 Update the translations in Transifex. Back in your GitHub repository, review the latest commits. You should see a commit from Transifex with the latest updates to the target language.
