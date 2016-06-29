@@ -16,9 +16,9 @@ puma -p 9292
 
 Other platforms:
 
-- [Amazon AWS](http://docs.transifex.com/integrations/github/#sample-setup-of-txgh)
-- [Salesforce Heroku](https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/)
-- [Docker Container](https://github.com/transifex/txgh/blob/devel/Dockerfile)
+- [Amazon AWS](https://github.com/transifex/txgh/blob/devel/docs/aws.md)
+- [Salesforce Heroku](https://github.com/transifex/txgh/blob/devel/docs/heroku.md)
+- [Docker Container](https://github.com/transifex/txgh/blob/devel/docs/docker.md)
 
 Directory Layout
 ---
