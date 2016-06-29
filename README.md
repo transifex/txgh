@@ -14,12 +14,11 @@ To setup locally, clone this repository and install the dependencies from the Ge
 puma -p 9292
 ```
 
-Additionally we have already setup Txgh on some other popular hosting platforms, specific instructions below:
+Other platforms:
 
-- [Amazon AWS setup instructions](http://docs.transifex.com/integrations/github/#sample-setup-of-txgh)
-- [Heroku setup instructions](https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/)
-- Docker - Build your own image (kitchen sink version): [Dockerfile](https://github.com/transifex/txgh/blob/devel/Dockerfile)
-- Docker - Pre-made image (heavily opinionated): [DockerHub](https://hub.docker.com/r/mjjacko/txgh/)
+- [Amazon AWS](http://docs.transifex.com/integrations/github/#sample-setup-of-txgh)
+- [Salesforce Heroku](https://www.transifex.com/blog/2015/bridging-github-and-transifex-with-txgh/)
+- [Docker Container](https://github.com/transifex/txgh/blob/devel/Dockerfile)
 
 Directory Layout
 ---
@@ -95,7 +94,7 @@ tx.config - This is a configuration which maps the source file, languages, and t
 
 Getting Help
 ---
-You can always get additional help via [GitHub issues](https://github.com/transifex/transifex-client/issues) or [Transifex support](https://www.transifex.com/contact/)
+You can always get additional help via [GitHub Issues](https://github.com/transifex/txgh/issues) or [Transifex support email](support@transifex.com)
 
 License
 ---
