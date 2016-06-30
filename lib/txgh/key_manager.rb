@@ -9,6 +9,7 @@ module Txgh
         project_config = project_config_for(project_name)
         repo_config = repo_config_for(project_config['push_translations_to'])
         tx_config ||= Txgh::TxConfig.load_file(project_config['tx_config'])
+        tx_config = Txgh::TxConfig.filter_by_project(tx_config,project_name)
         Txgh::Config.new(project_config, repo_config, tx_config)
       end
 
@@ -16,6 +17,7 @@ module Txgh
         repo_config = repo_config_for(repo_name)
         project_config = project_config_for(repo_config['push_source_to'])
         tx_config ||= Txgh::TxConfig.load_file(project_config['tx_config'])
+        tx_config = Txgh::TxConfig.filter_by_project(tx_config,project_config['name'])
         Txgh::Config.new(project_config, repo_config, tx_config)
       end
 
@@ -23,6 +25,7 @@ module Txgh
         project_config = project_config_for(project_name)
         repo_config = repo_config_for(repo_name)
         tx_config ||= Txgh::TxConfig.load_file(project_config['tx_config'])
+        tx_config = Txgh::TxConfig.filter_by_project(tx_config,project_name)
         Txgh::Config.new(project_config, repo_config, tx_config)
       end
 

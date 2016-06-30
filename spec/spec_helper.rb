@@ -36,6 +36,15 @@ module StandardTxghSetup
     }
   end
 
+    let(:second_project_config) do
+    {
+      'api_username' => 'transifex_api_username',
+      'api_password' => 'transifex_api_password',
+      'push_translations_to' => 'my_org/my_second_repo',
+      'name' => 'my_second_awesome_project'
+    }
+  end
+
   let(:repo_config) do
     {
       'api_username' => 'github_api_username',
@@ -43,6 +52,16 @@ module StandardTxghSetup
       'push_source_to' => project_name,
       'branch' => branch,
       'name' => repo_name
+    }
+  end
+
+  let(:second_repo_config) do
+    {
+      'api_username' => 'github_api_username',
+      'api_token' => 'github_api_token',
+      'push_source_to' => 'my_second_awesome_project',
+      'branch' => branch,
+      'name' => 'my_org/my_second_repo'
     }
   end
 
@@ -62,17 +81,47 @@ module StandardTxghSetup
     )
   end
 
+  let(:tx_config_multi_project) do
+    Txgh::TxConfig.load(
+        """
+        [main]
+        host = https://www.transifex.com
+        lang_map = pt-BR:pt, ko-KR:ko
+
+        [my_awesome_project.my_resource]
+        file_filter = translations/<lang>/sample.po
+        source_file = sample.po
+        source_lang = en
+        type = PO
+
+        [my_awesome_project.my_second_resource]
+        file_filter = translations/<lang>/second_sample.po
+        source_file = second_sample.po
+        source_lang = en
+        type = PO
+
+        [my_second_awesome_project.my_resource]
+        file_filter = translations/my_second_proj/<lang>/sample.po
+        source_file = sample.po
+        source_lang = en
+        type = PO
+        """
+    )
+  end
+
   let(:yaml_config) do
     {
       'txgh' => {
         'github' => {
           'repos' => {
-            repo_name => repo_config
+            repo_name => repo_config,
+            'my_org/my_second_repo' => second_repo_config
           }
         },
         'transifex' => {
           'projects' => {
-            project_name => project_config
+            project_name => project_config,
+            'my_second_awesome_project' => second_project_config
           }
         }
       }

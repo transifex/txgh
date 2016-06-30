@@ -11,6 +11,14 @@ module Txgh
         parse(config)
       end
 
+      def filter_by_project(config, project_name)
+        res = config
+        if defined? config.resources
+          res.resources = config.resources.select { |o| o.project_slug == project_name }
+        end
+        res
+      end
+
       private
 
       def parse(config)
@@ -52,6 +60,7 @@ module Txgh
     end
 
     attr_reader :resources, :lang_map
+    attr_writer :resources
 
     def initialize(resources, lang_map)
       @resources = resources
