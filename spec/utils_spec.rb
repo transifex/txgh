@@ -35,6 +35,20 @@ describe Utils do
     end
   end
 
+  describe '.relative_branch' do
+    it 'removes tags/ if present' do
+      expect(Utils.relative_branch('tags/foobar')).to eq('foobar')
+    end
+
+    it 'removes heads/ if present' do
+      expect(Utils.relative_branch('heads/foobar')).to eq('foobar')
+    end
+
+    it 'does nothing if no prefix can be removed' do
+      expect(Utils.relative_branch('abcdef')).to eq('abcdef')
+    end
+  end
+
   describe '.is_tag?' do
     it 'returns true if given a tag' do
       expect(Utils.is_tag?('tags/foo')).to eq(true)
@@ -43,6 +57,14 @@ describe Utils do
     it 'returns false if not given a tag' do
       expect(Utils.is_tag?('heads/foo')).to eq(false)
       expect(Utils.is_tag?('foo')).to eq(false)
+    end
+  end
+
+  describe '.git_hash_blob' do
+    it 'calculates the git blob hash for the given string' do
+      expect(Utils.git_hash_blob('foobarbaz')).to eq(
+        '31e446dbb4751d2157c673a88826b3541ae073ea'
+      )
     end
   end
 

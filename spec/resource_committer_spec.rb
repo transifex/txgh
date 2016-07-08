@@ -31,7 +31,7 @@ describe ResourceCommitter do
         expect(downloader).to receive(:first).and_return([file_name, :translations])
 
         expect(github_api).to(
-          receive(:commit).with(
+          receive(:update_contents).with(
             repo_name, branch, { file_name => :translations }, commit_message
           )
         )

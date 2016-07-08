@@ -18,7 +18,10 @@ module Txgh
         message = commit_message_for(language, file_name)
 
         if translations
-          repo.api.commit(repo.name, branch, { file_name => translations }, message)
+          repo.api.update_contents(
+            repo.name, branch, { file_name => translations }, message
+          )
+
           fire_event_for(tx_resource, branch, language)
         end
       end

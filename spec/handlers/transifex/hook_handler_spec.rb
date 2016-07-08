@@ -43,7 +43,7 @@ describe HookHandler do
 
   it 'downloads translations and pushes them to the correct branch (head)' do
     expect(github_api).to(
-      receive(:commit).with(
+      receive(:update_contents).with(
         repo_name, "heads/#{branch}",
         { "translations/#{language}/sample.yml" => translations },
         "Updating #{language} translations in #{file_name}"
@@ -90,7 +90,7 @@ describe HookHandler do
       end
 
       expect(github_api).to(
-        receive(:commit).with(
+        receive(:update_contents).with(
           repo_name, ref,
           { "translations/#{language}/sample.yml" => translations },
           "Updating #{language} translations in #{file_name}"
@@ -108,7 +108,7 @@ describe HookHandler do
 
     it 'downloads translations and pushes them to the tag' do
       expect(github_api).to(
-        receive(:commit).with(
+        receive(:update_contents).with(
           repo_name, "tags/my_tag",
           { "translations/#{language}/sample.yml" => translations },
           "Updating #{language} translations in #{file_name}"
@@ -126,7 +126,7 @@ describe HookHandler do
     let(:supported_languages) { ['ja'] }
 
     it "doesn't make a commit" do
-      expect(github_api).to_not receive(:commit)
+      expect(github_api).to_not receive(:update_contents)
 
       response = handler.execute
       expect(response.status).to eq(304)

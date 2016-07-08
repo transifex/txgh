@@ -1,3 +1,5 @@
+require 'digest'
+
 module Txgh
   module Utils
     def slugify(text)
@@ -18,12 +20,20 @@ module Txgh
       end
     end
 
+    def relative_branch(branch)
+      branch.strip.sub(/\A(heads|tags)\//, '')
+    end
+
     def branches_equal?(first, second)
       absolute_branch(first) == absolute_branch(second)
     end
 
     def is_tag?(ref)
       ref.include?('tags/')
+    end
+
+    def git_hash_blob(str)
+      Digest::SHA1.hexdigest("blob #{str.bytesize}\0#{str}")
     end
 
     # Builds a hash from an array of hashes using a common key present in all

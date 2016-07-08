@@ -35,6 +35,41 @@ describe GithubApi do
     end
   end
 
+  describe '#update_contents' do
+    let(:path) { 'path/to/file.txt' }
+    let(:old_contents) { 'abc123' }
+    let(:old_sha) { Utils.git_hash_blob(old_contents) }
+
+    it 'updates the given file contents' do
+      new_contents = 'def456'
+
+      expect(client).to(
+        receive(:contents)
+          .with(repo, { ref: branch, path: path })
+          .and_return({ sha: old_sha, content: Base64.encode64(old_contents) })
+      )
+
+      expect(client).to(
+        receive(:update_contents)
+          .with(repo, path, 'message', old_sha, new_contents, { branch: branch })
+      )
+
+      api.update_contents(repo, branch, { path => new_contents }, 'message')
+    end
+
+    it "doesn't update the file contents if the file hasn't changed" do
+      expect(client).to(
+        receive(:contents)
+          .with(repo, { ref: branch, path: path })
+          .and_return({ sha: old_sha, content: Base64.encode64(old_contents) })
+      )
+
+      expect(client).to_not receive(:update_contents)
+
+      api.update_contents(repo, branch, { path => old_contents }, 'message')
+    end
+  end
+
   describe '#commit' do
     let(:path) { 'path/to/translations' }
     let(:other_path) { 'other/path/to/translations' }

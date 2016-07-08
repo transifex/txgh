@@ -33,6 +33,24 @@ module Txgh
       client.create_ref(repo, branch, sha) rescue false
     end
 
+    def update_contents(repo, branch, content_map, message)
+      content_map.each do |path, new_contents|
+        branch = Utils.relative_branch(branch)
+        file = client.contents(repo, { path: path, ref: branch})
+        current_contents = Base64.decode64(file[:content])
+        current_sha = file[:sha]
+
+        new_sha = Utils.git_hash_blob(new_contents)
+        options = { branch: branch }
+
+        if current_sha != new_sha
+          client.update_contents(
+            repo, path, message, current_sha, new_contents, options
+          )
+        end
+      end
+    end
+
     def commit(repo, branch, content_map, message, allow_empty = false)
       parent = client.ref(repo, branch)
       base_commit = get_commit(repo, parent[:object][:sha])
