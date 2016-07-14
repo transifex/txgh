@@ -63,7 +63,14 @@ module Txgh
               logger.info("process resource file: #{tx_resource.source_file}")
               blob = github_api.blob(repo.name, file['sha'])
               content = blob['encoding'] == 'utf-8' ? blob['content'] : Base64.decode64(blob['content'])
-
+              begin
+                content = content.gsub("\\u0020" ,"\u0020")
+                content = content.gsub("\\u0022" ,"\u0022")
+                content = content.gsub("\\u002E" ,"\u002E")
+                content = content.gsub("\\u2026" ,"\u2026")
+              rescue Encoding::CompatibilityError => error
+                logger.info("#{error.message}")
+              end
               if upload_by_branch?
                 upload_by_branch(tx_resource, content)
               else
