@@ -1,3 +1,6 @@
+== 5.3.1
+* Coerce numeric values in YAML dumps.
+
 == 5.3.0
 * Reduce github API calls when committing. Reduced from 5 to 2. 
 
