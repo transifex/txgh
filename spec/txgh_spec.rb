@@ -43,5 +43,17 @@ describe Txgh do
         )
       end.to_not raise_error
     end
+
+    it 'handles transifex errors' do
+      expect_any_instance_of(Txgh::GithubStatus).to(
+        receive(:update).and_raise(Txgh::TransifexNotFoundError)
+      )
+
+      expect do
+        Txgh.update_status_callback(
+          project: nil, repo: nil, resource: nil, sha: nil
+        )
+      end.to_not raise_error
+    end
   end
 end
