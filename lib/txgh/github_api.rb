@@ -36,10 +36,14 @@ module Txgh
     def update_contents(repo, branch, content_map, message)
       content_map.each do |path, new_contents|
         branch = Utils.relative_branch(branch)
-        file = client.contents(repo, { path: path, ref: branch})
-        current_contents = Base64.decode64(file[:content])
-        current_sha = file[:sha]
 
+        file = begin
+          client.contents(repo, { path: path, ref: branch })
+        rescue Octokit::NotFound
+          nil
+        end
+
+        current_sha = file ? file[:sha] : '0' * 40
         new_sha = Utils.git_hash_blob(new_contents)
         options = { branch: branch }
 

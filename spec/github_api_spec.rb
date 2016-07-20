@@ -68,6 +68,20 @@ describe GithubApi do
 
       api.update_contents(repo, branch, { path => old_contents }, 'message')
     end
+
+    it "creates the file if it doesn't already exist" do
+      new_contents = 'foobar'
+
+      # file doesn't exist, raise octokit error
+      expect(client).to receive(:contents).and_raise(Octokit::NotFound)
+
+      expect(client).to(
+        receive(:update_contents)
+          .with(repo, path, 'message', '0' * 40, new_contents, { branch: branch })
+      )
+
+      api.update_contents(repo, branch, { path => new_contents }, 'message')
+    end
   end
 
   describe '#commit' do
