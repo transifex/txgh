@@ -1,3 +1,6 @@
+== 5.3.4
+* Guard against transifex errors in status event 
+
 == 5.3.3
 * Guard against too many github statuses.
 
