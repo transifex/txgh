@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'octokit'
 
 describe Txgh do
   def with_env(env)
@@ -27,6 +28,20 @@ describe Txgh do
     it 'defaults to the raw tx config provider' do
       instance = Txgh.tx_manager.provider_for('foo')
       expect(instance.provider.scheme).to eq('raw')
+    end
+  end
+
+  describe '#update_status_callback' do
+    it 'handles github errors' do
+      expect_any_instance_of(Txgh::GithubStatus).to(
+        receive(:update).and_raise(Octokit::UnprocessableEntity)
+      )
+
+      expect do
+        Txgh.update_status_callback(
+          project: nil, repo: nil, resource: nil, sha: nil
+        )
+      end.to_not raise_error
     end
   end
 end

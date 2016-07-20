@@ -57,6 +57,8 @@ module Txgh
       resource = options.fetch(:resource)
 
       GithubStatus.new(project, repo, resource).update(options.fetch(:sha))
+    rescue Octokit::UnprocessableEntity
+      # raised because we've tried to create too many statuses for the commit
     end
 
     def env
