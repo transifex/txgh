@@ -1,3 +1,6 @@
+== 5.3.3
+* Guard against too many github statuses.
+
 == 5.3.2
 * Fix GithubApi#update_contents to create files if they doesn't exist.
 
