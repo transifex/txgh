@@ -3,10 +3,10 @@ language: ruby
 matrix:
   include:
     - rvm: 2.1.6
-      before_script: cd txgh/
-      script: 'bundle exec rspec'
+      before_install: cd txgh/
+      script: bundle exec rspec
       env: NAME=txgh
     - rvm: 2.1.6
-      before_script: cd txgh-server/
-      script: 'bundle exec rake spec:full'
+      before_install: cd server/
+      script: bundle exec rake spec:full
       env: NAME=txgh-server
