@@ -23,7 +23,7 @@ module StandardTxghSetup
   let(:branch) { 'master' }
   let(:ref) { 'heads/master' }
   let(:language) { 'ko_KR' }
-  let(:tx_hook_trigger) { 'translations' }
+  let(:tx_hook_trigger) { 'translated' }
   let(:translations) { 'translation file contents' }
 
   let(:project_config) do
@@ -31,7 +31,7 @@ module StandardTxghSetup
       'api_username' => 'transifex_api_username',
       'api_password' => 'transifex_api_password',
       'push_translations_to' => repo_name,
-      'push_trigger' => 'translations',
+      'push_trigger' => 'translated',
       'name' => project_name
     }
   end
