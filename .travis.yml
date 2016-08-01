@@ -1,11 +1,12 @@
 sudo: false
 language: ruby
 matrix:
-  - rvm: 2.1.6
-    before_script: cd txgh/
-    script: 'bundle exec rspec'
-    env: NAME=txgh
-  - rvm: 2.1.6
-    before_script: cd txgh-server/
-    script: 'bundle exec rake spec:full'
-    env: NAME=txgh-server
+  include:
+    - rvm: 2.1.6
+      before_script: cd txgh/
+      script: 'bundle exec rspec'
+      env: NAME=txgh
+    - rvm: 2.1.6
+      before_script: cd txgh-server/
+      script: 'bundle exec rake spec:full'
+      env: NAME=txgh-server
