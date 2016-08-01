@@ -89,6 +89,37 @@ There are 2 important configuration files.
 
 txgh.yml - This is the base configuration for the service.  To avoid needing to checkin sensitive password information, this file should pull it's settings from the Ruby ENV in production.  Additionally, this file can be located in the users HOME directory to support running the server with local values.
 
+```yaml
+txgh:
+  github:
+    repos:
+      # This name should be org/repo
+      MyOrg/frontend:
+        api_username: "github_username"
+        api_token: "github_token"
+        # Transifex project name, as below
+        push_source_to: "my-frontend" 
+        # The branch to watch. Set to 'all' to listen to all pushes.
+        branch: "i18n"
+        # Create a repo webhook. The secret is any string of your choosing,
+        # and is input during webhook creation. TXGH uses this to validate
+        # messages are really coming from GitHub.
+        webhook_secret: "..." 
+  transifex:
+    projects:
+      # This name should match the transifex project name, without org name
+      my-frontend:
+        tx_config: "./config/tx.config"
+        api_username: "transifex_user"
+        api_password: "transifex_password"
+        # This is the GitHub project name, as above.
+        push_translations_to: "MyOrg/frontend" 
+        # This can be 'translated' or 'reviewed'. To catch both actions,
+        # simply remove this key.
+        push_trigger: "translated"
+        # This works similarly to the GitHub webhook_secret above.
+        webhook_secret: "..."
+```
 
 tx.config - This is a configuration which maps the source file, languages, and target translation files.  It is based on this specification: http://docs.transifex.com/client/config/#txconfig
 
