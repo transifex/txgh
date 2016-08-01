@@ -1,0 +1,17 @@
+source 'https://rubygems.org'
+
+gemspec
+
+gem 'txgh', path: '~/workspace/txgh/txgh'
+
+group :development, :test do
+  gem 'pry-byebug'
+  gem 'rake'
+end
+
+group :test do
+  gem 'rack-test'
+  gem 'rspec'
+  gem 'vcr', '~> 3.0'
+  gem 'webmock', '~> 1.0'
+end

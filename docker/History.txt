@@ -1,0 +1,76 @@
+== 5.3.4
+* Guard against transifex errors in status event
+
+== 5.3.3
+* Guard against too many github statuses.
+
+== 5.3.2
+* Fix GithubApi#update_contents to create files if they doesn't exist.
+
+== 5.3.1
+* Coerce numeric values in YAML dumps.
+
+== 5.3.0
+* Reduce github API calls when committing. Reduced from 5 to 2.
+
+== 5.2.2
+* Correct issue with numeric YAML keys by upgrading to Abroad 4.0.
+
+== 5.2.1
+* Correct slugify algorithm.
+
+== 5.2.0
+* Moving pull/push logic into separate classes.
+
+== 5.1.0
+* Catch errors that occur during response streaming.
+* Provide methods to get list of projects and repos in KeyManager.
+
+== 5.0.0
+* Use tip of branch instead of commit sha when updating Transifex resources.
+* Library now raises more specific config errors.
+
+== 4.0.0
+* Refactor TransifexApi to reduce duplication.
+* Rename TransifexApi#delete to #delete_resource (means major version bump).
+* Include more information when raising TransifexApiError and subclasses.
+
+== 3.0.0
+* Upgrade abroad to v3.0.0 to take advantage of more consistent YAML scalar serialization
+
+== 2.4.0
+* Bump abroad to v2.0 to take advantage of pretty JSON serialization
+
+== 2.3.0
+* Make the raw:// tx config scheme the default
+
+== 2.2.0
+* Skip deleted branches when processing github push events
+* Add configuration option for custom commit message
+* Add environment
+
+== 2.1.0
+* Annotate commits on github with translation statuses
+* Include the branch in the resource's name
+
+== 2.0.1
+
+* Handle both strings and bools in auto_delete_resources config option
+
+== 2.0.0
+
+* Only commit/download translations for languages in the list of supported languages.
+
+== 1.1.0
+
+* Added github ping handler.
+* Added get_stats in TransifexApi.
+* When diffing is enabled, ResourceUpdater now uploads the full resource for diff points (i.e. master).
+
+== 1.0.1
+
+* Heroku button compatibility.
+
+== 1.0.0
+
+* Birthday!
