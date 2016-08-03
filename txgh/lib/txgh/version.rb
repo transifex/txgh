@@ -1,3 +1,3 @@
 module Txgh
-  VERSION = '6.0.0.beta1'
+  VERSION = '5.4.0'
 end

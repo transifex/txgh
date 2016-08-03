@@ -1,5 +1,8 @@
+== 5.4.0
+* Separate txgh core library and server components.
+
 == 5.3.4
-* Guard against transifex errors in status event 
+* Guard against transifex errors in status event
 
 == 5.3.3
 * Guard against too many github statuses.
