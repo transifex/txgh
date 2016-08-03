@@ -1,6 +1,6 @@
 txgh: &txgh
   before_install: gem install bundler -v 1.12.5
-  install: cd txgh && bundle install --deployment --jobs 3 --retry 3
+  install: cd txgh && bundle install --no-deployment --jobs 3 --retry 3
   script: cd txgh && bundle exec rspec
   env: NAME=txgh
 
