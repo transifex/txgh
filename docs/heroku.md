@@ -39,19 +39,18 @@ You can verify the success of the deployment by opening the Heroku dashboard in 
 ##Updating the Configuration
 
 Before you can start pushing updates between GitHub and Transifex, you’ll need to provide the Heroku app with information on how to access each service. Txgh uses a set of environment variables to manage connections between each service. The name and description of these variables is shown in the table below:
-```
-[table]
-Variable,Description,Example
-transifex_project_config_tx_config,Location of your Transifex project’s configuration file relative to Txgh’s root folder.,./config/tx.config
-transifex_project_config_api_username,Your Transifex username.,txuser
-transifex_project_config_api_password,Password to your Transifex account.,1324578
-transifex_project_config_push_translations_to,Name of the GitHub repository that Txgh will push updates to.,ghuser/my_repository
-transifex_project_config_push_translations_to_branch,GitHub branch to update.,heads/master
-github_repo_config_api_username,Your GitHub username.,ghuser
-github_repo_config_api_token,A personal API token created in GitHub.,489394e58d99095d9c6aafb49f0e2b1e
-github_repo_config_push_source_to,Name of the Transifex project that Txgh will push updates to.,my_project
-[/table]
-```
+
+| Variable | Description | Example |
+| -------- | ----------- | ------- |
+| transifex_project_config_tx_config | Location of your Transifex project’s configuration file relative to Txgh’s root folder. | ./config/tx.config |
+| transifex_project_config_api_username | Your Transifex username. | txuser |
+| transifex_project_config_api_password | Password to your Transifex account. | 1324578 |
+| transifex_project_config_push_translations_to | Name of the GitHub repository that Txgh will push updates to. | ghuser/my_repository |
+| transifex_project_config_push_translations_to_branch | GitHub branch to update. | heads/master |
+| github_repo_config_api_username | Your GitHub username. | ghuser |
+| github_repo_config_api_token | A personal API token created in GitHub. | 489394e58d99095d9c6aafb49f0e2b1e |
+| github_repo_config_push_source_to | Name of the Transifex project that Txgh will push updates to. | my_project |
+
 There are two ways to apply these to your Heroku app:
 
 - Add the environment variables through Heroku’s web interface.
