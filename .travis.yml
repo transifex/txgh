@@ -1,12 +1,24 @@
+txgh: &txgh
+  before_install: gem install bundler -v 1.12.5
+  install: cd txgh && bundle install --deployment --jobs 3 --retry 3
+  script: cd txgh && bundle exec rspec
+  env: NAME=txgh
+
+server: &server
+  before_install: gem install bundler -v 1.12.5
+  install: cd server && bundle install --deployment --jobs 3 --retry 3
+  script: cd server && bundle exec rake spec:full
+  env: NAME=txgh-server
+
 sudo: false
 language: ruby
 matrix:
   include:
     - rvm: 2.1.6
-      before_install: cd txgh/
-      script: bundle exec rspec
-      env: NAME=txgh
+      <<: *txgh
     - rvm: 2.1.6
-      before_install: cd server/
-      script: bundle exec rake spec:full
-      env: NAME=txgh-server
+      <<: *server
+    - rvm: 2.2.5
+      <<: *txgh
+    - rvm: 2.2.5
+      <<: *server
