@@ -99,7 +99,7 @@ namespace :publish do
   end
 
   task :tag do
-    system("git tag -a v#{TxghServer::VERSION} && git push origin --tags")
+    system("git tag -a 'txgh-server v#{TxghServer::VERSION}' && git push origin --tags")
   end
 
   task :build_gem => [:build]  # use preexisting build task from rubygems/package_task
