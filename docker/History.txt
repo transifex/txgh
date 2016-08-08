@@ -1,3 +1,6 @@
+== 5.4.1
+* Treat arrays as single units to conform to Transifex's string handling behavior. 
+
 == 5.4.0
 * Separate txgh core library and server components.
 
