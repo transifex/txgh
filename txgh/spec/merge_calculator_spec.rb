@@ -46,6 +46,22 @@ describe MergeCalculator do
     end
   end
 
+  context 'with an array added in HEAD' do
+    let(:diff_point_phrases) do
+      [phrase('planet.earth', 'Human')]
+    end
+
+    let(:head_phrases) do
+      diff_point_phrases + [
+        phrase('villains', %w(Kahn Chang Valeris Shinzon))
+      ]
+    end
+
+    it 'includes the added array' do
+      expect(merge_result.phrases).to eq(head_phrases)
+    end
+  end
+
   context 'with phrases removed from HEAD' do
     let(:diff_point_phrases) do
       head_phrases + [
@@ -62,6 +78,22 @@ describe MergeCalculator do
     end
   end
 
+  context 'with an array removed from HEAD' do
+    let(:diff_point_phrases) do
+      head_phrases + [
+        phrase('villains', %w(Kahn Chang Valeris Shinzon))
+      ]
+    end
+
+    let(:head_phrases) do
+      [phrase('planet.earth', 'Human')]
+    end
+
+    it 'does not include the removed array' do
+      expect(merge_result.phrases).to eq(head_phrases)
+    end
+  end
+
   context 'with phrases modified in HEAD' do
     let(:diff_point_phrases) do
       [phrase('planet.bajor', 'Cardassian')]
@@ -69,6 +101,20 @@ describe MergeCalculator do
 
     let(:head_phrases) do
       [phrase('planet.bajor', 'Bajoran')]
+    end
+
+    it 'includes the modified phrase' do
+      expect(merge_result.phrases).to eq(head_phrases)
+    end
+  end
+
+  context 'with an array modified in HEAD' do
+    let(:diff_point_phrases) do
+      [phrase('villains', %w(Kahn Chang Valeris))]
+    end
+
+    let(:head_phrases) do
+      [phrase('villains', %w(Kahn Chang Valeris Shinzon))]
     end
 
     it 'includes the modified phrase' do

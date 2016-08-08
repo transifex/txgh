@@ -11,18 +11,29 @@ describe ResourceContents do
     )
   end
 
-  let(:raw_contents) do
+  let(:default_contents) do
     outdent(%Q(
       en:
         welcome:
-          message: Hello!
+          message: "Hello!"
         goodbye:
-          message: Goodbye!
+          message: "Goodbye!"
+    ))
+  end
+
+  let(:array_contents) do
+    outdent(%Q(
+      en:
+        captains:
+        - "Janeway"
+        - "Picard"
+        - "Sisko"
+        - "Kirk"
     ))
   end
 
   let(:contents) do
-    ResourceContents.from_string(tx_resource, raw_contents)
+    ResourceContents.from_string(tx_resource, default_contents)
   end
 
   describe '#phrases' do
@@ -30,6 +41,13 @@ describe ResourceContents do
       expect(contents.phrases).to eq([
         { 'key' => 'welcome.message', 'string' => 'Hello!' },
         { 'key' => 'goodbye.message', 'string' => 'Goodbye!' }
+      ])
+    end
+
+    it 'preserves arrays' do
+      rsrc_contents = ResourceContents.from_string(tx_resource, array_contents)
+      expect(rsrc_contents.phrases).to eq([
+        { 'key' => 'captains', 'string' => %w(Janeway Picard Sisko Kirk) }
       ])
     end
   end
@@ -47,13 +65,14 @@ describe ResourceContents do
     it 'serializes the phrases to the given stream' do
       stream = StringIO.new
       contents.write_to(stream)
-      expect(stream.string).to eq(outdent(%Q(
-        en:
-          welcome:
-            message: "Hello!"
-          goodbye:
-            message: "Goodbye!"
-      )))
+      expect(stream.string).to eq(default_contents)
+    end
+
+    it 'serializes arrays correctly' do
+      stream = StringIO.new
+      rsrc_contents = ResourceContents.from_string(tx_resource, array_contents)
+      rsrc_contents.write_to(stream)
+      expect(stream.string).to eq(array_contents)
     end
 
     it 'includes phrases that were added after the fact' do

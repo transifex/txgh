@@ -37,7 +37,7 @@ module Txgh
 
     def phrases
       @phrases ||= extractor.from_string(raw) do |extractor|
-        extractor.extract_each.map do |key, value|
+        extractor.extract_each(preserve_arrays: true).map do |key, value|
           { 'key' => key, 'string' => value }
         end
       end
@@ -56,7 +56,7 @@ module Txgh
       serializer.from_stream(stream, language) do |serializer|
         phrases.each do |phrase|
           serializer.write_key_value(
-            phrase['key'], (phrase['string'] || '').to_s
+            phrase['key'], str(phrase['string'] || '')
           )
         end
       end
@@ -94,6 +94,15 @@ module Txgh
     private
 
     attr_reader :raw
+
+    def str(obj)
+      case obj
+        when Array
+          obj
+        else
+          obj.to_s
+      end
+    end
 
     def extractor
       id = EXTRACTOR_MAP.fetch(tx_resource.type) do

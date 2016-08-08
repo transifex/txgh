@@ -35,6 +35,29 @@ describe DiffCalculator do
       end
     end
 
+    context 'with an array added to HEAD' do
+      let(:head_phrases) do
+        diff_point_phrases + [
+          phrase('villains', %w(Khan Chang Valeris Shinzon))
+        ]
+      end
+
+      let(:diff_point_phrases) do
+        [
+          phrase('Bajor', 'Bajoran'),
+          phrase('Cardassia', 'Cardassian')
+        ]
+      end
+
+      it 'includes the new array' do
+        expect(diff[:added].size).to eq(1)
+        expect(diff[:modified].size).to eq(0)
+        phrase = diff[:added].first
+        expect(phrase['key']).to eq('villains')
+        expect(phrase['string']).to eq(%w(Khan Chang Valeris Shinzon))
+      end
+    end
+
     context 'with phrases removed from HEAD' do
       let(:head_phrases) do
         []
@@ -45,6 +68,21 @@ describe DiffCalculator do
       end
 
       it 'does not include the new string if string has been removed' do
+        expect(diff[:added].size).to eq(0)
+        expect(diff[:modified].size).to eq(0)
+      end
+    end
+
+    context 'with an array removed from HEAD' do
+      let(:head_phrases) do
+        []
+      end
+
+      let(:diff_point_phrases) do
+        phrase('villains', %w(Khan Chang Valeris Shinzon))
+      end
+
+      it 'does not include the array' do
         expect(diff[:added].size).to eq(0)
         expect(diff[:modified].size).to eq(0)
       end
@@ -65,6 +103,24 @@ describe DiffCalculator do
         phrase = diff[:modified].first
         expect(phrase['key']).to eq('TheNextGeneration')
         expect(phrase['string']).to eq('Jean Luc Picard (rocks)')
+      end
+    end
+
+    context 'with an array modified in HEAD' do
+      let(:head_phrases) do
+        [phrase('villains', %w(Khan Chang Valeris Shinzon))]
+      end
+
+      let(:diff_point_phrases) do
+        [phrase('villains', %w(Khan Chang Valeris))]
+      end
+
+      it 'includes the entire array' do
+        expect(diff[:added].size).to eq(0)
+        expect(diff[:modified].size).to eq(1)
+        phrase = diff[:modified].first
+        expect(phrase['key']).to eq('villains')
+        expect(phrase['string']).to eq(%w(Khan Chang Valeris Shinzon))
       end
     end
 
