@@ -1,3 +1,6 @@
+== 5.4.2
+* * Array preservation should only affect string arrays (i.e. not nested objects).
+
 == 5.4.1
 * Treat arrays as single units to conform to Transifex's string handling behavior. 
 
