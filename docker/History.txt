@@ -1,3 +1,6 @@
+== 5.4.4
+* Don't convert nils to empty strings when serializing YAML.
+
 == 5.4.3
 * Fix for nested YAML arrays, which broke after the array preservation stuff.
 
