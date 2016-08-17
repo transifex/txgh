@@ -1,3 +1,6 @@
+== 5.5.0
+* Use github's contents API for downloading files.
+
 == 5.4.4
 * Don't convert nils to empty strings when serializing YAML.
 
