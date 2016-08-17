@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'base64'
 
 include Txgh
 
@@ -178,20 +179,30 @@ describe GithubApi do
   end
 
   describe '#download' do
+    let(:path) { 'path/to/file.xyz' }
+
     it 'downloads the file from the given branch' do
-      path = 'path/to/file.xyz'
-
-      expect(client).to receive(:ref).with(repo, branch).and_return(object: { sha: :branch_sha })
-      expect(client).to receive(:commit).with(repo, :branch_sha).and_return(commit: { tree: { sha: :base_tree_sha } })
-      expect(client).to receive(:tree).with(repo, :base_tree_sha, recursive: 1).and_return(
-        tree: [{ path: path, sha: :blob_sha }]
+      expect(client).to(
+        receive(:contents)
+          .with(repo, path: path, ref: branch)
+          .and_return(
+            content: 'content', encoding: 'utf-8'
+          )
       )
 
-      expect(client).to receive(:blob).with(repo, :blob_sha).and_return(
-        { 'content' => :blob, 'encoding' => 'utf-8' }
+      expect(api.download(repo, path, branch)).to eq('content')
+    end
+
+    it 'automatically decodes base64-encoded content' do
+      expect(client).to(
+        receive(:contents)
+          .with(repo, path: path, ref: branch)
+          .and_return(
+            content: Base64.encode64('content'), encoding: 'base64'
+          )
       )
 
-      expect(api.download(repo, path, branch)).to eq(:blob)
+      expect(api.download(repo, path, branch)).to eq('content')
     end
   end
 end
