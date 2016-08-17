@@ -1,3 +1,6 @@
+== 5.5.0
+* Use github's contents API for downloading files.
+
 == 5.4.1
 * Treat arrays as single units to conform to Transifex's string handling behavior.
 
