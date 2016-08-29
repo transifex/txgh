@@ -32,20 +32,20 @@ describe ResourceUpdater do
     tree_sha = 'abc123'
 
     allow(github_api).to(
-      receive(:get_commit).with(repo_name, commit_sha) do
+      receive(:get_commit).with(commit_sha) do
         { 'commit' => { 'tree' => { 'sha' => tree_sha } } }
       end
     )
 
     allow(github_api).to(
-      receive(:tree).with(repo_name, tree_sha) do
+      receive(:tree).with(tree_sha) do
         { 'tree' => modified_files }
       end
     )
 
     modified_files.each do |file|
       allow(github_api).to(
-        receive(:blob).with(repo_name, file['sha']) do
+        receive(:blob).with(file['sha']) do
           { 'content' => translations, 'encoding' => 'utf-8' }
         end
       )
@@ -134,7 +134,7 @@ describe ResourceUpdater do
     it 'uploads a diff instead of the whole resource' do
       expect(github_api).to(
         receive(:download)
-          .with(repo_name, 'en.yml', diff_point)
+          .with('en.yml', diff_point)
           .and_return(YAML.load("|
             en:
               welcome: Hello

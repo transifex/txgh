@@ -29,7 +29,7 @@ module Txgh
 
     def update(sha)
       repo.api.create_status(
-        repo.name, sha, state, {
+        sha, state, {
           context: context, target_url: target_url, description: description
         }
       )

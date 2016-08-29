@@ -32,7 +32,7 @@ describe ResourceCommitter do
 
         expect(github_api).to(
           receive(:update_contents).with(
-            repo_name, branch, { file_name => :translations }, commit_message
+            branch, { file_name => :translations }, commit_message
           )
         )
       end

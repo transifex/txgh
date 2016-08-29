@@ -5,7 +5,7 @@ include Txgh
 
 describe GithubApi do
   let(:client) { double(:client) }
-  let(:api) { GithubApi.create_from_client(client) }
+  let(:api) { GithubApi.create_from_client(client, repo) }
   let(:repo) { 'my_org/my_repo' }
   let(:branch) { 'master' }
   let(:sha) { 'abc123' }
@@ -13,26 +13,26 @@ describe GithubApi do
   describe '#tree' do
     it 'retrieves a git tree using the client' do
       expect(client).to receive(:tree).with(repo, sha, recursive: 1)
-      api.tree(repo, sha)
+      api.tree(sha)
     end
   end
 
   describe '#blob' do
     it 'retrieves a git blob using the client' do
       expect(client).to receive(:blob).with(repo, sha)
-      api.blob(repo, sha)
+      api.blob(sha)
     end
   end
 
   describe '#create_ref' do
     it 'creates the given ref using the client' do
       expect(client).to receive(:create_ref).with(repo, branch, sha)
-      api.create_ref(repo, branch, sha)
+      api.create_ref(branch, sha)
     end
 
     it 'returns false on client error' do
       expect(client).to receive(:create_ref).and_raise(StandardError)
-      expect(api.create_ref(repo, branch, sha)).to eq(false)
+      expect(api.create_ref(branch, sha)).to eq(false)
     end
   end
 
@@ -55,7 +55,7 @@ describe GithubApi do
           .with(repo, path, 'message', old_sha, new_contents, { branch: branch })
       )
 
-      api.update_contents(repo, branch, { path => new_contents }, 'message')
+      api.update_contents(branch, { path => new_contents }, 'message')
     end
 
     it "doesn't update the file contents if the file hasn't changed" do
@@ -67,7 +67,7 @@ describe GithubApi do
 
       expect(client).to_not receive(:update_contents)
 
-      api.update_contents(repo, branch, { path => old_contents }, 'message')
+      api.update_contents(branch, { path => old_contents }, 'message')
     end
 
     it "creates the file if it doesn't already exist" do
@@ -81,100 +81,21 @@ describe GithubApi do
           .with(repo, path, 'message', '0' * 40, new_contents, { branch: branch })
       )
 
-      api.update_contents(repo, branch, { path => new_contents }, 'message')
-    end
-  end
-
-  describe '#commit' do
-    let(:path) { 'path/to/translations' }
-    let(:other_path) { 'other/path/to/translations' }
-
-    before(:each) do
-      allow(client).to receive(:create_blob).with(repo, :new_content).and_return(:blob_sha)
-      allow(client).to receive(:ref).with(repo, branch).and_return(object: { sha: :branch_sha })
-      allow(client).to receive(:commit).with(repo, :branch_sha).and_return(commit: { tree: { sha: :base_tree_sha } })
-      allow(client).to receive(:create_tree).and_return(sha: :new_tree_sha)
-    end
-
-    it 'creates a new commit and updates the branch' do
-      expect(client).to(
-        receive(:create_commit)
-          .with(repo, 'message', :new_tree_sha, :branch_sha)
-          .and_return(sha: :new_commit_sha)
-      )
-
-      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-      api.commit(repo, branch, { path => :new_content }, 'message', true)
-    end
-
-    it 'updates multiple files at a time' do
-      allow(client).to receive(:create_blob).with(repo, :other_content).and_return(:blob_sha_2)
-
-      expect(client).to(
-        receive(:create_commit)
-          .with(repo, 'message', :new_tree_sha, :branch_sha)
-          .and_return(sha: :new_commit_sha)
-      )
-
-      expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-      content_map = { path => :new_content, other_path => :other_content }
-      api.commit(repo, branch, content_map, 'message', true)
-    end
-
-    context 'with an empty commit' do
-      before(:each) do
-        allow(client).to(
-          receive(:compare)
-            .with(repo, :branch_sha, :new_commit_sha)
-            .and_return(files: [])
-        )
-
-        expect(client).to(
-          receive(:create_commit)
-            .with(repo, 'message', :new_tree_sha, :branch_sha)
-            .and_return(sha: :new_commit_sha)
-        )
-      end
-
-      it 'does not allow empty commits by default' do
-        expect(client).to_not receive(:update_ref)
-        api.commit(repo, branch, { path => :new_content }, 'message')
-      end
-    end
-
-    context 'with a non-empty commit' do
-      before(:each) do
-        allow(client).to(
-          receive(:compare)
-            .with(repo, :branch_sha, :new_commit_sha)
-            .and_return(files: %w(abc def))
-        )
-
-        expect(client).to(
-          receive(:create_commit)
-            .with(repo, 'message', :new_tree_sha, :branch_sha)
-            .and_return(sha: :new_commit_sha)
-        )
-      end
-
-      it 'updates the ref as expected' do
-        expect(client).to receive(:update_ref).with(repo, branch, :new_commit_sha, false)
-        api.commit(repo, branch, { path => :new_content }, 'message')
-      end
+      api.update_contents(branch, { path => new_contents }, 'message')
     end
   end
 
   describe '#get_commit' do
     it 'retrieves the given commit using the client' do
       expect(client).to receive(:commit).with(repo, sha)
-      api.get_commit(repo, sha)
+      api.get_commit(sha)
     end
   end
 
   describe '#get_ref' do
     it 'retrieves the given ref (i.e. branch) using the client' do
       expect(client).to receive(:ref).with(repo, sha)
-      api.get_ref(repo, sha)
+      api.get_ref(sha)
     end
   end
 
@@ -190,7 +111,23 @@ describe GithubApi do
           )
       )
 
-      expect(api.download(repo, path, branch)).to eq('content')
+      expect(api.download(path, branch)).to eq({ content: 'content' })
+    end
+
+    it 'encodes the string using the encoding specified in the response' do
+      content = 'ありがと'.encode('UTF-16')
+
+      expect(client).to(
+        receive(:contents)
+          .with(repo, path: path, ref: branch)
+          .and_return(
+            content: content, encoding: 'utf-16'
+          )
+      )
+
+      result = api.download(path, branch)
+      expect(result[:content].encoding).to eq(Encoding::UTF_16)
+      expect(result[:content]).to eq(content)
     end
 
     it 'automatically decodes base64-encoded content' do
@@ -202,7 +139,7 @@ describe GithubApi do
           )
       )
 
-      expect(api.download(repo, path, branch)).to eq('content')
+      expect(api.download(path, branch)).to eq({ content: 'content' })
     end
   end
 end

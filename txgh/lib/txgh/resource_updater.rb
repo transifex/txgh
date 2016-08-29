@@ -12,15 +12,13 @@ module Txgh
       @logger = logger || Logger.new(STDOUT)
     end
 
-    # For each modified resource, get its content and update the content
-    # in Transifex.
     def update_resource(tx_resource, commit_sha, categories = {})
       # don't process the resource unless the project slugs are the same
       return unless tx_resource.project_slug == project.name
 
       logger.info('process updated resource')
-      tree_sha = repo.api.get_commit(repo.name, commit_sha)['commit']['tree']['sha']
-      tree = repo.api.tree(repo.name, tree_sha)
+      tree_sha = repo.api.get_commit(commit_sha)['commit']['tree']['sha']
+      tree = repo.api.tree(tree_sha)
 
       tree['tree'].each do |file|
         logger.info("process each tree entry: #{file['path']}")
@@ -81,7 +79,7 @@ module Txgh
     end
 
     def diff_point_content(tx_resource, file)
-      raw_content = repo.api.download(repo.name, file['path'], repo.diff_point)
+      raw_content = repo.api.download(file['path'], repo.diff_point)
       ResourceContents.from_string(tx_resource, raw_content)
     end
 
@@ -110,7 +108,7 @@ module Txgh
     end
 
     def contents_of(sha)
-      blob = repo.api.blob(repo.name, sha)
+      blob = repo.api.blob(sha)
 
       if blob['encoding'] == 'utf-8'
         blob['content']

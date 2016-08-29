@@ -28,7 +28,7 @@ module Txgh
 
       def github_api
         @github_api ||= Txgh::GithubApi.create_from_credentials(
-          repo_config['api_username'], repo_config['api_token']
+          repo_config['api_username'], repo_config['api_token'], repo_config['name']
         )
       end
     end

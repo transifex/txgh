@@ -19,7 +19,7 @@ module Txgh
 
         if translations
           repo.api.update_contents(
-            repo.name, branch, { file_name => translations }, message
+            branch, { file_name => translations }, message
           )
 
           fire_event_for(tx_resource, branch, language)
@@ -30,7 +30,7 @@ module Txgh
     private
 
     def fire_event_for(tx_resource, branch, language)
-      head = repo.api.get_ref(repo.name, branch)
+      head = repo.api.get_ref(branch)
       sha = head[:object][:sha]
 
       Txgh.events.publish(

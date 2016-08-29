@@ -34,7 +34,7 @@ module Txgh
         private
 
         def download
-          github_repo.api.download(github_repo.name, payload, ref)
+          github_repo.api.download(payload, ref)[:content]
         rescue Octokit::NotFound
           raise Txgh::GitConfigNotFoundError, "Config file #{payload} not found in #{ref}"
         end

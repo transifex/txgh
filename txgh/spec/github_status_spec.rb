@@ -26,8 +26,7 @@ describe GithubStatus do
 
     context 'with all resources at 100%' do
       it 'reports status as success' do
-        expect(github_api).to receive(:create_status) do |repo, commit_sha, state, options|
-          expect(repo).to eq(repo_name)
+        expect(github_api).to receive(:create_status) do |commit_sha, state, options|
           expect(commit_sha).to eq(sha)
           expect(state).to eq(GithubStatus::State.success)
           expect(options[:description]).to eq('Translations complete!')
@@ -56,7 +55,7 @@ describe GithubStatus do
       end
 
       it 'reports status as pending' do
-        expect(github_api).to receive(:create_status) do |repo, commit_sha, state, options|
+        expect(github_api).to receive(:create_status) do |commit_sha, state, options|
           expect(state).to eq(GithubStatus::State.pending)
           expect(options[:description]).to eq('15/20 translations complete.')
         end
