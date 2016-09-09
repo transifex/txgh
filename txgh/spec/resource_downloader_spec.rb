@@ -97,8 +97,8 @@ describe ResourceDownloader do
     let(:ref) { 'heads/mybranch' }
 
     before(:each) do
-      allow(github_api).to receive(:download) do |repo_name, file, branch|
-        source_for(branch)
+      allow(github_api).to receive(:download) do |file, branch|
+        { content: source_for(branch) }
       end
     end
 

@@ -101,7 +101,7 @@ module Txgh
     end
 
     def git_download(resource, branch)
-      repo.api.download(repo.name, resource.source_file, branch)
+      repo.api.download(resource.source_file, branch)[:content]
     end
 
     def transifex_api
