@@ -9,12 +9,11 @@ describe DeleteHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    DeleteHandler.new(
-      project: transifex_project,
-      repo: github_repo,
-      payload: payload.to_h,
-      logger: logger
-    )
+    DeleteHandler.new(transifex_project, github_repo, logger, attributes)
+  end
+
+  let(:attributes) do
+    DeleteAttributes.from_webhook_payload(payload.to_h)
   end
 
   let(:payload) do

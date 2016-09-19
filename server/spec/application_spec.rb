@@ -185,9 +185,9 @@ describe TxghServer::WebhookEndpoints do
 
       before(:each) do
         allow(TxghServer::Webhooks::Github::PushHandler).to(
-          receive(:new) do |options|
-            expect(options[:project].name).to eq(project_name)
-            expect(options[:repo].name).to eq(repo_name)
+          receive(:new) do |project, repo, logger, attributes|
+            expect(project.name).to eq(project_name)
+            expect(repo.name).to eq(repo_name)
             handler
           end
         )
@@ -199,6 +199,7 @@ describe TxghServer::WebhookEndpoints do
         )
 
         payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+        payload.add_commit
 
         sign_with payload.to_json
         header 'X-GitHub-Event', 'push'
@@ -217,8 +218,11 @@ describe TxghServer::WebhookEndpoints do
       end
 
       it 'returns invalid request if event unrecognized' do
+        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+
+        sign_with payload.to_json
         header 'X-GitHub-Event', 'foobar'
-        post '/github'
+        post '/github', payload.to_json
 
         expect(last_response.status).to eq(400)
       end

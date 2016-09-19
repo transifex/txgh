@@ -27,10 +27,6 @@ module Txgh
       @translation_file = translation_file
     end
 
-    def L10N_resource_slug
-      "L10N#{resource_slug}"
-    end
-
     def lang_map(tx_lang)
       @lang_map.fetch(tx_lang, tx_lang)
     end
@@ -65,6 +61,10 @@ module Txgh
 
     def branch
       nil
+    end
+
+    def has_branch?
+      false
     end
   end
 end

@@ -8,7 +8,7 @@ require 'helpers/integration_setup'
 require 'uri'
 require 'yaml'
 
-include Txgh
+include TxghServer
 
 describe 'hook integration tests', integration: true do
   include Rack::Test::Methods
@@ -83,10 +83,6 @@ describe 'hook integration tests', integration: true do
     File.read(payload_path.join('github_postbody_release.json'))
   end
 
-  let(:github_postbody_l10n) do
-    File.read(payload_path.join('github_postbody_l10n.json'))
-  end
-
   let(:project_name) { 'test-project-88' }
   let(:repo_name) { 'txgh-bot/txgh-test-resources' }
 
@@ -143,16 +139,6 @@ describe 'hook integration tests', integration: true do
       header 'X-GitHub-Event', 'push'
       header 'content-type', 'application/x-www-form-urlencoded'
       post '/github', github_postbody_release
-      expect(last_response).to be_ok
-    end
-  end
-
-  it 'verifies the github l10n hook endpoint works' do
-    VCR.use_cassette('github_l10n_hook_endpoint') do
-      sign_github_request(github_postbody_l10n)
-      header 'X-GitHub-Event', 'push'
-      header 'content-type', 'application/x-www-form-urlencoded'
-      post '/github', github_postbody_l10n
       expect(last_response).to be_ok
     end
   end

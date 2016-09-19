@@ -4,47 +4,13 @@ module TxghServer
   module Webhooks
     module Github
       class RequestHandler
-        class << self
-
-          include ResponseHelpers
-
-          def handle_request(request, logger)
-            case request.env['HTTP_X_GITHUB_EVENT']
-              when 'push'
-                handle_push(request, logger)
-              when 'delete'
-                handle_delete(request, logger)
-              when 'ping'
-                handle_ping(request, logger)
-              else
-                handle_unexpected
-            end
-          end
-
-          private
-
-          def handle_push(request, logger)
-            klass = TxghServer::Webhooks::Github::PushHandler
-            new(request, logger).handle(klass)
-          end
-
-          def handle_delete(request, logger)
-            klass = TxghServer::Webhooks::Github::DeleteHandler
-            new(request, logger).handle(klass)
-          end
-
-          def handle_ping(request, logger)
-            klass = TxghServer::Webhooks::Github::PingHandler
-            new(request, logger).handle(klass)
-          end
-
-          def handle_unexpected
-            respond_with_error(400, 'Unexpected event type')
-          end
-
-        end
-
         include ResponseHelpers
+
+        class << self
+          def handle_request(request, logger)
+            new(request, logger).handle_request
+          end
+        end
 
         attr_reader :request, :logger
 
@@ -53,16 +19,18 @@ module TxghServer
           @logger = logger
         end
 
-        def handle(klass)
+        def handle_request
           handle_safely do
-            handler = klass.new(
-              project: config.transifex_project,
-              repo: config.github_repo,
-              payload: payload,
-              logger: logger
-            )
-
-            handler.execute
+            case request.env['HTTP_X_GITHUB_EVENT']
+              when 'push'
+                handle_push
+              when 'delete'
+                handle_delete
+              when 'ping'
+                handle_ping
+              else
+                handle_unexpected
+            end
           end
         end
 
@@ -78,16 +46,38 @@ module TxghServer
           respond_with_error(500, "Internal server error: #{e.message}", e)
         end
 
+        def handle_push
+          attributes = PushAttributes.from_webhook_payload(payload)
+          PushHandler.new(project, repo, logger, attributes).execute
+        end
+
+        def handle_delete
+          attributes = DeleteAttributes.from_webhook_payload(payload)
+          DeleteHandler.new(project, repo, logger, attributes).execute
+        end
+
+        def handle_ping
+          PingHandler.new(logger).execute
+        end
+
+        def handle_unexpected
+          respond_with_error(400, 'Unexpected event type')
+        end
+
         def payload
-          @payload ||= if request.params[:payload]
-            JSON.parse(request.params[:payload])
-          else
-            JSON.parse(request.body.read)
+          @payload ||= begin
+            if request.params[:payload]
+              JSON.parse(request.params[:payload])
+            else
+              JSON.parse(request.body.read)
+            end
+          rescue JSON::ParserError
+            {}
           end
         end
 
         def github_repo_name
-          payload['repository']['full_name']
+          payload.fetch('repository', {})['full_name']
         end
 
         def config
@@ -96,6 +86,10 @@ module TxghServer
 
         def repo
           config.github_repo
+        end
+
+        def project
+          config.transifex_project
         end
 
         def authentic_request?

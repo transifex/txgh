@@ -5,9 +5,8 @@ module Txgh
     extend Forwardable
 
     def_delegators :@resource, *[
-      :project_slug, :type, :source_lang, :source_file, :L10N_resource_slug,
-      :translation_file, :lang_map, :translation_path, :original_resource_slug,
-      :to_h, :to_api_h
+      :project_slug, :type, :source_lang, :source_file, :translation_file,
+      :lang_map, :translation_path, :original_resource_slug, :to_h, :to_api_h
     ]
 
     attr_reader :resource, :branch
@@ -48,6 +47,10 @@ module Txgh
         project_slug: project_slug,
         resource_slug: resource_slug
       )
+    end
+
+    def has_branch?
+      true
     end
 
     private

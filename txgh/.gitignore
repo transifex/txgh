@@ -26,4 +26,4 @@ config/txgh_config.rb
 .ruby-version
 tester.rb
 pkg/
-
+.DS_Store

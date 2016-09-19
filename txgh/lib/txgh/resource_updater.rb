@@ -12,46 +12,36 @@ module Txgh
       @logger = logger || Logger.new(STDOUT)
     end
 
-    def update_resource(tx_resource, commit_sha, categories = {})
+    def update_resource(tx_resource, categories = {})
       # don't process the resource unless the project slugs are the same
       return unless tx_resource.project_slug == project.name
+      branch = tx_resource.branch || repo.diff_point
+      file = repo.api.download(tx_resource.source_file)
 
-      logger.info('process updated resource')
-      tree_sha = repo.api.get_commit(commit_sha)['commit']['tree']['sha']
-      tree = repo.api.tree(tree_sha)
-
-      tree['tree'].each do |file|
-        logger.info("process each tree entry: #{file['path']}")
-
-        if tx_resource.source_file == file['path']
-          if repo.upload_diffs?
-            upload_diff(tx_resource, file, categories)
-          else
-            upload_whole(tx_resource, file, categories)
-          end
-
-          fire_event_for(tx_resource, commit_sha)
-        end
+      if repo.upload_diffs? && tx_resource.has_branch?
+        upload_diff(tx_resource, file, categories)
+      else
+        upload_whole(tx_resource, file, categories)
       end
+
+      fire_event_for(tx_resource, file)
     end
 
     private
 
-    def fire_event_for(tx_resource, commit_sha)
+    def fire_event_for(tx_resource, file)
       Txgh.events.publish(
         'transifex.resource.updated', {
-          project: project, repo: repo, resource: tx_resource, sha: commit_sha
+          project: project, repo: repo, resource: tx_resource, sha: file[:sha]
         }
       )
     end
 
     def upload_whole(tx_resource, file, categories)
-      content = contents_of(file['sha'])
-
       if repo.process_all_branches?
-        upload_by_branch(tx_resource, content, categories)
+        upload_by_branch(tx_resource, file[:content], categories)
       else
-        upload(tx_resource, content)
+        upload(tx_resource, file[:content])
       end
     end
 
@@ -75,11 +65,11 @@ module Txgh
     end
 
     def head_content(tx_resource, file)
-      ResourceContents.from_string(tx_resource, contents_of(file['sha']))
+      ResourceContents.from_string(tx_resource, file[:content])
     end
 
     def diff_point_content(tx_resource, file)
-      raw_content = repo.api.download(file['path'], repo.diff_point)
+      raw_content = repo.api.download(file[:path], repo.diff_point)
       ResourceContents.from_string(tx_resource, raw_content)
     end
 
@@ -105,16 +95,6 @@ module Txgh
     def categories_for(tx_resource)
       resource = project.api.get_resource(*tx_resource.slugs)
       deserialize_categories(Array(resource['categories']))
-    end
-
-    def contents_of(sha)
-      blob = repo.api.blob(sha)
-
-      if blob['encoding'] == 'utf-8'
-        blob['content']
-      else
-        Base64.decode64(blob['content'])
-      end
     end
   end
 end

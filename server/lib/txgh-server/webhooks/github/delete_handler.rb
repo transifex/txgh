@@ -1,9 +1,17 @@
 module TxghServer
   module Webhooks
     module Github
-      class DeleteHandler < Handler
+      class DeleteHandler
+        include ResponseHelpers
 
-        include Txgh::CategorySupport
+        attr_reader :project, :repo, :logger, :attributes
+
+        def initialize(project, repo, logger, attributes)
+          @project = project
+          @repo = repo
+          @logger = logger
+          @attributes = attributes
+        end
 
         def execute
           perform_delete if should_handle_request?
@@ -22,13 +30,13 @@ module TxghServer
 
         def should_handle_request?
           # ref_type can be either 'branch' or 'tag' - we only care about branches
-          payload['ref_type'] == 'branch' &&
+          attributes.ref_type == 'branch' &&
             repo.should_process_ref?(branch) &&
             project.auto_delete_resources?
         end
 
         def branch
-          Txgh::Utils.absolute_branch(payload['ref'].sub(/^refs\//, ''))
+          Txgh::Utils.absolute_branch(attributes.ref.sub(/^refs\//, ''))
         end
 
       end

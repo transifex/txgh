@@ -6,7 +6,10 @@ module TxghServer
       class PingHandler
         include ResponseHelpers
 
-        def initialize(options = {})
+        attr_reader :logger
+
+        def initialize(logger)
+          @logger = logger
         end
 
         def execute

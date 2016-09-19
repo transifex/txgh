@@ -1,10 +1,19 @@
-require 'base64'
 require 'set'
 
 module TxghServer
   module Webhooks
     module Github
-      class PushHandler < Handler
+      class PushHandler
+        include ResponseHelpers
+
+        attr_reader :project, :repo, :logger, :attributes
+
+        def initialize(project, repo, logger, attributes)
+          @project = project
+          @repo = repo
+          @logger = logger
+          @attributes = attributes
+        end
 
         def execute
           # Check if the branch in the hook data is the configured branch we want
@@ -14,31 +23,11 @@ module TxghServer
           if should_process?
             logger.info('found branch in github request')
 
-            tx_resources = tx_resources_for(branch)
-
-            modified_resources = added_and_modified_resources_for(tx_resources)
-            modified_resources += l10n_resources_for(tx_resources)
-
-            if repo.github_config_branch.include?('tags/')
-              modified_resources += tag_resources_for(tx_resources)
-            end
-
-            # Handle DBZ 'L10N' special case
-            if branch.include?("L10N")
-              logger.info('processing L10N tag')
-
-              # Create a new branch off tag commit
-              if branch.include?('tags/L10N')
-                repo.api.create_ref(repo.name, 'heads/L10N', payload['head_commit']['id'])
-              end
-            end
-
             updater = Txgh::ResourceUpdater.new(project, repo, logger)
-            categories = { 'author' => payload['head_commit']['committer']['name'] }
-            ref = repo.api.get_ref(repo.name, branch)
+            categories = { 'author' => attributes.author }
 
-            modified_resources.each do |resource|
-              updater.update_resource(resource, ref[:object][:sha], categories)
+            added_and_modified_resources.each do |resource|
+              updater.update_resource(resource, categories)
             end
           end
 
@@ -47,47 +36,20 @@ module TxghServer
 
         private
 
-        def tag_resources_for(tx_resources)
-          payload['head_commit']['modified'].each_with_object(Set.new) do |modified, ret|
-            logger.info("processing modified file: #{modified}")
-
-            if tx_resources.include?(modified)
-              ret << tx_resources[modified]
-            end
-          end
-        end
-
-        def l10n_resources_for(tx_resources)
-          payload['head_commit']['modified'].each_with_object(Set.new) do |modified, ret|
-            if tx_resources.include?(modified)
-              logger.info("setting new resource: #{tx_resources[modified].L10N_resource_slug}")
-              ret << tx_resources[modified]
-            end
-          end
-        end
-
         # finds the resources that were updated in each commit
-        def added_and_modified_resources_for(tx_resources)
-          payload['commits'].each_with_object(Set.new) do |commit, ret|
-            logger.info('processing commit')
+        def added_and_modified_resources
+          attributes.files.each_with_object(Set.new) do |file, ret|
+            logger.info("processing added/modified file: #{file}")
 
-            (commit['modified'] + commit['added']).each do |file|
-              logger.info("processing added/modified file: #{file}")
-
-              if tx_resources.include?(file)
-                ret << tx_resources[file]
-              end
+            if tx_resources.include?(file)
+              ret << tx_resources[file]
             end
           end
         end
 
         # Build an index of known Tx resources, by source file
-        def tx_resources_for(branch)
-          tx_config.resources.each_with_object({}) do |resource, ret|
-            logger.info('processing resource')
-
-            # If we're processing by branch, create a branch resource. Otherwise,
-            # use the original resource.
+        def tx_resources
+          @tx_resources ||= tx_config.resources.each_with_object({}) do |resource, ret|
             ret[resource.source_file] = if repo.process_all_branches?
               Txgh::TxBranchResource.new(resource, branch)  # maybe find instead?
             else
@@ -101,7 +63,7 @@ module TxghServer
         end
 
         def branch
-          @ref ||= payload['ref'].sub(/^refs\//, '')
+          @ref ||= attributes.ref.sub(/^refs\//, '')
         end
 
         def should_process?
@@ -115,7 +77,7 @@ module TxghServer
         def should_process_commit?
           # return false if 'after' commit sha is all zeroes (indicates branch
           # has been deleted)
-          !(payload.fetch('after', '') =~ /\A0+\z/)
+          !((attributes.after || '') =~ /\A0+\z/)
         end
 
       end
