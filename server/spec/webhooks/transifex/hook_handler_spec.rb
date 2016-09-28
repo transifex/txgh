@@ -44,7 +44,7 @@ describe HookHandler do
   it 'downloads translations and pushes them to the correct branch (head)' do
     expect(github_api).to(
       receive(:update_contents).with(
-        repo_name, "heads/#{branch}",
+        "heads/#{branch}",
         { "translations/#{language}/sample.yml" => translations },
         "Updating #{language} translations in #{file_name}"
       )
@@ -91,7 +91,7 @@ describe HookHandler do
 
       expect(github_api).to(
         receive(:update_contents).with(
-          repo_name, ref,
+          ref,
           { "translations/#{language}/sample.yml" => translations },
           "Updating #{language} translations in #{file_name}"
         )
@@ -109,7 +109,7 @@ describe HookHandler do
     it 'downloads translations and pushes them to the tag' do
       expect(github_api).to(
         receive(:update_contents).with(
-          repo_name, "tags/my_tag",
+          "tags/my_tag",
           { "translations/#{language}/sample.yml" => translations },
           "Updating #{language} translations in #{file_name}"
         )

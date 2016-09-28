@@ -20,28 +20,28 @@ http_interactions:
     headers:
       Server:
       - nginx
+      Date:
+      - Wed, 28 Sep 2016 18:33:51 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
       Vary:
       - Accept-Encoding
       - Authorization, Host, Accept-Language, Cookie
-      Content-Type:
-      - application/json; charset=utf-8
-      Date:
-      - Fri, 12 Feb 2016 19:48:59 GMT
-      Transfer-Encoding:
-      - chunked
+      X-Frame-Options:
+      - SAMEORIGIN
       Content-Language:
       - en
       X-Content-Type-Options:
       - nosniff
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - X-Mapping-fjhppofk=B8558B7BB369B761FC4CE03884ACF0F5; path=/
-      X-Frame-Options:
-      - SAMEORIGIN
     body:
       encoding: UTF-8
-      string: "[]"
+      string: "[\n    {\n        \"coordinators\": [\n            \"txgh.bot\"\n        ],
+        \n        \"language_code\": \"el_GR\", \n        \"translators\": [], \n
+        \       \"reviewers\": []\n    }\n]"
     http_version: 
-  recorded_at: Fri, 12 Feb 2016 19:48:59 GMT
-recorded_with: VCR 3.0.1
+  recorded_at: Wed, 28 Sep 2016 18:33:51 GMT
+recorded_with: VCR 3.0.3
