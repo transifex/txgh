@@ -1,3 +1,9 @@
+== 6.0.0
+* Refactor GithubApi. Repo name is now passed into constructor.
+* Remove unused L10n branch behavior.
+* Use tip of branch instead of commit SHA to update a resource.
+* Use Github's content API to create and update files instead of the commit API.
+
 == 5.5.0
 * Use github's contents API for downloading files.
 
