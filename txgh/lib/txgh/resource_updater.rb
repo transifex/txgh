@@ -16,7 +16,7 @@ module Txgh
       # don't process the resource unless the project slugs are the same
       return unless tx_resource.project_slug == project.name
       branch = tx_resource.branch || repo.diff_point
-      file = repo.api.download(tx_resource.source_file)
+      file = repo.api.download(tx_resource.source_file, branch)
 
       if repo.upload_diffs? && tx_resource.has_branch?
         upload_diff(tx_resource, file, categories)
