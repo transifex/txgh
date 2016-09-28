@@ -1,3 +1,6 @@
+== 6.0.1
+* Fix ArgumentError bug in resource updater.
+
 == 6.0.0
 * Refactor GithubApi. Repo name is now passed into constructor.
 * Remove unused L10n branch behavior.
