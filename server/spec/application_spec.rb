@@ -279,7 +279,7 @@ describe TxghServer::TriggerEndpoints do
       expect(Txgh::GithubApi).to receive(:new).and_return(github_api)
       expect(github_api).to receive(:get_ref).and_return(object: { sha: 'abc123' })
 
-      expect(updater).to receive(:update_resource) do |resource, sha|
+      expect(updater).to receive(:update_resource) do |resource, categories|
         expected_branch = Txgh::Utils.absolute_branch(branch)
         expect(resource.branch).to eq(expected_branch)
         expect(resource.project_slug).to eq(project_name)
