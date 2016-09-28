@@ -116,14 +116,18 @@ describe ResourceUpdater do
     end
 
     it 'uploads a diff instead of the whole resource' do
+      file = {
+        path: 'en.yml',
+        commit_sha: commit_sha,
+        content: YAML.load("|
+          en:
+            welcome: Hello
+            goodbye: Goodbye
+        ")
+      }
+
       expect(github_api).to(
-        receive(:download)
-          .with('en.yml', diff_point)
-          .and_return(YAML.load("|
-            en:
-              welcome: Hello
-              goodbye: Goodbye
-          "))
+        receive(:download).with('en.yml', diff_point).and_return(file)
       )
 
       diff = YAML.load(%Q(|

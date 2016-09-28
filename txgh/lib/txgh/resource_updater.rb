@@ -69,7 +69,7 @@ module Txgh
     end
 
     def diff_point_content(tx_resource, file)
-      raw_content = repo.api.download(file[:path], repo.diff_point)
+      raw_content = repo.api.download(file[:path], repo.diff_point)[:content]
       ResourceContents.from_string(tx_resource, raw_content)
     end
 
