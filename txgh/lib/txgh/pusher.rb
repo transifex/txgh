@@ -19,8 +19,7 @@ module Txgh
     end
 
     def push_resource(tx_resource)
-      ref = repo.api.get_ref(branch || repo.branch)
-      updater.update_resource(tx_resource, ref[:object][:sha])
+      updater.update_resource(tx_resource)
     end
 
     def push_slug(resource_slug)
