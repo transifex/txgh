@@ -1,3 +1,6 @@
+== 6.0.3
+* Don't pass SHA when calling ResourceUpdater#update_resource.
+
 == 6.0.2
 * Fix bug in resource updater where a file hash is sent to the abroad extractor instead of the file's contents.
 
