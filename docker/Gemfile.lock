@@ -54,19 +54,19 @@ GEM
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
     tilt (2.0.5)
-    txgh (5.5.0)
+    txgh (6.0.1)
       abroad (~> 4.1)
       faraday (~> 0.9)
       faraday_middleware (~> 0.10)
       json (~> 1.8)
       octokit (~> 4.2)
       parseconfig (~> 1.0)
-    txgh-server (1.1.0)
+    txgh-server (2.0.0)
       mime-types (~> 2.0)
       rubyzip (>= 1.0, <= 1.1.2)
       sinatra (~> 1.4)
       sinatra-contrib (~> 1.4)
-      txgh (~> 5.4)
+      txgh (~> 6.0)
     xml-write-stream (1.1.0)
     yaml-write-stream (2.0.2)
 
@@ -77,8 +77,8 @@ DEPENDENCIES
   puma
   rack
   rake
-  txgh (~> 5.4)
-  txgh-server (~> 1.0)
+  txgh (~> 6.0)
+  txgh-server (~> 2.0)
 
 BUNDLED WITH
    1.12.5

@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'puma'
-gem 'txgh', '~> 5.4'
-gem 'txgh-server', '~> 1.0'
+gem 'txgh', '~> 6.0'
+gem 'txgh-server', '~> 2.0'
 
 group :development, :test do
   gem 'rack'
