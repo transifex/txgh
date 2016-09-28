@@ -1,3 +1,7 @@
+== 6.0.0
+* Upgrade txgh to v6.0.
+* Upgrade txgh-server to v2.0.
+
 == 5.6.0
 * Refactor webhook logic, bump version of txgh-server.
 * Fix incorrectly scoped constant.
