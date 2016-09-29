@@ -132,7 +132,9 @@ describe TransifexApi do
       end
 
       expect { api.create(resource, 'new_content') }.to(
-        raise_error(TransifexApiError)
+        raise_error(TransifexNotFoundError) do |e|
+          expect(e.status_code).to eq(404)
+        end
       )
     end
 
@@ -286,7 +288,9 @@ describe TransifexApi do
       end
 
       expect { api.download(resource, language) }.to(
-        raise_error(TransifexApiError)
+        raise_error(TransifexUnauthorizedError) do |e|
+          expect(e.status_code).to eq(401)
+        end
       )
     end
 

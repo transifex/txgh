@@ -180,8 +180,10 @@ module Txgh
           raise TransifexNotFoundError, "404 Not Found: #{response.env.url}"
         else
           if (response.status / 100) != 2
-            raise TransifexApiError,
-              "HTTP #{response.status}: #{response.env.url}, body: #{response.body}"
+            raise TransifexApiError.new(
+              "HTTP #{response.status}: #{response.env.url}, body: #{response.body}",
+              response.status
+            )
           end
       end
     end
