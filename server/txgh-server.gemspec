@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version  = ::TxghServer::VERSION
   s.authors  = ['Matthew Jackowski', 'Cameron Dutro']
   s.email    = ['mattjjacko@gmail.com', 'camertron@gmail.com']
-  s.homepage = 'https://github.com/lumoslabs/txgh-server'
+  s.homepage = 'https://github.com/lumoslabs/txgh'
 
   s.description = s.summary = 'An HTTP server for interacting with txgh.'
 
