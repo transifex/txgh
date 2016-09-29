@@ -19,7 +19,6 @@ module Txgh
   autoload :ResourceDeleter,       'txgh/resource_deleter'
   autoload :ResourceDownloader,    'txgh/resource_downloader'
   autoload :ResourceUpdater,       'txgh/resource_updater'
-  autoload :ResponseHelpers,       'txgh/response_helpers'
   autoload :TransifexApi,          'txgh/transifex_api'
   autoload :TransifexProject,      'txgh/transifex_project'
   autoload :TxBranchResource,      'txgh/tx_branch_resource'
