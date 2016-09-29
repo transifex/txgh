@@ -17,17 +17,22 @@ module Txgh
         callback.call(options)
       end
     rescue => e
-      publish_error(e)
+      publish_error!(e)
     end
 
     def channels
       channel_hash.keys
     end
 
-    def publish_error(e)
+    def publish_error(e, params = {})
+      callbacks = channel_hash.fetch(ERROR_CHANNEL) { [] }
+      callbacks.map { |callback| callback.call(e, params) }
+    end
+
+    def publish_error!(e, params = {})
       # if nobody has subscribed to error events, raise original error
       callbacks = channel_hash.fetch(ERROR_CHANNEL) { raise e }
-      callbacks.each { |callback| callback.call(e) }
+      callbacks.map { |callback| callback.call(e, params) }
     end
   end
 end
