@@ -55,7 +55,7 @@ describe GithubApi do
           .with(repo, path, 'message', old_sha, new_contents, { branch: branch })
       )
 
-      api.update_contents(branch, { path => new_contents }, 'message')
+      api.update_contents(branch, [{ path: path, contents: new_contents }], 'message')
     end
 
     it "doesn't update the file contents if the file hasn't changed" do
@@ -67,7 +67,7 @@ describe GithubApi do
 
       expect(client).to_not receive(:update_contents)
 
-      api.update_contents(branch, { path => old_contents }, 'message')
+      api.update_contents(branch, [{ path: path, contents: old_contents }], 'message')
     end
 
     it "creates the file if it doesn't already exist" do
@@ -81,7 +81,7 @@ describe GithubApi do
           .with(repo, path, 'message', '0' * 40, new_contents, { branch: branch })
       )
 
-      api.update_contents(branch, { path => new_contents }, 'message')
+      api.update_contents(branch, [{ path: path, contents: new_contents }], 'message')
     end
   end
 
