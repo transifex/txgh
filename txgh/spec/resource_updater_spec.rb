@@ -14,6 +14,7 @@ describe ResourceUpdater do
   let(:ref) { 'heads/master' }
   let(:resource) { tx_config.resource(resource_slug, ref) }
   let(:commit_sha) { '8765309' }
+  let(:file_sha) { 'abc123' }
 
   let(:translations) do
     YAML.load("|
@@ -25,7 +26,7 @@ describe ResourceUpdater do
   end
 
   let(:modified_files) do
-    [{ path: resource.source_file, content: translations, sha: commit_sha }]
+    [{ path: resource.source_file, content: translations, sha: file_sha }]
   end
 
   before(:each) do
@@ -34,6 +35,10 @@ describe ResourceUpdater do
         receive(:download).with(file[:path], ref).and_return(file)
       )
     end
+
+    allow(github_api).to receive(:get_ref).with(ref).and_return(
+      { object: { sha: commit_sha } }
+    )
   end
 
   it 'correctly uploads modified files to transifex' do

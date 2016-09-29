@@ -24,15 +24,20 @@ module Txgh
         upload_whole(tx_resource, file, categories)
       end
 
-      fire_event_for(tx_resource, file)
+      fire_event_for(tx_resource, branch)
     end
 
     private
 
-    def fire_event_for(tx_resource, file)
+    def fire_event_for(tx_resource, branch)
+      ref = repo.api.get_ref(branch)
+
       Txgh.events.publish(
         'transifex.resource.updated', {
-          project: project, repo: repo, resource: tx_resource, sha: file[:sha]
+          project: project,
+          repo: repo,
+          resource: tx_resource,
+          sha: ref[:object][:sha]
         }
       )
     end
