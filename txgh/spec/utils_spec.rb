@@ -98,4 +98,48 @@ describe Utils do
       expect(Utils.booleanize(false)).to eq(false)
     end
   end
+
+  describe '.deep_symbolize_keys' do
+    it 'symbolizes keys in a hash with depth 1' do
+      hash = { 'abc' => 'def', ghi: 'jkl' }
+      expect(Utils.deep_symbolize_keys(hash)).to eq(
+        { abc: 'def', ghi: 'jkl' }
+      )
+    end
+
+    it 'symbolizes keys in a hash with depth 2' do
+      hash = { 'abc' => { 'def' => 'ghi' } }
+      expect(Utils.deep_symbolize_keys(hash)).to eq(
+        { abc: { def: 'ghi' } }
+      )
+    end
+
+    it 'symbolizes keys in a hash with depth 3' do
+      hash = { 'abc' => { 'def' => { 'ghi' => 'jkl' }, 'mno' => 'pqr' } }
+      expect(Utils.deep_symbolize_keys(hash)).to eq(
+        { abc: { def: { ghi: 'jkl' }, mno: 'pqr' } }
+      )
+    end
+
+    it 'symbolizes hash keys in an array' do
+      array = [{ 'def' => 'ghi' }]
+      expect(Utils.deep_symbolize_keys(array)).to eq(
+        [{ def: 'ghi' }]
+      )
+    end
+
+    it 'symbolizes keys nested inside arrays' do
+      hash = { 'abc' => [{ 'def' => 'ghi' }] }
+      expect(Utils.deep_symbolize_keys(hash)).to eq(
+        { abc: [{ def: 'ghi' }] }
+      )
+    end
+
+    it "doesn't modify objects that aren't hashes" do
+      hash = { 'abc' => Set.new(%w(a b c)) }
+      expect(Utils.deep_symbolize_keys(hash)).to eq(
+        { abc: hash['abc'] }
+      )
+    end
+  end
 end
