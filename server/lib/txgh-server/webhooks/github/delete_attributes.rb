@@ -3,7 +3,7 @@ module TxghServer
     module Github
       class DeleteAttributes
         ATTRIBUTES = [
-          :repo_name, :ref, :ref_type
+          :event, :repo_name, :ref, :ref_type
         ]
 
         class << self
@@ -13,6 +13,10 @@ module TxghServer
                 ret[attr] = public_send(attr, payload)
               end
             )
+          end
+
+          def event(payload)
+            'delete'
           end
 
           def repo_name(payload)

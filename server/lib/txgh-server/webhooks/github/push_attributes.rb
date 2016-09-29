@@ -1,11 +1,9 @@
-require 'set'
-
 module TxghServer
   module Webhooks
     module Github
       class PushAttributes
         ATTRIBUTES = [
-          :repo_name, :ref, :before, :after,
+          :event, :repo_name, :ref, :before, :after,
           :added_files, :modified_files, :author
         ]
 
@@ -16,6 +14,10 @@ module TxghServer
                 ret[attr] = public_send(attr, payload)
               end
             )
+          end
+
+          def event(payload)
+            'push'
           end
 
           def repo_name(payload)
