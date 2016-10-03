@@ -19,7 +19,7 @@ module Txgh
 
         if translations
           repo.api.update_contents(
-            branch, { path: file_name, contents: translations }, message
+            branch, [{ path: file_name, contents: translations }], message
           )
 
           fire_event_for(tx_resource, branch, language)
