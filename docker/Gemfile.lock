@@ -54,7 +54,7 @@ GEM
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
     tilt (2.0.5)
-    txgh (6.0.4)
+    txgh (6.0.5)
       abroad (~> 4.1)
       faraday (~> 0.9)
       faraday_middleware (~> 0.10)
