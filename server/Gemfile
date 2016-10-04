@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'txgh', path: '../txgh'
-
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
