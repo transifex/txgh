@@ -1,4 +1,6 @@
 require 'set'
+require 'octokit'
+require 'txgh'
 
 module TxghServer
   module Webhooks
@@ -23,12 +25,12 @@ module TxghServer
           if should_process?
             logger.info('found branch in github request')
 
-            updater = Txgh::ResourceUpdater.new(project, repo, logger)
-            categories = { 'author' => attributes.author }
-
-            added_and_modified_resources.each do |resource|
-              updater.update_resource(resource, categories)
+            pusher.push_resources(added_and_modified_resources) do |tx_resource|
+              # block should return categories for the passed-in resource
+              { 'author' => attributes.author }
             end
+
+            update_github_status
           end
 
           respond_with(200, true)
@@ -36,9 +38,21 @@ module TxghServer
 
         private
 
+        def update_github_status
+          Txgh::GithubStatus.update(project, repo, branch)
+        rescue Octokit::UnprocessableEntity
+          # raised because we've tried to create too many statuses for the commit
+        rescue Txgh::TransifexNotFoundError
+          # raised if transifex resource can't be found
+        end
+
+        def pusher
+          @pusher ||= Txgh::Pusher.new(project, repo, branch)
+        end
+
         # finds the resources that were updated in each commit
         def added_and_modified_resources
-          attributes.files.each_with_object(Set.new) do |file, ret|
+          @amr ||= attributes.files.each_with_object(Set.new) do |file, ret|
             logger.info("processing added/modified file: #{file}")
 
             if tx_resources.include?(file)

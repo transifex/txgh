@@ -50,6 +50,10 @@ describe HookHandler do
       )
     )
 
+    expect(Txgh::GithubStatus).to(
+      receive(:update).with(transifex_project, github_repo, ref)
+    )
+
     response = handler.execute
     expect(response.status).to eq(200)
     expect(response.body).to eq(true)
@@ -97,6 +101,10 @@ describe HookHandler do
         )
       )
 
+      expect(Txgh::GithubStatus).to(
+        receive(:update).with(transifex_project, github_repo, ref)
+      )
+
       response = handler.execute
       expect(response.status).to eq(200)
       expect(response.body).to eq(true)
@@ -113,6 +121,10 @@ describe HookHandler do
           [{ path: "translations/#{language}/sample.yml", contents: translations }],
           "Updating #{language} translations in #{file_name}"
         )
+      )
+
+      expect(Txgh::GithubStatus).to(
+        receive(:update).with(transifex_project, github_repo, branch)
       )
 
       response = handler.execute

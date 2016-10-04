@@ -48,6 +48,10 @@ describe PushHandler do
       )
     end
 
+    expect(Txgh::GithubStatus).to(
+      receive(:update).with(transifex_project, github_repo, ref)
+    )
+
     response = handler.execute
     expect(response.status).to eq(200)
     expect(response.body).to eq(true)

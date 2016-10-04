@@ -9,41 +9,41 @@ module Txgh
     end
 
     def pull
-      tx_config.resources.each do |tx_resource|
+      existing_resources = project.api.get_resources(project.name)
+      slugs = existing_resources.map { |resource| resource['slug'] }
+
+      resources = tx_config.resources.each_with_object([]) do |tx_resource, ret|
         if repo.process_all_branches?
           tx_resource = Txgh::TxBranchResource.new(tx_resource, branch)
         end
 
-        pull_resource(tx_resource)
+        next unless slugs.include?(tx_resource.resource_slug)
+        ret << tx_resource
+      end
+
+      pull_resources(resources, &block)
+    end
+
+    def pull_resources(tx_resources, languages = nil)
+      tx_resources.each do |tx_resource|
+        pull_resource(tx_resource, languages)
       end
     end
 
-    def pull_resource(tx_resource)
-      each_language do |language_code|
-        committer.commit_resource(tx_resource, branch, language_code)
+    def pull_resource(tx_resource, languages = nil)
+      (languages || project.languages).each do |language|
+        committer.commit_resource(tx_resource, branch, language)
       end
     end
 
-    def pull_slug(resource_slug)
-      pull_resource(tx_config.resource(resource_slug, branch))
+    def pull_slug(resource_slug, languages = nil)
+      pull_resource(tx_config.resource(resource_slug, branch), languages)
     end
 
     private
 
     def committer
       @committer ||= Txgh::ResourceCommitter.new(project, repo)
-    end
-
-    def each_language
-      return to_enum(__method__) unless block_given?
-
-      languages.each do |language|
-        language_code = language['language_code']
-
-        if project.supported_language?(language_code)
-          yield language_code
-        end
-      end
     end
 
     def languages

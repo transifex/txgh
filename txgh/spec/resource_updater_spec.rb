@@ -67,7 +67,7 @@ describe ResourceUpdater do
     options = event[:options]
     expect(options[:project].name).to eq(project_name)
     expect(options[:repo].name).to eq(repo_name)
-    expect(options[:sha]).to eq(commit_sha)
+    expect(options[:branch]).to eq(ref)
     expect(options[:resource].original_resource_slug).to eq(resource_slug)
   end
 

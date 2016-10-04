@@ -52,7 +52,7 @@ describe ResourceCommitter do
         options = event[:options]
         expect(options[:project].name).to eq(project_name)
         expect(options[:repo].name).to eq(repo_name)
-        expect(options[:sha]).to eq('abc123shashasha')
+        expect(options[:branch]).to eq(branch)
         expect(options[:resource].original_resource_slug).to eq(resource_slug)
         expect(options[:language]).to eq(language)
       end

@@ -21,7 +21,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Wed, 28 Sep 2016 18:33:49 GMT
+      - Tue, 04 Oct 2016 21:43:57 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -34,9 +34,9 @@ http_interactions:
       Content-Language:
       - en
       Expires:
-      - Wed, 28 Sep 2016 18:33:49 GMT
+      - Tue, 04 Oct 2016 21:43:57 GMT
       Last-Modified:
-      - Wed, 28 Sep 2016 18:33:49 GMT
+      - Tue, 04 Oct 2016 21:43:57 GMT
       Cache-Control:
       - max-age=0
       X-Frame-Options:
@@ -61,7 +61,7 @@ http_interactions:
         \\\"Eight\\\"\\nmsgstr \\\"\\\"\\n\\nmsgid \\\"Nine\\\"\\nmsgstr \\\"\\\"\\n\\nmsgid
         \\\"Ten\\\"\\nmsgstr \\\"\\\"\\n\", \n    \"mimetype\": \"text/x-po\"\n}"
     http_version: 
-  recorded_at: Wed, 28 Sep 2016 18:33:49 GMT
+  recorded_at: Tue, 04 Oct 2016 21:43:57 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/contents/translations/el_GR/sample.po?ref=master
@@ -87,7 +87,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Wed, 28 Sep 2016 18:33:50 GMT
+      - Tue, 04 Oct 2016 21:43:57 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -97,9 +97,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4997'
+      - '4994'
       X-Ratelimit-Reset:
-      - '1475091178'
+      - '1475620950'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
@@ -131,14 +131,76 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 7f48e2f7761567e923121f17538d7a6d
+      - 075bb2f6b7031ca3c0e69edb17939fae
       X-Github-Request-Id:
-      - 04358C36:65B4:C9CF06F:57EC0D0D
+      - 04358C36:681B:440C7C9:57F4229D
     body:
       encoding: UTF-8
       string: '{"name":"sample.po","path":"translations/el_GR/sample.po","sha":"540a3d944ac19f573e756de687c8c4f3f9847b53","size":911,"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/contents/translations/el_GR/sample.po?ref=master","html_url":"https://github.com/txgh-bot/txgh-test-resources/blob/master/translations/el_GR/sample.po","git_url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/540a3d944ac19f573e756de687c8c4f3f9847b53","download_url":"https://raw.githubusercontent.com/txgh-bot/txgh-test-resources/master/translations/el_GR/sample.po","type":"file","content":"IyBUcmFuc2xhdGlvbiBmaWxlIGZvciBUcmFuc2lmZXguCiMgQ29weXJpZ2h0\nIChDKSAyMDA3LTIwMTAgSW5kaWZleCBMdGQuCiMgVGhpcyBmaWxlIGlzIGRp\nc3RyaWJ1dGVkIHVuZGVyIHRoZSBzYW1lIGxpY2Vuc2UgYXMgdGhlIFRyYW5z\naWZleCBwYWNrYWdlLgojIAojIFRyYW5zbGF0b3JzOgojIFRyYW5zbGF0b3Jz\nOgptc2dpZCAiIgptc2dzdHIgIiIKIlByb2plY3QtSWQtVmVyc2lvbjogdGVz\ndC1wcm9qZWN0XG4iCiJSZXBvcnQtTXNnaWQtQnVncy1UbzogXG4iCiJQT1Qt\nQ3JlYXRpb24tRGF0ZTogMjAxNS0wMi0xNyAyMDoxMCswMDAwXG4iCiJQTy1S\nZXZpc2lvbi1EYXRlOiAyMDE2LTAxLTE5IDE5OjA4KzAwMDBcbiIKIkxhc3Qt\nVHJhbnNsYXRvcjogSWxpYXMtRGltaXRyaW9zIFZyYWNobmlzXG4iCiJMYW5n\ndWFnZS1UZWFtOiBHcmVlayAoR3JlZWNlKSAoaHR0cDovL3d3dy50cmFuc2lm\nZXguY29tL3R4Z2gtdGVzdC90ZXN0LXByb2plY3QtODgvbGFuZ3VhZ2UvZWxf\nR1IvKVxuIgoiTUlNRS1WZXJzaW9uOiAxLjBcbiIKIkNvbnRlbnQtVHlwZTog\ndGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOFxuIgoiQ29udGVudC1UcmFuc2Zl\nci1FbmNvZGluZzogOGJpdFxuIgoiTGFuZ3VhZ2U6IGVsX0dSXG4iCiJQbHVy\nYWwtRm9ybXM6IG5wbHVyYWxzPTI7IHBsdXJhbD0obiAhPSAxKTtcbiIKCm1z\nZ2lkICJPbmUiCm1zZ3N0ciAiIgoKbXNnaWQgIlR3byIKbXNnc3RyICIiCgpt\nc2dpZCAiVGhyZWUiCm1zZ3N0ciAiIgoKbXNnaWQgIkZvdXIiCm1zZ3N0ciAi\nIgoKbXNnaWQgIkZpdmUiCm1zZ3N0ciAiIgoKbXNnaWQgIlNpeCIKbXNnc3Ry\nICIiCgptc2dpZCAiU2V2ZW4iCm1zZ3N0ciAiIgoKbXNnaWQgIkVpZ2h0Igpt\nc2dzdHIgIiIKCm1zZ2lkICJOaW5lIgptc2dzdHIgIiIKCm1zZ2lkICJUZW4i\nCm1zZ3N0ciAiIgo=\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/txgh-bot/txgh-test-resources/contents/translations/el_GR/sample.po?ref=master","git":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/blobs/540a3d944ac19f573e756de687c8c4f3f9847b53","html":"https://github.com/txgh-bot/txgh-test-resources/blob/master/translations/el_GR/sample.po"}}'
     http_version: 
-  recorded_at: Wed, 28 Sep 2016 18:33:50 GMT
+  recorded_at: Tue, 04 Oct 2016 21:43:57 GMT
+- request:
+    method: get
+    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resources/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 04 Oct 2016 21:43:58 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Content-Language:
+      - en
+      Expires:
+      - Tue, 04 Oct 2016 21:43:58 GMT
+      Last-Modified:
+      - Tue, 04 Oct 2016 21:43:58 GMT
+      Cache-Control:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: "[\n    {\n        \"source_language_code\": \"en\", \n        \"name\":
+        \"sample.po\", \n        \"i18n_type\": \"PO\", \n        \"priority\": \"1\",
+        \n        \"slug\": \"samplepo-heads_master\", \n        \"categories\": [\n
+        \           \"\"\n        ]\n    }, \n    {\n        \"source_language_code\":
+        \"en\", \n        \"name\": \"sample.po\", \n        \"i18n_type\": \"PO\",
+        \n        \"priority\": \"0\", \n        \"slug\": \"samplepo\", \n        \"categories\":
+        [\n            \"branch:refs/tags/L10N\", \n            \"author:Txgh Bot\"\n
+        \       ]\n    }, \n    {\n        \"source_language_code\": \"en\", \n        \"name\":
+        \"test.yml\", \n        \"i18n_type\": \"YML\", \n        \"priority\": \"1\",
+        \n        \"slug\": \"testyml-heads_change_some_shizz\", \n        \"categories\":
+        [\n            \"author:Cameron_Dutro branch:heads/change_some_shizz\"\n        ]\n
+        \   }, \n    {\n        \"source_language_code\": \"en\", \n        \"name\":
+        \"test.yml\", \n        \"i18n_type\": \"YML\", \n        \"priority\": \"0\",
+        \n        \"slug\": \"testyml-heads_master\", \n        \"categories\": [\n
+        \           \"branch:heads/master\"\n        ]\n    }\n]"
+    http_version: 
+  recorded_at: Tue, 04 Oct 2016 21:43:58 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master
@@ -164,7 +226,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Wed, 28 Sep 2016 18:33:50 GMT
+      - Tue, 04 Oct 2016 21:43:58 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -174,9 +236,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4996'
+      - '4993'
       X-Ratelimit-Reset:
-      - '1475091178'
+      - '1475620950'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
@@ -210,12 +272,152 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Served-By:
-      - 065b43cd9674091fec48a221b420fbb3
+      - 76d9828c7e4f1d910f7ba069e90ce976
       X-Github-Request-Id:
-      - 04358C36:65B4:C9CF0BE:57EC0D0E
+      - 04358C36:681A:21A9497:57F4229E
     body:
       encoding: UTF-8
       string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"f3edb21f027b70974750649ba29b0090e410ecde","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/f3edb21f027b70974750649ba29b0090e410ecde"}}'
     http_version: 
-  recorded_at: Wed, 28 Sep 2016 18:33:50 GMT
+  recorded_at: Tue, 04 Oct 2016 21:43:58 GMT
+- request:
+    method: get
+    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resource/samplepo/stats/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 04 Oct 2016 21:43:59 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Content-Language:
+      - en
+      Expires:
+      - Tue, 04 Oct 2016 21:43:59 GMT
+      Last-Modified:
+      - Tue, 04 Oct 2016 21:43:59 GMT
+      Cache-Control:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: "{\n    \"el_GR\": {\n        \"reviewed_percentage\": \"0%\", \n        \"completed\":
+        \"0%\", \n        \"untranslated_words\": 10, \n        \"last_commiter\":
+        \"\", \n        \"reviewed\": 0, \n        \"translated_entities\": 0, \n
+        \       \"translated_words\": 0, \n        \"last_update\": \"2016-01-19 19:08:25\",
+        \n        \"untranslated_entities\": 10\n    }, \n    \"ru\": {\n        \"reviewed_percentage\":
+        \"0%\", \n        \"completed\": \"0%\", \n        \"untranslated_words\":
+        10, \n        \"last_commiter\": \"txgh.bot\", \n        \"reviewed\": 0,
+        \n        \"translated_entities\": 0, \n        \"translated_words\": 0, \n
+        \       \"last_update\": \"2016-04-01 05:36:37\", \n        \"untranslated_entities\":
+        10\n    }, \n    \"en\": {\n        \"reviewed_percentage\": \"0%\", \n        \"completed\":
+        \"100%\", \n        \"untranslated_words\": 0, \n        \"last_commiter\":
+        \"txgh.bot\", \n        \"reviewed\": 0, \n        \"translated_entities\":
+        10, \n        \"translated_words\": 10, \n        \"last_update\": \"2016-01-19
+        19:08:25\", \n        \"untranslated_entities\": 0\n    }\n}"
+    http_version: 
+  recorded_at: Tue, 04 Oct 2016 21:43:59 GMT
+- request:
+    method: post
+    uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/statuses/f3edb21f027b70974750649ba29b0090e410ecde
+    body:
+      encoding: UTF-8
+      string: '{"context":"continuous-localization/txgh","target_url":"https://www.transifex.com//test-project-88/content","description":"10/30
+        translations complete.","state":"pending"}'
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.3.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token <GITHUB_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 04 Oct 2016 21:43:59 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '1259'
+      Status:
+      - 201 Created
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4992'
+      X-Ratelimit-Reset:
+      - '1475620950'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - '"d1840f82e12475b13c29e798d6b1e604"'
+      X-Oauth-Scopes:
+      - public_repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      Location:
+      - https://api.github.com/repos/txgh-bot/txgh-test-resources/statuses/f3edb21f027b70974750649ba29b0090e410ecde
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Served-By:
+      - 7efb7ae49588ef0269c6a1c1bd3721d9
+      X-Github-Request-Id:
+      - 04358C36:6823:3A0BE34:57F4229F
+    body:
+      encoding: UTF-8
+      string: '{"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/statuses/f3edb21f027b70974750649ba29b0090e410ecde","id":785754437,"state":"pending","description":"10/30
+        translations complete.","target_url":"https://www.transifex.com//test-project-88/content","context":"continuous-localization/txgh","created_at":"2016-10-04T21:43:59Z","updated_at":"2016-10-04T21:43:59Z","creator":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false}}'
+    http_version: 
+  recorded_at: Tue, 04 Oct 2016 21:43:59 GMT
 recorded_with: VCR 3.0.3

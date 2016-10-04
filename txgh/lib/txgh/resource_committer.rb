@@ -12,34 +12,26 @@ module Txgh
 
     def commit_resource(tx_resource, branch, language)
       return if prevent_commit_on?(branch)
+      return if language == tx_resource.source_lang
 
-      unless language == tx_resource.source_lang
-        file_name, translations = download(tx_resource, branch, language)
-        message = commit_message_for(language, file_name)
+      file_name, translations = download(tx_resource, branch, language)
+      message = commit_message_for(language, file_name)
 
-        if translations
-          repo.api.update_contents(
-            branch, [{ path: file_name, contents: translations }], message
-          )
+      return unless translations
 
-          fire_event_for(tx_resource, branch, language)
-        end
-      end
-    end
-
-    private
-
-    def fire_event_for(tx_resource, branch, language)
-      head = repo.api.get_ref(branch)
-      sha = head[:object][:sha]
+      repo.api.update_contents(
+        branch, [{ path: file_name, contents: translations }], message
+      )
 
       Txgh.events.publish(
         'github.resource.committed', {
-          project: project, repo: repo, resource: tx_resource, sha: sha,
-          language: language
+          project: project, repo: repo, resource: tx_resource,
+          language: language, branch: branch
         }
       )
     end
+
+    private
 
     def download(tx_resource, branch, language)
       downloader = ResourceDownloader.new(

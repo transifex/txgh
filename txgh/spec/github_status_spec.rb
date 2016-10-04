@@ -7,8 +7,9 @@ describe GithubStatus do
   include StandardTxghSetup
 
   describe '#update' do
-    let(:status) { GithubStatus.new(transifex_project, github_repo, resource) }
+    let(:status) { GithubStatus.new(transifex_project, github_repo, branch) }
     let(:resource) { tx_config.resource(resource_slug) }
+    let(:branch) { 'heads/master' }
     let(:sha) { 'abc123shashasha' }
 
     let(:stats) do
@@ -22,6 +23,14 @@ describe GithubStatus do
 
     before(:each) do
       allow(transifex_api).to receive(:get_stats).and_return(stats)
+
+      allow(transifex_api).to receive(:get_resources).and_return(
+        [{ 'slug' => resource.resource_slug }]
+      )
+
+      allow(github_api).to receive(:get_ref).and_return(
+        object: { sha: sha }
+      )
     end
 
     context 'with all resources at 100%' do
@@ -32,11 +41,11 @@ describe GithubStatus do
           expect(options[:description]).to eq('Translations complete!')
           expect(options[:context]).to eq('continuous-localization/txgh')
           expect(options[:target_url]).to eq(
-            "https://www.transifex.com/#{organization}/#{project_name}/#{resource_slug}/"
+            "https://www.transifex.com/#{organization}/#{project_name}/content"
           )
         end
 
-        status.update(sha)
+        status.update
       end
     end
 
@@ -60,7 +69,7 @@ describe GithubStatus do
           expect(options[:description]).to eq('15/20 translations complete.')
         end
 
-        status.update(sha)
+        status.update
       end
     end
   end

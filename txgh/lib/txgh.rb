@@ -45,18 +45,6 @@ module Txgh
       @events ||= Events.new
     end
 
-    def update_status_callback(options)
-      project = options.fetch(:project)
-      repo = options.fetch(:repo)
-      resource = options.fetch(:resource)
-
-      GithubStatus.new(project, repo, resource).update(options.fetch(:sha))
-    rescue Octokit::UnprocessableEntity
-      # raised because we've tried to create too many statuses for the commit
-    rescue Txgh::TransifexNotFoundError
-      # raised if transifex resource can't be found
-    end
-
     def env
       ENV.fetch('TXGH_ENV', DEFAULT_ENV)
     end
@@ -70,12 +58,4 @@ module Txgh
   # default set of base config providers
   key_manager.register_provider(providers::FileProvider, YAML)
   key_manager.register_provider(providers::RawProvider,  YAML)
-
-  events.subscribe('transifex.resource.updated') do |options|
-    update_status_callback(options)
-  end
-
-  events.subscribe('github.resource.committed') do |options|
-    update_status_callback(options)
-  end
 end

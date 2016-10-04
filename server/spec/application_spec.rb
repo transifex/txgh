@@ -287,6 +287,8 @@ describe TxghServer::TriggerEndpoints do
         )
       end
 
+      expect(Txgh::GithubStatus).to receive(:update)
+
       patch '/push', params
       expect(last_response).to be_ok
     end
@@ -312,16 +314,15 @@ describe TxghServer::TriggerEndpoints do
 
     it 'updates translations (in all locales) in the expected repo' do
       committer = double(:committer)
-      languages = [{ 'language_code' => 'pt' }, { 'language_code' => 'ja' }]
-      project_config['languages'] = %w(pt ja)
+      languages = %w(pt ja)
+      project_config['languages'] = languages
       expect(Txgh::ResourceCommitter).to receive(:new).and_return(committer)
       expect(Txgh::TransifexApi).to receive(:new).and_return(transifex_api)
-      expect(transifex_api).to receive(:get_languages).and_return(languages)
 
       languages.each do |language|
         expect(committer).to receive(:commit_resource) do |resource, branch, lang|
           expect(branch).to eq(branch)
-          expect(lang).to eq(language['language_code'])
+          expect(lang).to eq(language)
           expect(resource.branch).to eq(branch)
           expect(resource.project_slug).to eq(project_name)
           expect(resource.resource_slug).to(
@@ -329,6 +330,8 @@ describe TxghServer::TriggerEndpoints do
           )
         end
       end
+
+      expect(Txgh::GithubStatus).to receive(:update)
 
       patch '/pull', params
       expect(last_response).to be_ok
