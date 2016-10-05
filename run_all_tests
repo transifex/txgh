@@ -1,0 +1,35 @@
+#! /bin/bash
+
+cd ./txgh
+echo "Bundling inside ./txgh"
+bundle > /dev/null
+
+if [ $? == 0 ]; then
+  echo 'Running txgh tests'
+  bundle exec rspec
+else
+  echo 'Txgh bundle failed.'
+fi
+
+cd ../server
+echo "Bundling inside ./server"
+bundle > /dev/null
+
+if [ $? == 0 ]; then
+  echo 'Running server tests'
+  bundle exec rake spec:full
+else
+  echo 'Server bundle failed.'
+fi
+
+cd ../queue
+echo "Bundling inside ./queue"
+bundle > /dev/null
+
+if [ $? == 0 ]; then
+  echo 'Running queue tests'
+  bundle exec rspec
+else
+  echo 'Queue bundle failed.'
+fi
+

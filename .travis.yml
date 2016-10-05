@@ -10,15 +10,27 @@ server: &server
   script: cd server && bundle exec rake spec:full && cd ..
   env: NAME=txgh-server
 
+queue: &queue
+  before_install: gem install bundler -v 1.12.5
+  install: cd queue; bundle install --no-deployment --jobs 3 --retry 3; cd ..
+  script: cd queue; bundle exec rspec; cd ..
+  env: NAME=txgh-queue
+
 sudo: false
 language: ruby
 matrix:
   include:
-    - rvm: 2.1.6
+    - rvm: 2.1.9
       <<: *txgh
-    - rvm: 2.1.6
+    - rvm: 2.1.9
       <<: *server
+    - rvm: 2.1.9
+      <<: *queue
+
     - rvm: 2.2.5
       <<: *txgh
     - rvm: 2.2.5
       <<: *server
+    - rvm: 2.2.5
+      <<: *queue
+

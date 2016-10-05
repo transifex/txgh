@@ -1,0 +1,7 @@
+Gemfile.lock
+.rspec
+.rvmrc
+.byebug_history
+.ruby-version
+pkg/
+.DS_Store
