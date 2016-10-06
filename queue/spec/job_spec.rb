@@ -19,15 +19,22 @@ describe Job, auto_configure: true do
       server_response = TxghServer::Response.new(200, 'Ok')
       expect(handler).to receive(:execute).and_return(server_response)
       result = job.process(payload)
-      expect(result.status).to eq(200)
+      expect(result.status).to eq(Status.ok)
       expect(result.response).to eq(server_response)
+    end
+
+    it 'responds appropriately when an error is raised' do
+      expect(handler).to receive(:execute).and_raise(StandardError)
+      result = job.process(payload)
+      expect(result.status).to eq(Status.fail)
+      expect(result.error).to be_a(StandardError)
     end
 
     it 'responds appropriately when an error response is returned' do
       server_response = TxghServer::Response.new(404, 'Not found')
       expect(handler).to receive(:execute).and_return(server_response)
       result = job.process(payload)
-      expect(result.status).to eq(404)
+      expect(result.status).to eq(Status.fail)
       expect(result.response).to eq(server_response)
     end
   end
@@ -93,7 +100,7 @@ describe Job, auto_configure: true do
     describe '#process' do
       it 'responds with fail' do
         result = job.process(payload)
-        expect(result.status).to eq(400)
+        expect(result.status).to eq(Status.fail)
         expect(result.response.status).to eq(400)
         expect(result.response.body).to eq([error: 'Unexpected event type'])
       end

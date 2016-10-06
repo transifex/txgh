@@ -13,20 +13,20 @@ module TxghQueue
     end
 
     def process(payload)
-      config = config_from(payload)
-      project = config.transifex_project
-      repo = config.github_repo
+      Supervisor.supervise do
+        config = config_from(payload)
+        project = config.transifex_project
+        repo = config.github_repo
 
-      response = case payload.fetch('event')
-        when 'push'
-          handle_push(project, repo, payload)
-        when 'delete'
-          handle_delete(project, repo, payload)
-        else
-          handle_unexpected
+        case payload.fetch('event')
+          when 'push'
+            handle_push(project, repo, payload)
+          when 'delete'
+            handle_delete(project, repo, payload)
+          else
+            handle_unexpected
+        end
       end
-
-      Result.new(response.status, response)
     end
 
     private
