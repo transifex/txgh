@@ -72,7 +72,7 @@ GEM
     tilt (2.0.5)
     timers (4.1.1)
       hitimes
-    txgh (6.1.0)
+    txgh (6.1.1)
       abroad (~> 4.1)
       celluloid
       faraday (~> 0.9)
