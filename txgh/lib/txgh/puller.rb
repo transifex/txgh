@@ -21,7 +21,7 @@ module Txgh
         ret << tx_resource
       end
 
-      pull_resources(resources, &block)
+      pull_resources(resources)
     end
 
     def pull_resources(tx_resources, languages = nil)
