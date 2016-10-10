@@ -45,7 +45,12 @@ module TxghServer
           end
 
           def author(payload)
-            payload.fetch('head_commit').fetch('committer').fetch('name')
+            if head_commit = payload.fetch('head_commit')
+              head_commit.fetch('committer').fetch('name')
+            else
+              # fall back to pusher if no head commit
+              payload.fetch('pusher').fetch('name')
+            end
           end
 
           def extract_files(payload, state)

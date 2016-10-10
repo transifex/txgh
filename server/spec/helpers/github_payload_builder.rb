@@ -22,7 +22,11 @@ class GithubPayload
     @result.to_json
   end
 
-  protected
+  def merge!(hash)
+    @result.merge!(hash)
+  end
+
+  private
 
   def digits
     @@digits ||= ('a'..'f').to_a + ('0'..'9').to_a
@@ -92,6 +96,7 @@ class GithubPushPayload < GithubPayload
       deleted: false,
       forced: true,
       base_ref: nil,
+      head_commit: nil,
       compare: "https://github.com/#{@repo}/commit/#{@after[0..12]}",
       commits: [],
       repository: {
