@@ -1,3 +1,6 @@
+== 6.1.2
+* Upgrade txgh-server to v2.1.1.
+
 == 6.1.1
 * Upgrade to txgh v6.1.1.
 
