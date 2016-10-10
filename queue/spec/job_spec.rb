@@ -44,6 +44,7 @@ describe Job, auto_configure: true do
       {
         'repo_name' => repo_name,
         'event' => 'push',
+        'txgh_event' => 'github.push',
         'ref' => 'heads/master',
         'before' => 'abc123',
         'after' => 'def456',
@@ -71,6 +72,7 @@ describe Job, auto_configure: true do
       {
         'repo_name' => repo_name,
         'event' => 'delete',
+        'txgh_event' => 'github.delete',
         'ref' => 'heads/master',
         'ref_type' => 'branch'
       }
@@ -93,7 +95,7 @@ describe Job, auto_configure: true do
     let(:payload) do
       {
         'repo_name' => repo_name,
-        'event' => 'foobarbazboo'
+        'txgh_event' => 'foobarbazboo'
       }
     end
 

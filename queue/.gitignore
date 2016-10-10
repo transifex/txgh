@@ -27,3 +27,4 @@ config/txgh_config.rb
 tester.rb
 pkg/
 .DS_Store
+.bundle/

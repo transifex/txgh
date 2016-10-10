@@ -3,7 +3,8 @@ require 'txgh-server'
 
 module TxghQueue
   class Job
-    include TxghServer::Webhooks::Github
+    Github = TxghServer::Webhooks::Github
+    Transifex = TxghServer::Webhooks::Transifex
     include TxghServer::ResponseHelpers
 
     attr_reader :logger
@@ -18,11 +19,13 @@ module TxghQueue
         project = config.transifex_project
         repo = config.github_repo
 
-        case payload.fetch('event')
-          when 'push'
-            handle_push(project, repo, payload)
-          when 'delete'
-            handle_delete(project, repo, payload)
+        case payload.fetch('txgh_event')
+          when 'github.push'
+            handle_github_push(project, repo, payload)
+          when 'github.delete'
+            handle_github_delete(project, repo, payload)
+          when 'transifex.hook'
+            handle_transifex_hook(project, repo, payload)
           else
             handle_unexpected
         end
@@ -35,14 +38,26 @@ module TxghQueue
       Txgh::Config::KeyManager.config_from_repo(payload.fetch('repo_name'))
     end
 
-    def handle_push(project, repo, payload)
-      attributes = PushAttributes.new(payload)
-      PushHandler.new(project, repo, logger, attributes).execute
+    def handle_github_push(project, repo, payload)
+      attributes = Github::PushAttributes.new(payload)
+      Github::PushHandler.new(project, repo, logger, attributes).execute
     end
 
-    def handle_delete(project, repo, payload)
-      attributes = DeleteAttributes.new(payload)
-      DeleteHandler.new(project, repo, logger, attributes).execute
+    def handle_github_delete(project, repo, payload)
+      attributes = Github::DeleteAttributes.new(payload)
+      Github::DeleteHandler.new(project, repo, logger, attributes).execute
+    end
+
+    def handle_transifex_hook(project, repo, payload)
+      handler = Transifex::HookHandler.new(
+        project: project,
+        repo: repo,
+        resource_slug: payload['resource'],
+        language: payload['language'],
+        logger: logger
+      )
+
+      handler.execute
     end
 
     def handle_unexpected
