@@ -40,12 +40,14 @@ module TxghQueue
 
     def handle_github_push(project, repo, payload)
       attributes = Github::PushAttributes.new(payload)
-      Github::PushHandler.new(project, repo, logger, attributes).execute
+      handler = Github::PushHandler.new(project, repo, logger, attributes)
+      execute(handler)
     end
 
     def handle_github_delete(project, repo, payload)
       attributes = Github::DeleteAttributes.new(payload)
-      Github::DeleteHandler.new(project, repo, logger, attributes).execute
+      handler = Github::DeleteHandler.new(project, repo, logger, attributes)
+      execute(handler)
     end
 
     def handle_transifex_hook(project, repo, payload)
@@ -57,7 +59,15 @@ module TxghQueue
         logger: logger
       )
 
-      handler.execute
+      execute(handler)
+    end
+
+    def execute(handler)
+      if TxghQueue::Config.processing_enabled?
+        handler.execute
+      else
+        respond_with(200, 'Ok')
+      end
     end
 
     def handle_unexpected

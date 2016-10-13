@@ -2,13 +2,21 @@ require 'yaml'
 
 module TxghQueue
   class Config
+    DEFAULT_BACKEND = 'null'
+
     class << self
       def backend
-        TxghQueue::Backends.get(raw_config[:backend])
+        TxghQueue::Backends.get(
+          raw_config.fetch(:backend, DEFAULT_BACKEND)
+        )
+      end
+
+      def processing_enabled?
+        raw_config.fetch(:processing_enabled, true)
       end
 
       def options
-        raw_config[:options]
+        raw_config.fetch(:options, {})
       end
 
       def reset!
@@ -19,8 +27,12 @@ module TxghQueue
 
       def raw_config
         @raw_config ||= begin
-          scheme, payload = ENV['TXGH_QUEUE_CONFIG'].split('://')
-          send(:"load_#{scheme}", payload)
+          if ENV['TXGH_QUEUE_CONFIG']
+            scheme, payload = ENV['TXGH_QUEUE_CONFIG'].split('://')
+            send(:"load_#{scheme}", payload)
+          else
+            {}
+          end
         end
       end
 

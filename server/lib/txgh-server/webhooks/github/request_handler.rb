@@ -1,4 +1,5 @@
 require 'json'
+require 'txgh-queue'
 
 module TxghServer
   module Webhooks
@@ -9,6 +10,10 @@ module TxghServer
         class << self
           def handle_request(request, logger)
             new(request, logger).handle_request
+          end
+
+          def enqueue_request(request, logger)
+            new(request, logger).enqueue
           end
         end
 
@@ -21,20 +26,50 @@ module TxghServer
 
         def handle_request
           handle_safely do
-            case request.env['HTTP_X_GITHUB_EVENT']
+            case github_event
               when 'push'
-                handle_push
+                PushHandler.new(project, repo, logger, attributes).execute
               when 'delete'
-                handle_delete
+                DeleteHandler.new(project, repo, logger, attributes).execute
               when 'ping'
-                handle_ping
+                PingHandler.new(logger).execute
               else
-                handle_unexpected
+                respond_with_error(400, 'Unexpected event type')
+            end
+          end
+        end
+
+        def enqueue
+          handle_safely do
+            case github_event
+              when 'push', 'delete'
+                txgh_event = "github.#{github_event}"
+
+                result = TxghQueue::Config.backend
+                  .producer_for(txgh_event, logger)
+                  .enqueue(attributes.to_h.merge(txgh_event: txgh_event))
+
+                respond_with(202, result.to_json)
+              when 'ping'
+                PingHandler.new(logger).execute
+              else
+                respond_with_error(400, "Event '#{github_event}' cannot be enqueued")
             end
           end
         end
 
         private
+
+        def attributes
+          case github_event
+            when 'push'
+              PushAttributes.from_webhook_payload(payload)
+            when 'delete'
+              DeleteAttributes.from_webhook_payload(payload)
+            else
+              BlankAttributes.from_webhook_payload(payload)
+          end
+        end
 
         def handle_safely
           if authentic_request?
@@ -44,24 +79,6 @@ module TxghServer
           end
         rescue => e
           respond_with_error(500, "Internal server error: #{e.message}", e)
-        end
-
-        def handle_push
-          attributes = PushAttributes.from_webhook_payload(payload)
-          PushHandler.new(project, repo, logger, attributes).execute
-        end
-
-        def handle_delete
-          attributes = DeleteAttributes.from_webhook_payload(payload)
-          DeleteHandler.new(project, repo, logger, attributes).execute
-        end
-
-        def handle_ping
-          PingHandler.new(logger).execute
-        end
-
-        def handle_unexpected
-          respond_with_error(400, 'Unexpected event type')
         end
 
         def payload
@@ -74,6 +91,10 @@ module TxghServer
           rescue JSON::ParserError
             {}
           end
+        end
+
+        def github_event
+          request.env['HTTP_X_GITHUB_EVENT']
         end
 
         def github_repo_name

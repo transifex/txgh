@@ -7,5 +7,6 @@ module TxghQueue
   autoload :Supervisor,    'txgh-queue/supervisor'
   autoload :Result,        'txgh-queue/result'
 
-  Backends.register('sqs', TxghQueue::Backends::Sqs)
+  Backends.register('null', TxghQueue::Backends::Null)
+  Backends.register('sqs',  TxghQueue::Backends::Sqs)
 end

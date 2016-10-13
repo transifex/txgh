@@ -105,7 +105,26 @@ describe TxghServer::WebhookEndpoints do
     allow(Txgh::Config::KeyManager).to(
       receive(:config_from_repo).with(repo_name).and_return(config)
     )
+
+    allow(TxghQueue::Config).to(
+      receive(:raw_config).and_return(queue_config)
+    )
   end
+
+  after(:each) do
+    backend.reset!
+  end
+
+  let(:queue_config) do
+    {
+      backend: 'test',
+      options: {
+        queues: %w(test-queue)
+      }
+    }
+  end
+
+  let(:backend) { TxghQueue::Config.backend }
 
   describe '/transifex' do
     def sign_with(body)
@@ -167,6 +186,30 @@ describe TxghServer::WebhookEndpoints do
       expect(JSON.parse(last_response.body)).to eq([
         'error' => 'Internal server error: StandardError'
       ])
+    end
+
+    describe '/enqueue' do
+      let(:producer) { backend.producer_for('transifex.hook') }
+
+      it 'enqueues a new job' do
+        payload = URI.encode_www_form(params.to_a)
+        sign_with payload
+
+        expect { post '/transifex/enqueue', payload }.to(
+          change { producer.enqueued_jobs.size }.from(0).to(1)
+        )
+
+        expect(last_response).to be_accepted
+
+        job = producer.enqueued_jobs.first
+        expect(job[:payload]).to include(
+          project: project_name,
+          resource: resource_slug,
+          language: language,
+          translated: '100',
+          txgh_event: 'transifex.hook'
+        )
+      end
     end
   end
 
@@ -241,6 +284,32 @@ describe TxghServer::WebhookEndpoints do
         expect(JSON.parse(last_response.body)).to eq([
           'error' => 'Internal server error: StandardError'
         ])
+      end
+
+      describe '/enqueue' do
+        let(:producer) { backend.producer_for('github.push') }
+
+        it 'enqueues a new job' do
+          payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+          payload.add_commit
+
+          sign_with payload.to_json
+          header 'X-GitHub-Event', 'push'
+
+          expect { post '/github/enqueue', payload.to_json }.to(
+            change { producer.enqueued_jobs.size }.from(0).to(1)
+          )
+
+          expect(last_response).to be_accepted
+
+          job = producer.enqueued_jobs.first
+          expect(job[:payload]).to include(
+            event: 'push',
+            txgh_event: 'github.push',
+            repo_name: repo_name,
+            ref: "refs/#{ref}"
+          )
+        end
       end
     end
   end

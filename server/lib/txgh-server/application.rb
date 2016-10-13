@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'sinatra/json'
-require 'sinatra/reloader'
 require 'sinatra/streaming'
 
 module TxghServer
@@ -35,10 +34,6 @@ module TxghServer
       set :logging, nil
       logger = Txgh::TxLogger.logger
       set :logger, logger
-    end
-
-    def initialize(app = nil)
-      super(app)
     end
 
     get '/health_check' do
@@ -89,14 +84,6 @@ module TxghServer
       set :logger, logger
     end
 
-    configure :development do
-      register Sinatra::Reloader
-    end
-
-    def initialize(app = nil)
-      super(app)
-    end
-
     post '/transifex' do
       respond_with(
         Transifex::RequestHandler.handle_request(request, settings.logger)
@@ -106,6 +93,18 @@ module TxghServer
     post '/github' do
       respond_with(
         Github::RequestHandler.handle_request(request, settings.logger)
+      )
+    end
+
+    post '/transifex/enqueue' do
+      respond_with(
+        Transifex::RequestHandler.enqueue_request(request, settings.logger)
+      )
+    end
+
+    post '/github/enqueue' do
+      respond_with(
+        Github::RequestHandler.enqueue_request(request, settings.logger)
       )
     end
   end
@@ -119,10 +118,6 @@ module TxghServer
       set :logging, nil
       logger = Txgh::TxLogger.logger
       set :logger, logger
-    end
-
-    configure :development do
-      register Sinatra::Reloader
     end
 
     patch '/push' do

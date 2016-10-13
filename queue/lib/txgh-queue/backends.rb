@@ -1,6 +1,9 @@
 module TxghQueue
   module Backends
-    autoload :Sqs, 'txgh-queue/backends/sqs'
+    autoload :Null, 'txgh-queue/backends/null'
+    autoload :Sqs,  'txgh-queue/backends/sqs'
+
+    class BackendNotConfiguredError < StandardError; end
 
     class << self
       def register(name, klass)

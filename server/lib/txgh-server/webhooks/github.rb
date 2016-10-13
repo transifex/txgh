@@ -1,6 +1,7 @@
 module TxghServer
   module Webhooks
     module Github
+      autoload :BlankAttributes,  'txgh-server/webhooks/github/blank_attributes'
       autoload :DeleteAttributes, 'txgh-server/webhooks/github/delete_attributes'
       autoload :DeleteHandler,    'txgh-server/webhooks/github/delete_handler'
       autoload :Handler,          'txgh-server/webhooks/github/handler'

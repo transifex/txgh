@@ -4,12 +4,16 @@ module TxghServer
   module Webhooks
     module Transifex
       class RequestHandler
-        class << self
+        TXGH_EVENT = 'transifex.hook'
 
+        class << self
           def handle_request(request, logger)
-            new(request, logger).handle(TxghServer::Webhooks::Transifex::HookHandler)
+            new(request, logger).handle_request
           end
 
+          def enqueue_request(request, logger)
+            new(request, logger).enqueue
+          end
         end
 
         include ResponseHelpers
@@ -21,17 +25,27 @@ module TxghServer
           @logger = logger
         end
 
-        def handle(klass)
+        def handle_request
           handle_safely do
-            handler = klass.new(
+            handler = TxghServer::Webhooks::Transifex::HookHandler.new(
               project: config.transifex_project,
               repo: config.github_repo,
-              resource_slug: payload['resource'],
-              language: payload['language'],
+              resource_slug: payload[:resource],
+              language: payload[:language],
               logger: logger
             )
 
             handler.execute
+          end
+        end
+
+        def enqueue
+          handle_safely do
+            result = TxghQueue::Config.backend
+              .producer_for(TXGH_EVENT, logger)
+              .enqueue(payload.merge(txgh_event: TXGH_EVENT))
+
+            respond_with(202, result.to_json)
           end
         end
 
@@ -62,13 +76,16 @@ module TxghServer
         end
 
         def config
-          @config ||= Txgh::Config::KeyManager.config_from_project(payload['project'])
+          @config ||= Txgh::Config::KeyManager.config_from_project(payload[:project])
         end
 
         def payload
           @payload ||= begin
             request.body.rewind
-            Hash[URI.decode_www_form(request.body.read)]
+
+            Txgh::Utils.deep_symbolize_keys(
+              Hash[URI.decode_www_form(request.body.read)]
+            )
           end
         end
 
