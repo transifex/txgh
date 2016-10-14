@@ -1,3 +1,7 @@
+== 6.2.0
+* Upgrade txgh-server to v2.2.0.
+* Add txgh-queue support.
+
 == 6.1.2
 * Upgrade txgh-server to v2.1.1.
 
