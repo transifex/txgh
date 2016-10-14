@@ -1,4 +1,5 @@
 require 'txgh-server'
+require 'txgh-queue'
 
 map '/' do
   use TxghServer::Application
@@ -8,5 +9,6 @@ end
 
 map '/hooks' do
   use TxghServer::WebhookEndpoints
+  use TxghQueue::WebhookEndpoints
   run Sinatra::Base
 end
