@@ -87,7 +87,7 @@ GEM
       json (~> 1.8)
       octokit (~> 4.2)
       parseconfig (~> 1.0)
-    txgh-queue (1.0.0)
+    txgh-queue (1.0.1)
       aws-sdk (~> 2.0)
       sinatra (~> 1.4)
       sinatra-contrib (~> 1.4)
