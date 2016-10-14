@@ -1,3 +1,6 @@
+== 2.2.0
+* A bit of refactoring.
+
 == 2.1.1
 * Fix bug causing .fetch to be called on nil when processing certain Github webhook payloads.
 
