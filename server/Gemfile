@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'txgh-queue', path: '../queue'
-
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'

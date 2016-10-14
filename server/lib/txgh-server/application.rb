@@ -95,18 +95,6 @@ module TxghServer
         Github::RequestHandler.handle_request(request, settings.logger)
       )
     end
-
-    post '/transifex/enqueue' do
-      respond_with(
-        Transifex::RequestHandler.enqueue_request(request, settings.logger)
-      )
-    end
-
-    post '/github/enqueue' do
-      respond_with(
-        Github::RequestHandler.enqueue_request(request, settings.logger)
-      )
-    end
   end
 
   class TriggerEndpoints < Sinatra::Base

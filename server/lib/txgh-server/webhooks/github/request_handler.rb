@@ -1,5 +1,4 @@
 require 'json'
-require 'txgh-queue'
 
 module TxghServer
   module Webhooks
@@ -10,10 +9,6 @@ module TxghServer
         class << self
           def handle_request(request, logger)
             new(request, logger).handle_request
-          end
-
-          def enqueue_request(request, logger)
-            new(request, logger).enqueue
           end
         end
 
@@ -35,25 +30,6 @@ module TxghServer
                 PingHandler.new(logger).execute
               else
                 respond_with_error(400, 'Unexpected event type')
-            end
-          end
-        end
-
-        def enqueue
-          handle_safely do
-            case github_event
-              when 'push', 'delete'
-                txgh_event = "github.#{github_event}"
-
-                result = TxghQueue::Config.backend
-                  .producer_for(txgh_event, logger)
-                  .enqueue(attributes.to_h.merge(txgh_event: txgh_event))
-
-                respond_with(202, result.to_json)
-              when 'ping'
-                PingHandler.new(logger).execute
-              else
-                respond_with_error(400, "Event '#{github_event}' cannot be enqueued")
             end
           end
         end

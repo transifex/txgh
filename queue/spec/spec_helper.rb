@@ -1,6 +1,10 @@
+$:.push(File.join(Gem.loaded_specs['txgh'].full_gem_path, 'spec'))
+$:.push(File.join(Gem.loaded_specs['txgh-server'].full_gem_path, 'spec'))
+
 require 'pry-byebug'
 require 'rake'
 require 'rspec'
+require 'txgh'
 require 'txgh-queue'
 require 'txgh-server'
 
@@ -51,6 +55,7 @@ RSpec.configure do |config|
 
       # reset global config
       TxghQueue::Config.reset!
+      TxghQueue::TestBackend.reset!
       TxghQueue::Backends::Sqs::Config.reset!
     else
       example.run

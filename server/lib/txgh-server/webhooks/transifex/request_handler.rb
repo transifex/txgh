@@ -4,15 +4,9 @@ module TxghServer
   module Webhooks
     module Transifex
       class RequestHandler
-        TXGH_EVENT = 'transifex.hook'
-
         class << self
           def handle_request(request, logger)
             new(request, logger).handle_request
-          end
-
-          def enqueue_request(request, logger)
-            new(request, logger).enqueue
           end
         end
 
@@ -36,16 +30,6 @@ module TxghServer
             )
 
             handler.execute
-          end
-        end
-
-        def enqueue
-          handle_safely do
-            result = TxghQueue::Config.backend
-              .producer_for(TXGH_EVENT, logger)
-              .enqueue(payload.merge(txgh_event: TXGH_EVENT))
-
-            respond_with(202, result.to_json)
           end
         end
 
