@@ -15,17 +15,9 @@ module TxghQueue
 
     def process(payload)
       Supervisor.supervise do
-        config = config_from(payload)
-        project = config.transifex_project
-        repo = config.github_repo
-
         case payload.fetch('txgh_event')
-          when 'github.push'
-            handle_github_push(project, repo, payload)
-          when 'github.delete'
-            handle_github_delete(project, repo, payload)
-          when 'transifex.hook'
-            handle_transifex_hook(project, repo, payload)
+          when 'github.push', 'github.delete', 'transifex.hook'
+            handle_expected(payload)
           else
             handle_unexpected
         end
@@ -34,8 +26,28 @@ module TxghQueue
 
     private
 
+    def handle_expected(payload)
+      config = config_from(payload)
+      project = config.transifex_project
+      repo = config.github_repo
+
+      case payload.fetch('txgh_event')
+        when 'github.push'
+          handle_github_push(project, repo, payload)
+        when 'github.delete'
+          handle_github_delete(project, repo, payload)
+        when 'transifex.hook'
+          handle_transifex_hook(project, repo, payload)
+      end
+    end
+
     def config_from(payload)
-      Txgh::Config::KeyManager.config_from_repo(payload.fetch('repo_name'))
+      case payload.fetch('txgh_event')
+        when 'github.push', 'github.delete'
+          Txgh::Config::KeyManager.config_from_repo(payload.fetch('repo_name'))
+        when 'transifex.hook'
+          Txgh::Config::KeyManager.config_from_project(payload.fetch('project'))
+      end
     end
 
     def handle_github_push(project, repo, payload)
