@@ -1,2 +1,5 @@
+== 1.0.1
+* Fetch config correctly when processing jobs (used to only work for github repos).
+
 == 1.0.0
 * Birthday!
