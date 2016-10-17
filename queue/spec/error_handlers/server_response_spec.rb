@@ -21,6 +21,12 @@ describe ErrorHandlers::ServerResponse do
       expect(reply).to eq(Status.ok)
     end
 
+    it 'replies with ok if the status code is in the 300 range' do
+      server_response = TxghServer::Response.new(304, 'Not modified')
+      reply = described_class.status_for(server_response)
+      expect(reply).to eq(Status.ok)
+    end
+
     it 'replies with fail if the status code is in the 400 range' do
       server_response = TxghServer::Response.new(404, 'Not found')
       reply = described_class.status_for(server_response)

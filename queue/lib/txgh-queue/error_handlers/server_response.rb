@@ -10,7 +10,7 @@ module TxghQueue
 
         def status_for(response)
           case response.status.to_i / 100
-            when 2
+            when 2, 3
               Status.ok
             else
               Status.fail
