@@ -1,3 +1,5 @@
+require 'octokit'
+
 module Txgh
   class ResourceDownloader
     include Enumerable
@@ -97,11 +99,15 @@ module Txgh
     def transifex_download(resource, language)
       transifex_api.download(resource, language)
     rescue TransifexNotFoundError
+      # return nil here so wrap() will return an instance of EmptyResourceContents
       nil
     end
 
     def git_download(resource, branch)
       repo.api.download(resource.source_file, branch)[:content]
+    rescue Octokit::NotFound
+      # return nil here so wrap() will return an instance of EmptyResourceContents
+      nil
     end
 
     def transifex_api
@@ -123,13 +129,7 @@ module Txgh
       return to_enum(__method__) unless block_given?
       return @languages.each(&block) if @languages
 
-      raw_languages.each(&block)
-    end
-
-    def raw_languages
-      @raw_languages ||= transifex_api.get_languages(project.name).map do |lang|
-        lang['language_code']
-      end
+      project.languages.each(&block)
     end
 
     def tx_config

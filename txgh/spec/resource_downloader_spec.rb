@@ -7,7 +7,7 @@ include Txgh
 describe ResourceDownloader do
   include StandardTxghSetup
 
-  let(:api_languages) { %w(es de ja) }
+  let(:supported_languages) { %w(es de ja) }
   let(:format) { '.zip' }
 
   let(:downloader) do
@@ -15,14 +15,6 @@ describe ResourceDownloader do
   end
 
   before(:each) do
-    allow(transifex_api).to(
-      receive(:get_languages).with(project_name).and_return(
-        api_languages.map do |language_code|
-          { 'language_code' => language_code }
-        end
-      )
-    )
-
     allow(transifex_api).to(
       receive(:download) do |resource, language|
         translations_for(resource, language)
@@ -44,7 +36,7 @@ describe ResourceDownloader do
 
     it 'downloads the resource in all languages' do
       expect(downloader.each.to_a).to eq(
-        api_languages.map do |language|
+        supported_languages.map do |language|
           [
             "translations/#{language}/sample.yml",
             translations_for(resource, language)
@@ -73,14 +65,14 @@ describe ResourceDownloader do
         resource = tx_config.resource(resource_slug)
         actual_results = downloader.each.to_a
 
-        expected_results = api_languages.map do |language|
+        expected_results = supported_languages.map do |language|
           [
             "translations/#{language}/sample.yml",
             translations_for(resource, language)
           ]
         end
 
-        expected_results += api_languages.map do |language|
+        expected_results += supported_languages.map do |language|
           [
             "translations/#{language}/sample2.yml",
             translations_for(resource, language)
@@ -130,7 +122,7 @@ describe ResourceDownloader do
     end
 
     def translations_for(resource, language)
-      branch = resource.respond_to?(:branch) ? resource.branch : nil
+      branch = resource.has_branch? ? resource.branch : nil
 
       if branch == diff_point
         diff_point_translations_for(language)
@@ -162,7 +154,7 @@ describe ResourceDownloader do
     it 'merges the head and diff point strings together' do
       # picard unmodified, janeway modified, sisko added, sulu removed
       expect(downloader.each.to_a).to eq(
-        api_languages.map do |language|
+        supported_languages.map do |language|
           [
             "translations/#{language}/sample.yml",
             outdent(%Q{
@@ -189,13 +181,41 @@ describe ResourceDownloader do
 
       results = downloader.each.to_a
       expect(results).to eq(
-        api_languages.map do |language|
+        supported_languages.map do |language|
           [
             "translations/#{language}/sample.yml",
             outdent(%Q{
               #{language}:
                 picard: "enterprise (dp trans)"
                 janeway: "voyager (dp trans)"
+            })
+          ]
+        end
+      )
+    end
+
+    it "works even if the file doesn't exist in the git repo" do
+      allow(github_api).to(
+        receive(:download) do |path, branch|
+          if branch == 'heads/master'
+            raise Octokit::NotFound
+          else
+            { content: head_source_for(branch) }
+          end
+        end
+      )
+
+      results = downloader.each.to_a
+      expect(results).to eq(
+        supported_languages.map do |language|
+          [
+            "translations/#{language}/sample.yml",
+            outdent(%Q{
+              #{language}:
+                picard: "enterprise (head trans)"
+                janeway: "uss voyager (head trans)"
+                sulu: "excelsior (dp trans)"
+                sisko: "deep space nine (head trans)"
             })
           ]
         end
