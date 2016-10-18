@@ -14,11 +14,14 @@ module Txgh
 
     def publish(channel, options = {})
       channel_hash.fetch(channel, []).each do |callback|
-        callback.call(options)
+        result = callback.call(options)
+        yield result if block_given?
       end
     rescue => e
       publish_error!(e)
     end
+
+    alias_method :publish_each, :publish
 
     def channels
       channel_hash.keys

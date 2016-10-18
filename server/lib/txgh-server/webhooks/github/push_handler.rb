@@ -34,12 +34,32 @@ module TxghServer
           end
 
           respond_with(200, true)
+        rescue => e
+          error_params = Txgh.events.publish_error!(e)
+
+          Txgh.events.publish_each('github.status.error', error_params) do |status_params|
+            update_github_status_with_error(status_params) if status_params
+          end
+
+          respond_with_error(500, "Internal server error: #{e.message}", e)
         end
 
         private
 
+        def update_github_status_with_error(status_params)
+          update_github_status_safely do
+            Txgh::GithubStatus.error(project, repo, branch, status_params)
+          end
+        end
+
         def update_github_status
-          Txgh::GithubStatus.update(project, repo, branch)
+          update_github_status_safely do
+            Txgh::GithubStatus.update(project, repo, branch)
+          end
+        end
+
+        def update_github_status_safely
+          yield
         rescue Octokit::UnprocessableEntity
           # raised because we've tried to create too many statuses for the commit
         rescue Txgh::TransifexNotFoundError

@@ -25,6 +25,10 @@ module Txgh
       def update(project, repo, branch)
         new(project, repo, branch).update
       end
+
+      def error(project, repo, branch, options = {})
+        new(project, repo, branch).error(options)
+      end
     end
 
     attr_reader :project, :repo, :branch
@@ -38,8 +42,6 @@ module Txgh
     def update
       return if tx_resources.empty?
 
-      sha = repo.api.get_ref(branch)[:object][:sha]
-
       repo.api.create_status(
         sha, state, {
           context: context, target_url: target_url, description: description
@@ -47,7 +49,25 @@ module Txgh
       )
     end
 
+    def error(options = {})
+      repo.api.create_status(
+        sha, State.error, {
+          context: context,
+          target_url: options.fetch(:target_url),
+          description: options.fetch(:description)
+        }
+      )
+    end
+
     private
+
+    def sha
+      ref[:object][:sha]
+    end
+
+    def ref
+      @ref ||= repo.api.get_ref(branch)
+    end
 
     def context
       CONTEXT
