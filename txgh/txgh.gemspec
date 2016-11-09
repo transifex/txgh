@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
 
-  s.add_dependency 'abroad', '~> 4.1'
+  s.add_dependency 'abroad', '~> 4.2'
   s.add_dependency 'celluloid'
   s.add_dependency 'faraday', '~> 0.9'
   s.add_dependency 'faraday_middleware', '~> 0.10'
