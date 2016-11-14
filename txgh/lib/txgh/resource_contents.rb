@@ -7,14 +7,16 @@ module Txgh
       'YML'          => 'yaml/rails',
       'YAML'         => 'yaml/rails',
       'KEYVALUEJSON' => 'json/key-value',
-      'ANDROID'      => 'xml/android'
+      'ANDROID'      => 'xml/android',
+      'TXT'          => 'txt/lines'
     }
 
     SERIALIZER_MAP = {
       'YML'          => 'yaml/rails',
       'YAML'         => 'yaml/rails',
       'KEYVALUEJSON' => 'json/key-value',
-      'ANDROID'      => 'xml/android'
+      'ANDROID'      => 'xml/android',
+      'TXT'          => 'txt/lines'
     }
 
     class << self
