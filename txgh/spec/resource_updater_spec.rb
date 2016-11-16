@@ -114,7 +114,7 @@ describe ResourceUpdater do
       TxBranchResource.new(
         TxResource.new(
           project_name, resource_slug, 'YAML',
-          'en', 'en.yml', '', 'translation_file'
+          'en', 'en.yml', {}, 'translation_file'
         ),
         ref
       )

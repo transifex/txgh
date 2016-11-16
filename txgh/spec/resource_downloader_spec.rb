@@ -50,7 +50,7 @@ describe ResourceDownloader do
     before(:each) do
       tx_config.resources << Txgh::TxResource.new(
         project_name, "#{resource_slug}_second", 'YML',
-        'en', 'en.yml', '', 'translations/<lang>/sample2.yml'
+        'en', 'en.yml', {}, 'translations/<lang>/sample2.yml'
       )
 
       allow(Txgh::Config::TxManager).to(

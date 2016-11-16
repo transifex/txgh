@@ -19,7 +19,7 @@ describe TxBranchResource do
   let(:base_resource) do
     TxResource.new(
       project_slug, resource_slug, 'type', 'source_lang', 'source_file',
-      'ko-KR:ko', 'translation_file'
+      { 'ko-KR' => 'ko' }, 'translation_file'
     )
   end
 

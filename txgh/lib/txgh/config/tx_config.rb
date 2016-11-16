@@ -4,35 +4,39 @@ module Txgh
       class << self
         def load_file(path)
           config = Txgh::ParseConfig.load_file(path)
-          parse(config)
+          load_config(config)
         end
 
         def load(contents)
           config = Txgh::ParseConfig.load(contents)
-          parse(config)
+          load_config(config)
         end
 
         private
 
-        def parse(config)
-          resources = []
-          lang_map = {}
+        def load_config(config)
+          lang_map = load_lang_map(config)
+          resources = load_resources(config, lang_map)
+          new(resources, lang_map)
+        end
 
-          config.get_groups.each do |group|
-            if group == 'main'
-              main = config[group]
-
-              if main['lang_map']
-                lang_map = parse_lang_map(main['lang_map'])
-              end
-            else
-              resources.push(
-                parse_resource(group, config[group])
-              )
+        def load_lang_map(config)
+          lang_map = if main = config['main']
+            if map = main['lang_map']
+              parse_lang_map(map)
             end
           end
 
-          new(resources, lang_map)
+          lang_map || {}
+        end
+
+        def load_resources(config, lang_map)
+          [].tap do |resources|
+            config.groups.each do |group|
+              next if group == 'main'
+              resources << load_resource(group, config[group], lang_map)
+            end
+          end
         end
 
         def parse_lang_map(lang_map)
@@ -42,12 +46,12 @@ module Txgh
           end
         end
 
-        def parse_resource(name, resource)
+        def load_resource(name, resource, lang_map)
           id = name.split('.', 2)
           TxResource.new(
             id[0].strip, id[1].strip, resource['type'],
             resource['source_lang'], resource['source_file'],
-            resource['lang_map'], resource['file_filter']
+            lang_map, resource['file_filter']
           )
         end
       end

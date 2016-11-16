@@ -6,7 +6,7 @@ describe TxResource do
   let(:resource) do
     TxResource.new(
       'project_slug', 'resource_slug', 'type',
-      'source_lang', 'source_file', 'ko-KR:ko', 'translation_file'
+      'source_lang', 'source_file', { 'ko-KR' => 'ko' }, 'translation_file/<lang>.foo'
     )
   end
 
@@ -26,6 +26,16 @@ describe TxResource do
     end
   end
 
+  describe '#translation_path' do
+    it 'interpolates the given locale' do
+      expect(resource.translation_path('de')).to eq('translation_file/de.foo')
+    end
+
+    it 'interpolates using the converted locale if a mapping exists for it' do
+      expect(resource.translation_path('ko-KR')).to eq('translation_file/ko.foo')
+    end
+  end
+
   describe '#to_h' do
     it 'converts the resource into a hash' do
       expect(resource.to_h).to eq(
@@ -34,7 +44,7 @@ describe TxResource do
         type: 'type',
         source_lang: 'source_lang',
         source_file: 'source_file',
-        translation_file: 'translation_file'
+        translation_file: 'translation_file/<lang>.foo'
       )
     end
   end
