@@ -7,7 +7,7 @@ describe ResourceContents do
   let(:tx_resource) do
     TxResource.new(
       'project_slug', 'resource_slug', 'YAML',
-      'en', 'source_file', '', 'translation_file'
+      'en', 'source_file', {}, 'translation_file'
     )
   end
 

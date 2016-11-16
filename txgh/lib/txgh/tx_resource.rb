@@ -12,18 +12,7 @@ module Txgh
       @type = type
       @source_lang = source_lang
       @source_file = source_file
-      @lang_map = {}
-
-      if lang_map
-        result = {}
-        lang_map.split(',').each do |m|
-          key_value = m.split(':', 2)
-          result[key_value[0].strip] = key_value[1].strip
-        end
-
-        @lang_map = result
-      end
-
+      @lang_map = lang_map
       @translation_file = translation_file
     end
 

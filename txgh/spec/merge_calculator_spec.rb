@@ -10,7 +10,7 @@ describe MergeCalculator do
   let(:resource) do
     TxResource.new(
       'project_name', 'resource_slug', 'YAML',
-      'en', 'en.yml', '', 'translation_file'
+      'en', 'en.yml', {}, 'translation_file'
     )
   end
 

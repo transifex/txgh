@@ -6,7 +6,7 @@ describe TxResource do
   let(:resource) do
     TxResource.new(
       'project_slug', 'resource_slug', 'type',
-      'source_lang', 'source_file', 'ko-KR:ko', 'translation_file/<lang>.foo'
+      'source_lang', 'source_file', { 'ko-KR' => 'ko' }, 'translation_file/<lang>.foo'
     )
   end
 

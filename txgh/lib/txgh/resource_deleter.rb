@@ -43,7 +43,7 @@ module Txgh
         resource_hash['i18n_type'],
         resource_hash['source_language_code'],
         resource_hash['name'],
-        '', nil
+        {}, nil
       )
     end
   end
