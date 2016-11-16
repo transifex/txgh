@@ -82,7 +82,7 @@ module Txgh
     def download_each
       each_resource do |resource|
         each_language do |language_code|
-          file_name = resource.translation_path(resource.lang_map(language_code))
+          file_name = resource.translation_path(language_code)
           yield resource, language_code, file_name
         end
       end

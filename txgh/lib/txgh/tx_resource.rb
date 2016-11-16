@@ -32,7 +32,7 @@ module Txgh
     end
 
     def translation_path(language)
-      translation_file.gsub('<lang>', language)
+      translation_file.gsub('<lang>', lang_map(language))
     end
 
     def slugs
