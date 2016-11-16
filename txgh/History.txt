@@ -1,3 +1,6 @@
+== 6.2.1
+* Use lang map when constructing translation paths.
+
 == 6.2.0
 * Add support for text files.
 
