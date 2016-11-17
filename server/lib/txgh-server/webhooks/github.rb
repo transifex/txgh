@@ -9,6 +9,7 @@ module TxghServer
       autoload :PushHandler,      'txgh-server/webhooks/github/push_handler'
       autoload :PushAttributes,   'txgh-server/webhooks/github/push_attributes'
       autoload :RequestHandler,   'txgh-server/webhooks/github/request_handler'
+      autoload :StatusUpdater,    'txgh-server/webhooks/github/status_updater'
     end
   end
 end
