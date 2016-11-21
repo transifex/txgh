@@ -1,3 +1,7 @@
+== 6.3.0
+* Events#publish now yields callback results if given a block.
+* Add ability to report errors via github statuses.
+
 == 6.2.2
 * Fix lang map.
 
