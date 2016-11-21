@@ -1,3 +1,6 @@
+== 2.3.0
+* Mark github statuses as errored if an error occurs during push.
+
 == 2.2.0
 * A bit of refactoring.
 
