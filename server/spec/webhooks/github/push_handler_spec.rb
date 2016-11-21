@@ -57,6 +57,31 @@ describe PushHandler do
     expect(response.body).to eq(true)
   end
 
+  context 'with an error' do
+    let(:description) { 'An error done occurred, fool' }
+    let(:target_url) { 'http://you-goofed.com' }
+
+    let(:status_params) do
+      { description: description, target_url: target_url }
+    end
+
+    let(:error_params) { { foo: 'bar' } }
+
+    before(:each) do
+      Txgh.events.subscribe(Txgh::Events::ERROR_CHANNEL) { error_params }
+      Txgh.events.subscribe('github.status.error') { status_params }
+    end
+
+    it 'reports errors and updates the github status' do
+      expect(Txgh::GithubStatus).to(
+        receive(:error).with(transifex_project, github_repo, ref, status_params)
+      )
+
+      expect(handler).to receive(:should_process?).and_raise(StandardError)
+      handler.execute
+    end
+  end
+
   context 'with a deleted branch' do
     let(:before) { nil }
     let(:after) { '0' * 40 }

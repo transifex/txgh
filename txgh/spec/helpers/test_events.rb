@@ -8,5 +8,6 @@ class TestEvents < Txgh::Events
 
   def publish(channel, options = {})
     published << { channel: channel, options: options }
+    super
   end
 end

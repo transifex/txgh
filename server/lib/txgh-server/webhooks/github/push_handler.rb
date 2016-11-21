@@ -30,24 +30,23 @@ module TxghServer
               { 'author' => attributes.author }
             end
 
-            update_github_status
+            status_updater.update_status
           end
 
           respond_with(200, true)
+        rescue => e
+          status_updater.report_error_and_update_status(e)
+          respond_with_error(500, "Internal server error: #{e.message}", e)
         end
 
         private
 
-        def update_github_status
-          Txgh::GithubStatus.update(project, repo, branch)
-        rescue Octokit::UnprocessableEntity
-          # raised because we've tried to create too many statuses for the commit
-        rescue Txgh::TransifexNotFoundError
-          # raised if transifex resource can't be found
-        end
-
         def pusher
           @pusher ||= Txgh::Pusher.new(project, repo, branch)
+        end
+
+        def status_updater
+          @status_updater = StatusUpdater.new(project, repo, branch)
         end
 
         # finds the resources that were updated in each commit

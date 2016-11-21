@@ -6,12 +6,22 @@ include Txgh
 describe GithubStatus do
   include StandardTxghSetup
 
-  describe '#update' do
-    let(:status) { GithubStatus.new(transifex_project, github_repo, branch) }
-    let(:resource) { tx_config.resource(resource_slug) }
-    let(:branch) { 'heads/master' }
-    let(:sha) { 'abc123shashasha' }
+  let(:status) { GithubStatus.new(transifex_project, github_repo, branch) }
+  let(:resource) { tx_config.resource(resource_slug) }
+  let(:branch) { 'heads/master' }
+  let(:sha) { 'abc123shashasha' }
 
+  before(:each) do
+    allow(transifex_api).to receive(:get_resources).and_return(
+      [{ 'slug' => resource.resource_slug }]
+    )
+
+    allow(github_api).to receive(:get_ref).and_return(
+      object: { sha: sha }
+    )
+  end
+
+  describe '#update' do
     let(:stats) do
       supported_languages.each_with_object({}) do |language, ret|
         ret[language] = {
@@ -23,14 +33,6 @@ describe GithubStatus do
 
     before(:each) do
       allow(transifex_api).to receive(:get_stats).and_return(stats)
-
-      allow(transifex_api).to receive(:get_resources).and_return(
-        [{ 'slug' => resource.resource_slug }]
-      )
-
-      allow(github_api).to receive(:get_ref).and_return(
-        object: { sha: sha }
-      )
     end
 
     context 'with all resources at 100%' do
@@ -71,6 +73,23 @@ describe GithubStatus do
 
         status.update
       end
+    end
+  end
+
+  describe '#error' do
+    it 'reports status as error' do
+      target_url = 'http://abc.foo.com'
+      description = 'The green albatross flitters in the moonlight'
+
+      expect(github_api).to receive(:create_status) do |commit_sha, state, options|
+        expect(commit_sha).to eq(sha)
+        expect(state).to eq(GithubStatus::State.error)
+        expect(options[:description]).to eq(description)
+        expect(options[:context]).to eq('continuous-localization/txgh')
+        expect(options[:target_url]).to eq(target_url)
+      end
+
+      status.error(target_url: target_url, description: description)
     end
   end
 end
