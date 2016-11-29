@@ -20,7 +20,7 @@ module Txgh
 
     def tx_resources
       project.api.get_resources(project.name).map do |resource_hash|
-        categories = deserialize_categories(resource_hash['categories'])
+        categories = deserialize_categories(resource_hash['categories'] || [])
         resource_branch = Txgh::Utils.absolute_branch(categories['branch'])
 
         if resource_branch == branch

@@ -36,6 +36,14 @@ describe ResourceDeleter do
     deleter.delete_resources
   end
 
+  it 'handles the case when no categories are present' do
+    expect(transifex_api).to(
+      receive(:get_resources).and_return([resource.to_api_h.merge('categories' => nil)])
+    )
+
+    expect { deleter.delete_resources }.to_not raise_error
+  end
+
   it "does not delete resources that don't have a matching branch" do
     deleter = ResourceDeleter.new(transifex_project, github_repo, 'heads/fake')
     expect(transifex_api).to(
