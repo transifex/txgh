@@ -1,3 +1,6 @@
+== 6.3.1
+* Fix issue causing an error when receiving a delete webhook. Error caused by a resource with a blank set of categories.
+
 == 6.3.0
 * Events#publish now yields callback results if given a block.
 * Add ability to report errors via github statuses.
