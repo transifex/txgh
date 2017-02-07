@@ -161,7 +161,7 @@ Meanwhile, check the values of your other variables. If any values seem incorrec
 
 ##Connecting Transifex and GitHub to Txgh
 
-Txgh synchronizes your Transifex and GitHub projects using webhooks, allowing Txgh to respond immediately to changes in either service. The webhook URLs follow the format https://.herokuapp.com/hooks/, where is the name of your deployed Heroku app and is either “transifex” or “github.” 
+Txgh synchronizes your Transifex and GitHub projects using webhooks, allowing Txgh to respond immediately to changes in either service. The webhook URLs follow the format https://HEROKUNAME.herokuapp.com/hooks/SOURCE, where HEROKUNAME is the name of your deployed Heroku app and SOURCE is either “transifex” or “github”.
 
 For instance, we’ll use the following URL with Transifex:
 
