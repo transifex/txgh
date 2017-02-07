@@ -95,10 +95,14 @@ Before you can start pushing updates between GitHub and Transifex, you’ll need
 | TX_USERNAME | Your Transifex username. | txuser |
 | TX_PASSWORD | Password to your Transifex account. | 1324578 |
 | TX_PUSH_TRANSLATIONS_TO | Name of the GitHub repository that Txgh will push updates to. | ghuser/my_repository |
+| TX_WEBHOOK_SECRET | Secret key given to Transifex to authenticate the webhook request (optional) | please-dont-use-this-example |
 | GITHUB_BRANCH | GitHub branch to update. | heads/master |
 | GITHUB_USERNAME | Your GitHub username. | ghuser |
 | GITHUB_TOKEN | A personal API token created in GitHub. | 489394e58d99095d9c6aafb49f0e2b1e |
 | GITHUB_PUSH_SOURCE_TO | Name of the Transifex project that Txgh will push updates to. | my_project |
+| GITHUB_WEBHOOK_SECRET | Secret key given to Github to authenticate the webhook request (optional) | please-dont-use-this-example |
+
+If you want to use webhook secrets, you'll need to add them to your txgh.yml as well.  Add `webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"` to the Github repo block in there, and `webhook_secret: "<%= ENV['TX_WEBHOOK_SECRET'] %>"` in the Transifex block.
 
 There are two ways to apply these to your Heroku app:
 
@@ -173,12 +177,12 @@ https://nameless-eyrie-4025.herokuapp.com/hooks/github
 
 Open your project in Transifex. Under More Project Options, click Manage.
 
-In the Features section at the bottom of the screen is a text box titled Web Hook URL. Enter in the URL you created from your Heroku app, then click Save Project. Secret keys are currently unsupported, so leave the field blank for now.
+In the Features section at the bottom of the screen is a text box titled Web Hook URL. Enter in the URL you created from your Heroku app, then click Save Project.
 
 Connecting Your GitHub Repository
 Connecting a GitHub repository is similar. Open your repository in a web browser and click Settings.
 
-Under Webhooks & services, click to add a webhook. You may be asked to confirm your password. Enter the Heroku app URL for the Payload URL and change the Content type to application/x-www-form-urlencoded. Just like with Transifex, keep the Secret token field blank.
+Under Webhooks & services, click to add a webhook. You may be asked to confirm your password. Enter the Heroku app URL for the Payload URL and change the Content type to application/x-www-form-urlencoded.
 
 Click Add webhook to create your new webhook. GitHub will ping the URL to test its validity. You can check whether the ping was successful by reloading the page.
 
