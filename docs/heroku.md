@@ -42,14 +42,14 @@ Before you can start pushing updates between GitHub and Transifex, you’ll need
 
 | Variable | Description | Example |
 | -------- | ----------- | ------- |
-| transifex_project_config_tx_config | Location of your Transifex project’s configuration file relative to Txgh’s root folder. | ./config/tx.config |
-| transifex_project_config_api_username | Your Transifex username. | txuser |
-| transifex_project_config_api_password | Password to your Transifex account. | 1324578 |
-| transifex_project_config_push_translations_to | Name of the GitHub repository that Txgh will push updates to. | ghuser/my_repository |
-| transifex_project_config_push_translations_to_branch | GitHub branch to update. | heads/master |
-| github_repo_config_api_username | Your GitHub username. | ghuser |
-| github_repo_config_api_token | A personal API token created in GitHub. | 489394e58d99095d9c6aafb49f0e2b1e |
-| github_repo_config_push_source_to | Name of the Transifex project that Txgh will push updates to. | my_project |
+| TX_CONFIG_PATH | Location of your Transifex project’s configuration file relative to Txgh’s root folder. | ./config/tx.config |
+| TX_USERNAME | Your Transifex username. | txuser |
+| TX_PASSWORD | Password to your Transifex account. | 1324578 |
+| TX_PUSH_TRANSLATIONS_TO | Name of the GitHub repository that Txgh will push updates to. | ghuser/my_repository |
+| GITHUB_BRANCH | GitHub branch to update. | heads/master |
+| GITHUB_USERNAME | Your GitHub username. | ghuser |
+| GITHUB_TOKEN | A personal API token created in GitHub. | 489394e58d99095d9c6aafb49f0e2b1e |
+| GITHUB_PUSH_SOURCE_TO | Name of the Transifex project that Txgh will push updates to. | my_project |
 
 There are two ways to apply these to your Heroku app:
 
@@ -69,14 +69,14 @@ The txgh_config.rb file stores our environment variables inside of the Txgh fold
 ```
 # 'test' only ENV['RACK_ENV']
 config_env :test do
-    set 'transifex_project_config_tx_config', './config/tx.config'
-    set 'transifex_project_config_api_username', 
-    set 'transifex_project_config_api_password', 
-    set 'transifex_project_config_push_translations_to', 
-    set 'transifex_project_config_push_translations_to_branch', 'heads/master'
-    set 'github_repo_config_api_username', 
-    set 'github_repo_config_api_token', 
-    set 'github_repo_config_push_source_to', 
+    set 'TX_CONFIG_PATH', './config/tx.config'
+    set 'TX_USERNAME',
+    set 'TX_PASSWORD',
+    set 'TX_PUSH_TRANSLATIONS_TO',
+    set 'GITHUB_BRANCH', 'heads/master'
+    set 'GITHUB_USERNAME',
+    set 'GITHUB_TOKEN',
+    set 'GITHUB_PUSH_SOURCE_TO',
 end
 ```
 To apply the changes to your Heroku dyno, use the rake command:
@@ -87,15 +87,15 @@ Running echo $RACK_ENV on nameless-eyrie-4025... up, run.2376
 Configure Heroku according to config_env[test]
 
 === nameless-eyrie-4025 Config Vars
-LANG:                                          en_US.UTF-8
-RACK_ENV:                                      test
-github_repo_config_api_token:                  489394e58d99095d9c6aafb49f0e2b1e
-github_repo_config_api_username:               ghuser
-github_repo_config_push_source_to:             nodejs-test
-transifex_project_config_api_password:         12345678
-transifex_project_config_api_username:         txuser
-transifex_project_config_push_translations_to: ghuser/nodejs-test
-transifex_project_config_tx_config:            ./config/tx.config
+LANG:                          en_US.UTF-8
+RACK_ENV:                      test
+GITHUB_TOKEN:                  489394e58d99095d9c6aafb49f0e2b1e
+GITHUB_USERNAME:               ghuser
+GITHUB_PUSH_SOURCE_TO:         nodejs-test
+TX_PASSWORD:                   12345678
+TX_USERNAME:                   txuser
+TX_PUSH_TRANSLATIONS_TO:       ghuser/nodejs-test
+TX_CONFIG_PATH:                ./config/tx.config
 ```
 
 This command updates the configuration of your Heroku app with the values specified in `txgh_config.rb` If you have any issues running the rake command, run bundle install in the Txgh project’s root directory. This compiles and installs the Ruby gems required by Txgh. Once the install completes, run the rake command again.
