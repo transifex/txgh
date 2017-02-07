@@ -8,7 +8,56 @@ Creating nameless-eyrie-4025... done, stack is cedar-14
 https://nameless-eyrie-4025.herokuapp.com/ | https://git.heroku.com/nameless-eyrie-4025.git
 Git remote heroku added
 ```
-By default, Heroku provides a randomly generated name, but you can supply one as a parameter. Once the new application has been created, you can deploy your app by using git:
+By default, Heroku provides a randomly generated name, but you can supply one as a parameter. Once the new application has been created, you need to generate a Gemfile.lock and commit it to your repository. This is counter to how most projects work in git, but is a Heroku requirement:
+```
+$ bundle install
+Fetching gem metadata from https://rubygems.org/............
+Fetching version metadata from https://rubygems.org/...
+Fetching dependency metadata from https://rubygems.org/..
+Resolving dependencies...
+Using rake 12.0.0
+Using public_suffix 2.0.5
+Using addressable 2.5.0
+Using backports 3.6.8
+Using coderay 1.1.1
+Using safe_yaml 1.0.4
+Using crack 0.4.3
+Using diff-lcs 1.3
+Using multipart-post 2.0.0
+Using faraday 0.11.0
+Using faraday_middleware 0.11.0.1
+Using hashdiff 0.3.2
+Using json 2.0.3
+Using method_source 0.8.2
+Using multi_json 1.12.1
+Using sawyer 0.8.1
+Using octokit 4.6.2
+Using parseconfig 1.0.8
+Using slop 3.6.0
+Using pry 0.10.4
+Using pry-nav 0.2.4
+Using puma 3.7.0
+Using rack 1.6.5
+Using rack-protection 1.5.3
+Using rack-test 0.6.3
+Using rspec-support 3.5.0
+Using rspec-core 3.5.4
+Using rspec-expectations 3.5.0
+Using rspec-mocks 3.5.0
+Using rspec 3.5.0
+Using shotgun 0.9.2
+Using tilt 2.0.6
+Using sinatra 1.4.8
+Using sinatra-contrib 1.4.7
+Using vcr 3.0.3
+Using webmock 1.24.6
+Using bundler 1.10.6
+Bundle complete! 16 Gemfile dependencies, 37 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+$ git add -f Gemfile.lock
+$ git commit -m"Adding Gemfile.lock for Heroku's benefit"
+```
+Then you can deploy your app by using git:
 
 ```
 $ git push heroku master
