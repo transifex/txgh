@@ -119,13 +119,13 @@ The txgh_config.rb file stores our environment variables inside of the Txgh fold
 # 'test' only ENV['RACK_ENV']
 config_env :test do
     set 'TX_CONFIG_PATH', './config/tx.config'
-    set 'TX_USERNAME',
-    set 'TX_PASSWORD',
-    set 'TX_PUSH_TRANSLATIONS_TO',
+    set 'TX_USERNAME', 'txuser'
+    set 'TX_PASSWORD', '1324578'
+    set 'TX_PUSH_TRANSLATIONS_TO', 'ghuser/my_repository'
     set 'GITHUB_BRANCH', 'heads/master'
-    set 'GITHUB_USERNAME',
-    set 'GITHUB_TOKEN',
-    set 'GITHUB_PUSH_SOURCE_TO',
+    set 'GITHUB_USERNAME', 'ghuser'
+    set 'GITHUB_TOKEN', '489394e58d99095d9c6aafb49f0e2b1e'
+    set 'GITHUB_PUSH_SOURCE_TO', 'my_project'
 end
 ```
 To apply the changes to your Heroku dyno, use the rake command:
@@ -140,10 +140,10 @@ LANG:                          en_US.UTF-8
 RACK_ENV:                      test
 GITHUB_TOKEN:                  489394e58d99095d9c6aafb49f0e2b1e
 GITHUB_USERNAME:               ghuser
-GITHUB_PUSH_SOURCE_TO:         nodejs-test
-TX_PASSWORD:                   12345678
+GITHUB_PUSH_SOURCE_TO:         my_project
+TX_PASSWORD:                   1324578
 TX_USERNAME:                   txuser
-TX_PUSH_TRANSLATIONS_TO:       ghuser/nodejs-test
+TX_PUSH_TRANSLATIONS_TO:       ghuser/my_repository
 TX_CONFIG_PATH:                ./config/tx.config
 ```
 
