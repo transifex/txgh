@@ -19,7 +19,7 @@ rerun.txt
 pickle-email-*.html
 .project
 config/initializers/secret_token.rb
-Gemfile.lock
 config/txgh_config.rb
 .env
 .*.swp
+.DS_Store
