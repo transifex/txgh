@@ -8,7 +8,56 @@ Creating nameless-eyrie-4025... done, stack is cedar-14
 https://nameless-eyrie-4025.herokuapp.com/ | https://git.heroku.com/nameless-eyrie-4025.git
 Git remote heroku added
 ```
-By default, Heroku provides a randomly generated name, but you can supply one as a parameter. Once the new application has been created, you can deploy your app by using git:
+By default, Heroku provides a randomly generated name, but you can supply one as a parameter. Once the new application has been created, you need to generate a Gemfile.lock and commit it to your repository. This is counter to how most projects work in git, but is a Heroku requirement:
+```
+$ bundle install
+Fetching gem metadata from https://rubygems.org/............
+Fetching version metadata from https://rubygems.org/...
+Fetching dependency metadata from https://rubygems.org/..
+Resolving dependencies...
+Using rake 12.0.0
+Using public_suffix 2.0.5
+Using addressable 2.5.0
+Using backports 3.6.8
+Using coderay 1.1.1
+Using safe_yaml 1.0.4
+Using crack 0.4.3
+Using diff-lcs 1.3
+Using multipart-post 2.0.0
+Using faraday 0.11.0
+Using faraday_middleware 0.11.0.1
+Using hashdiff 0.3.2
+Using json 2.0.3
+Using method_source 0.8.2
+Using multi_json 1.12.1
+Using sawyer 0.8.1
+Using octokit 4.6.2
+Using parseconfig 1.0.8
+Using slop 3.6.0
+Using pry 0.10.4
+Using pry-nav 0.2.4
+Using puma 3.7.0
+Using rack 1.6.5
+Using rack-protection 1.5.3
+Using rack-test 0.6.3
+Using rspec-support 3.5.0
+Using rspec-core 3.5.4
+Using rspec-expectations 3.5.0
+Using rspec-mocks 3.5.0
+Using rspec 3.5.0
+Using shotgun 0.9.2
+Using tilt 2.0.6
+Using sinatra 1.4.8
+Using sinatra-contrib 1.4.7
+Using vcr 3.0.3
+Using webmock 1.24.6
+Using bundler 1.10.6
+Bundle complete! 16 Gemfile dependencies, 37 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+$ git add -f Gemfile.lock
+$ git commit -m"Adding Gemfile.lock for Heroku's benefit"
+```
+Then you can deploy your app by using git:
 
 ```
 $ git push heroku master
@@ -42,14 +91,18 @@ Before you can start pushing updates between GitHub and Transifex, you’ll need
 
 | Variable | Description | Example |
 | -------- | ----------- | ------- |
-| transifex_project_config_tx_config | Location of your Transifex project’s configuration file relative to Txgh’s root folder. | ./config/tx.config |
-| transifex_project_config_api_username | Your Transifex username. | txuser |
-| transifex_project_config_api_password | Password to your Transifex account. | 1324578 |
-| transifex_project_config_push_translations_to | Name of the GitHub repository that Txgh will push updates to. | ghuser/my_repository |
-| transifex_project_config_push_translations_to_branch | GitHub branch to update. | heads/master |
-| github_repo_config_api_username | Your GitHub username. | ghuser |
-| github_repo_config_api_token | A personal API token created in GitHub. | 489394e58d99095d9c6aafb49f0e2b1e |
-| github_repo_config_push_source_to | Name of the Transifex project that Txgh will push updates to. | my_project |
+| TX_CONFIG_PATH | Location of your Transifex project’s configuration file relative to Txgh’s root folder. | ./config/tx.config |
+| TX_USERNAME | Your Transifex username. | txuser |
+| TX_PASSWORD | Password to your Transifex account. | 1324578 |
+| TX_PUSH_TRANSLATIONS_TO | Name of the GitHub repository that Txgh will push updates to. | ghuser/my_repository |
+| TX_WEBHOOK_SECRET | Secret key given to Transifex to authenticate the webhook request (optional) | please-dont-use-this-example |
+| GITHUB_BRANCH | GitHub branch to update. | heads/master |
+| GITHUB_USERNAME | Your GitHub username. | ghuser |
+| GITHUB_TOKEN | A personal API token created in GitHub. | 489394e58d99095d9c6aafb49f0e2b1e |
+| GITHUB_PUSH_SOURCE_TO | Name of the Transifex project that Txgh will push updates to. | my_project |
+| GITHUB_WEBHOOK_SECRET | Secret key given to Github to authenticate the webhook request (optional) | please-dont-use-this-example |
+
+If you want to use webhook secrets, you'll need to add them to your txgh.yml as well.  Add `webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"` to the Github repo block in there, and `webhook_secret: "<%= ENV['TX_WEBHOOK_SECRET'] %>"` in the Transifex block.
 
 There are two ways to apply these to your Heroku app:
 
@@ -69,14 +122,14 @@ The txgh_config.rb file stores our environment variables inside of the Txgh fold
 ```
 # 'test' only ENV['RACK_ENV']
 config_env :test do
-    set 'transifex_project_config_tx_config', './config/tx.config'
-    set 'transifex_project_config_api_username', 
-    set 'transifex_project_config_api_password', 
-    set 'transifex_project_config_push_translations_to', 
-    set 'transifex_project_config_push_translations_to_branch', 'heads/master'
-    set 'github_repo_config_api_username', 
-    set 'github_repo_config_api_token', 
-    set 'github_repo_config_push_source_to', 
+    set 'TX_CONFIG_PATH', './config/tx.config'
+    set 'TX_USERNAME', 'txuser'
+    set 'TX_PASSWORD', '1324578'
+    set 'TX_PUSH_TRANSLATIONS_TO', 'ghuser/my_repository'
+    set 'GITHUB_BRANCH', 'heads/master'
+    set 'GITHUB_USERNAME', 'ghuser'
+    set 'GITHUB_TOKEN', '489394e58d99095d9c6aafb49f0e2b1e'
+    set 'GITHUB_PUSH_SOURCE_TO', 'my_project'
 end
 ```
 To apply the changes to your Heroku dyno, use the rake command:
@@ -87,15 +140,15 @@ Running echo $RACK_ENV on nameless-eyrie-4025... up, run.2376
 Configure Heroku according to config_env[test]
 
 === nameless-eyrie-4025 Config Vars
-LANG:                                          en_US.UTF-8
-RACK_ENV:                                      test
-github_repo_config_api_token:                  489394e58d99095d9c6aafb49f0e2b1e
-github_repo_config_api_username:               ghuser
-github_repo_config_push_source_to:             nodejs-test
-transifex_project_config_api_password:         12345678
-transifex_project_config_api_username:         txuser
-transifex_project_config_push_translations_to: ghuser/nodejs-test
-transifex_project_config_tx_config:            ./config/tx.config
+LANG:                          en_US.UTF-8
+RACK_ENV:                      test
+GITHUB_TOKEN:                  489394e58d99095d9c6aafb49f0e2b1e
+GITHUB_USERNAME:               ghuser
+GITHUB_PUSH_SOURCE_TO:         my_project
+TX_PASSWORD:                   1324578
+TX_USERNAME:                   txuser
+TX_PUSH_TRANSLATIONS_TO:       ghuser/my_repository
+TX_CONFIG_PATH:                ./config/tx.config
 ```
 
 This command updates the configuration of your Heroku app with the values specified in `txgh_config.rb` If you have any issues running the rake command, run bundle install in the Txgh project’s root directory. This compiles and installs the Ruby gems required by Txgh. Once the install completes, run the rake command again.
@@ -112,7 +165,7 @@ Meanwhile, check the values of your other variables. If any values seem incorrec
 
 ##Connecting Transifex and GitHub to Txgh
 
-Txgh synchronizes your Transifex and GitHub projects using webhooks, allowing Txgh to respond immediately to changes in either service. The webhook URLs follow the format https://.herokuapp.com/hooks/, where is the name of your deployed Heroku app and is either “transifex” or “github.” 
+Txgh synchronizes your Transifex and GitHub projects using webhooks, allowing Txgh to respond immediately to changes in either service. The webhook URLs follow the format https://HEROKUNAME.herokuapp.com/hooks/SOURCE, where HEROKUNAME is the name of your deployed Heroku app and SOURCE is either “transifex” or “github”.
 
 For instance, we’ll use the following URL with Transifex:
 
@@ -124,12 +177,12 @@ https://nameless-eyrie-4025.herokuapp.com/hooks/github
 
 Open your project in Transifex. Under More Project Options, click Manage.
 
-In the Features section at the bottom of the screen is a text box titled Web Hook URL. Enter in the URL you created from your Heroku app, then click Save Project. Secret keys are currently unsupported, so leave the field blank for now.
+In the Features section at the bottom of the screen is a text box titled Web Hook URL. Enter in the URL you created from your Heroku app, then click Save Project.
 
 Connecting Your GitHub Repository
 Connecting a GitHub repository is similar. Open your repository in a web browser and click Settings.
 
-Under Webhooks & services, click to add a webhook. You may be asked to confirm your password. Enter the Heroku app URL for the Payload URL and change the Content type to application/x-www-form-urlencoded. Just like with Transifex, keep the Secret token field blank.
+Under Webhooks & services, click to add a webhook. You may be asked to confirm your password. Enter the Heroku app URL for the Payload URL and change the Content type to application/x-www-form-urlencoded.
 
 Click Add webhook to create your new webhook. GitHub will ping the URL to test its validity. You can check whether the ping was successful by reloading the page.
 
