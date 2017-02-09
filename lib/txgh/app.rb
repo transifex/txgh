@@ -54,7 +54,6 @@ module Txgh
 
       rbody = request.body.read
       payload = Hash[URI.decode_www_form(rbody)]
-      logger.info(payload)
 
       if payload.key?('project')
         settings.logger.info('processing payload from form')
