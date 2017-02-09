@@ -52,7 +52,16 @@ module Txgh
       settings.logger.info('Processing request at /hooks/transifex')
       settings.logger.info(request.inspect)
 
-      payload = Hash[URI.decode_www_form(request.body.read)]
+      rbody = request.body.read
+      payload = Hash[URI.decode_www_form(rbody)]
+
+      if payload.key?('project')
+        settings.logger.info('processing payload from form')
+      else
+        settings.logger.info("processing payload from request.body")
+        payload = JSON.parse(rbody)
+      end
+
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
       if payload.key?('translated')
@@ -67,17 +76,17 @@ module Txgh
         handler = transifex_handler_for(
           project: config.transifex_project,
           repo: config.github_repo,
-          resource_slug: request['resource'],
+          resource_slug: payload['resource'],
           language: payload['language'],
           tx_hook_trigger: tx_hook_trigger,
           logger: settings.logger
         )
-
         handler.execute
         status 200
       else
         status 401
       end
+
     end
 
     post '/github' do
