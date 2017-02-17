@@ -32,7 +32,7 @@ describe TransifexRequestAuth do
 
   describe '.header' do
     it 'calculates the signature and formats it as an http header' do
-      value = TransifexRequestAuth.header_value(params, secret)
+      value = TransifexRequestAuth.header_value_v1(params, secret)
       expect(value).to eq(valid_signature)
     end
   end
