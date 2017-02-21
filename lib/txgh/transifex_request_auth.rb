@@ -11,8 +11,12 @@ module Txgh
     class << self
       def authentic_request?(request, secret)
         request.body.rewind
-        expected_signature_v1 = header_value_v1(request.body.read, secret)
-        expected_signature_v2 = header_value_v2(request, secret)
+        content = request.body.read
+        http_verb = request.request_method
+        url = request.url
+        date = request.env['HTTP_DATE']
+        expected_signature_v1 = header_value_v1(content, secret)
+        expected_signature_v2 = header_value_v2(http_verb, url, date, content, secret)
         actual_signature_v1 = request.env[RACK_HEADER]
         actual_signature_v2 = request.env[RACK_HEADER_V2]
         actual_signature_v1 == expected_signature_v1 or actual_signature_v2 == expected_signature_v2
@@ -22,11 +26,8 @@ module Txgh
         digest(HMAC_DIGEST, secret, transform(content))
       end
 
-      def header_value_v2(request, secret)
-        http_verb = request.request_method
-        url = request.url
-        date = request.env['HTTP_DATE']
-        content_md5 = request.env['HTTP_CONTENT_MD5']
+      def header_value_v2(http_verb, url, date, content, secret)
+        content_md5 = Digest::MD5.hexdigest content
         data = [http_verb, url, date, content_md5].join("\n")
         digest(HMAC_DIGEST_256, secret, data)
       end
