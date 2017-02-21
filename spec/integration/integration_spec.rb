@@ -53,7 +53,7 @@ describe 'integration tests', integration: true do
   def sign_transifex_request(body)
     header(
       TransifexRequestAuth::TRANSIFEX_HEADER,
-      TransifexRequestAuth.header_value(body, config.transifex_project.webhook_secret)
+      TransifexRequestAuth.header_value_v1(body, config.transifex_project.webhook_secret)
     )
   end
 
