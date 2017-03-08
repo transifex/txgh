@@ -51,9 +51,10 @@ describe 'integration tests', integration: true do
   end
 
   def sign_transifex_request(body)
+    params = URI.decode_www_form(body)
     header(
       TransifexRequestAuth::TRANSIFEX_HEADER,
-      TransifexRequestAuth.header_value(body, config.transifex_project.webhook_secret)
+      TransifexRequestAuth.header_value(params, config.transifex_project.webhook_secret)
     )
   end
 
