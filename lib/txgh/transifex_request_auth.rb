@@ -9,7 +9,14 @@ module Txgh
     class << self
       def authentic_request?(request, secret)
         request.body.rewind
-        expected_signature = header_value(request.body.read, secret)
+        content = request.body.read
+        if request.env['CONTENT_TYPE'] == "application/json"
+          params = JSON.parse(content)
+        else
+          params = URI.decode_www_form(content)
+        end
+
+        expected_signature = header_value(params, secret)
         actual_signature = request.env[RACK_HEADER]
         actual_signature == expected_signature
       end
@@ -23,9 +30,7 @@ module Txgh
       # In order to generate a correct HMAC hash, the request body must be
       # parsed and made to look like a python map. If you're thinking that's
       # weird, you're correct, but it's apparently expected behavior.
-      def transform(content)
-        params = URI.decode_www_form(content)
-
+      def transform(params)
         params = params.map do |key, val|
           key = "'#{key}'"
           val = interpret_val(val)
@@ -36,6 +41,7 @@ module Txgh
       end
 
       def interpret_val(val)
+        val = "#{val}"
         if val =~ /\A[\d]+\z/
           val
         else
