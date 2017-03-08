@@ -84,7 +84,7 @@ module Txgh
         resource_exists = project.api.resource_exists?(tx_resource)
 
         categories = if resource_exists
-          resource = project.api.get_resource(*tx_resource.slugs)
+          resource = project.api.get_resource(tx_resource.project_slug, tx_resource.resource_slug)
           deserialize_categories(Array(resource['categories']))
         else
           {}
