@@ -27,7 +27,7 @@ module Txgh
         actual_signature_v1 == expected_signature_v1 or actual_signature_v2 == expected_signature_v2
       end
 
-      def header_value_v1(params, is_json)
+      def header_value_v1(params, secret)
         digest(HMAC_DIGEST, secret, transform(params))
       end
 

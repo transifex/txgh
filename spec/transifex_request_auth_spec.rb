@@ -37,7 +37,8 @@ describe TransifexRequestAuth do
 
   describe '.header' do
     it 'calculates the V1 signature and formats it as an http header' do
-      value = TransifexRequestAuth.header_value_v1(formdata_params, secret)
+      params = {:param1 => 'value1', :param2 => 'value2', :param3 => 123}
+      value = TransifexRequestAuth.header_value_v1(params, secret)
       expect(value).to eq(valid_signature_v1)
     end
 
