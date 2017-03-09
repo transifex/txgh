@@ -1,18 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'faraday'
-gem 'faraday_middleware'
-gem 'json'
-gem 'octokit'
-gem 'puma'
-gem 'rack'
-gem 'rake'
-gem 'parseconfig'
-gem 'sinatra'
-gem 'sinatra-contrib'
+gemspec
 
 group :development, :test do
   gem 'pry-nav'
+  gem 'rake'
 end
 
 group :development do
