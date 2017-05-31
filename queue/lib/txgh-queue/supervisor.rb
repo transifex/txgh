@@ -13,7 +13,8 @@ module TxghQueue
       ErrorHandlers::Github,
       ErrorHandlers::Transifex,
       ErrorHandlers::TxghErrors,
-      ErrorHandlers::StandardErrors
+      ErrorHandlers::StandardErrors,
+      ErrorHandlers::NetworkErrors
     ]
 
     class << self
