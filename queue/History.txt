@@ -1,3 +1,6 @@
+== 1.1.0
+* Retry on network errors from Net::Protocol and Faraday.
+
 == 1.0.2
 * Don't fail if the txgh response code is in the 300 range (304 returned when a Transifex payload specifies a language equal to the source language).
 
