@@ -10,12 +10,14 @@ GEM
       yaml-write-stream (~> 2.0)
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
-    aws-sdk (2.6.10)
-      aws-sdk-resources (= 2.6.10)
-    aws-sdk-core (2.6.10)
+    aws-sdk (2.9.28)
+      aws-sdk-resources (= 2.9.28)
+    aws-sdk-core (2.9.28)
+      aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.6.10)
-      aws-sdk-core (= 2.6.10)
+    aws-sdk-resources (2.9.28)
+      aws-sdk-core (= 2.9.28)
+    aws-sigv4 (1.0.0)
     backports (3.6.8)
     celluloid (0.17.3)
       celluloid-essentials
@@ -89,7 +91,7 @@ GEM
       json (~> 1.8)
       octokit (~> 4.2)
       parseconfig (~> 1.0)
-    txgh-queue (1.0.2)
+    txgh-queue (1.1.0)
       aws-sdk (~> 2.0)
       sinatra (~> 1.4)
       sinatra-contrib (~> 1.4)
@@ -116,4 +118,4 @@ DEPENDENCIES
   txgh-server (~> 2.0)
 
 BUNDLED WITH
-   1.13.2
+   1.14.6
