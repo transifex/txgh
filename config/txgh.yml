@@ -4,15 +4,16 @@ txgh:
       uniiverse/multiverse:
         api_username: "szum"
         api_token: "7ab4338d8d6cac3a08b1992950050cedefba524d"
-        push_source_to: "uniiverse/multiverse"
-        branch: "all"
+        push_source_to: "multiverse"
+        branch: "txgh-test"
         # webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"
   transifex:
     projects:
-      uniiverse/multiverse:
+      multiverse:
         tx_config: "./config/tx.config"
-        api_username: "lukas.switlicki"
-        api_password: "1/ad4ad914d485ab4a5ccf0e697a1199d47b2c8111"
-        push_translations_to: "universe/multiverse"
+        api_username: "api"
+        api_password: "1/b8a9ea8aa47fb65f0c55c36a1713a0496e7d6738"
+        push_translations_to: "uniiverse/multiverse"
+        branch: "txgh-test"
         # push_trigger: "<%= ENV['TX_PUSH_TRIGGER_REVIEWED_OR_TRANSLATED'] %>"
         # webhook_secret: "<%= ENV['TX_WEBHOOK_SECRET'] %>"

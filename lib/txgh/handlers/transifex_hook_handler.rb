@@ -38,6 +38,7 @@ module Txgh
               tx_resource.translation_path(tx_resource.lang_map(language))
             else
               logger.info('request language is in lang_map and is in request or is nil')
+              puts project.lang_map(language)
               tx_resource.translation_path(project.lang_map(language))
             end
 
@@ -47,7 +48,7 @@ module Txgh
               repo.name, branch, translation_path, translations
             )
           end
-        elsif 
+        elsif
           tx_hook_trigger!=project.push_trigger
           logger.info("did not process changes because trigger was '#{tx_hook_trigger}' and push trigger was set to '#{project.push_trigger}'")
         else
