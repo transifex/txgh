@@ -9,7 +9,7 @@ txgh:
         # webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"
   transifex:
     projects:
-      multiverse:
+      uniiverse/multiverse:
         tx_config: "./config/tx.config"
         api_username: "lukas.switlicki"
         api_password: "1/ad4ad914d485ab4a5ccf0e697a1199d47b2c8111"
