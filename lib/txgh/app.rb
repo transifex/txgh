@@ -62,6 +62,9 @@ module Txgh
         payload = JSON.parse(rbody)
       end
 
+      puts(payload)
+      puts(payload['project'])
+
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
       if payload.key?('translated')

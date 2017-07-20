@@ -6,6 +6,7 @@ module Txgh
   class KeyManager
     class << self
       def config_from_project(project_name, tx_config = nil)
+        puts (project_name)
         project_config = project_config_for(project_name)
         repo_config = repo_config_for(project_config['push_translations_to'])
         tx_config ||= Txgh::TxConfig.load_file(project_config['tx_config'])

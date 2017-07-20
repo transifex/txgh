@@ -1,18 +1,18 @@
 txgh:
   github:
     repos:
-      <%= ENV['TX_PUSH_TRANSLATIONS_TO'] %>:
-        api_username: "<%= ENV['GITHUB_USERNAME'] %>"
-        api_token: "<%= ENV['GITHUB_TOKEN'] %>"
-        push_source_to: "<%= ENV['GITHUB_PUSH_SOURCE_TO'] %>"
-        branch: "<%= ENV['GITHUB_BRANCH'] %>"
-        webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"
+      uniiverse/multiverse:
+        api_username: "szum"
+        api_token: "7ab4338d8d6cac3a08b1992950050cedefba524d"
+        push_source_to: "uniiverse/multiverse"
+        branch: "all"
+        # webhook_secret: "<%= ENV['GITHUB_WEBHOOK_SECRET'] %>"
   transifex:
     projects:
-      <%= ENV['GITHUB_PUSH_SOURCE_TO'] %>:
-        tx_config: "<%= ENV['TX_CONFIG_PATH'] %>"
-        api_username: "<%= ENV['TX_USERNAME'] %>"
-        api_password: "<%= ENV['TX_PASSWORD'] %>"
-        push_translations_to: "<%= ENV['TX_PUSH_TRANSLATIONS_TO'] %>"
-        push_trigger: "<%= ENV['TX_PUSH_TRIGGER_REVIEWED_OR_TRANSLATED'] %>"
-        webhook_secret: "<%= ENV['TX_WEBHOOK_SECRET'] %>"
+      multiverse:
+        tx_config: "./config/tx.config"
+        api_username: "lukas.switlicki"
+        api_password: "1/ad4ad914d485ab4a5ccf0e697a1199d47b2c8111"
+        push_translations_to: "universe/multiverse"
+        # push_trigger: "<%= ENV['TX_PUSH_TRIGGER_REVIEWED_OR_TRANSLATED'] %>"
+        # webhook_secret: "<%= ENV['TX_WEBHOOK_SECRET'] %>"
