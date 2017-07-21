@@ -34,7 +34,6 @@ module Txgh
     end
 
     def translation_path(language)
-      puts language
       translation_file.gsub('<lang>', language)
     end
 

@@ -38,7 +38,6 @@ module Txgh
               tx_resource.translation_path(tx_resource.lang_map(language))
             else
               logger.info('request language is in lang_map and is in request or is nil')
-              puts project.lang_map(language)
               tx_resource.translation_path(project.lang_map(language))
             end
 
