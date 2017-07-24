@@ -62,6 +62,9 @@ module Txgh
         payload = JSON.parse(rbody)
       end
 
+      # puts(payload)
+      # puts(payload['project'])
+
       config = Txgh::KeyManager.config_from_project(payload['project'])
 
       if payload.key?('translated')
@@ -100,7 +103,10 @@ module Txgh
         JSON.parse(request.body.read)
       end
 
-      github_repo_name = "#{payload['repository']['owner']['name']}/#{payload['repository']['name']}"
+      github_repo_name = "uniiverse/#{payload['repository']['name']}"
+
+      puts payload['ref']
+      puts github_repo_name
       config = Txgh::KeyManager.config_from_repo(github_repo_name)
 
       if authenticated_github_request?(config.github_repo, request)

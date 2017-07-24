@@ -47,7 +47,7 @@ module Txgh
               repo.name, branch, translation_path, translations
             )
           end
-        elsif 
+        elsif
           tx_hook_trigger!=project.push_trigger
           logger.info("did not process changes because trigger was '#{tx_hook_trigger}' and push trigger was set to '#{project.push_trigger}'")
         else
