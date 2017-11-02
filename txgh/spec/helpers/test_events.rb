@@ -10,4 +10,8 @@ class TestEvents < Txgh::Events
     published << { channel: channel, options: options }
     super
   end
+
+  def published_in(channel)
+    published.select { |event| event[:channel] == channel }
+  end
 end

@@ -25,11 +25,21 @@ module TxghServer
           check_error_response || begin
             puller.pull_resource(tx_resource, [language])
             update_github_status
+            publish_event
             respond_with(200, true)
           end
         end
 
         private
+
+        def publish_event
+          Txgh.events.publish(
+            'transifex.webhook_received', {
+              project: project, repo: repo, tx_resource: tx_resource,
+              language: language
+            }
+          )
+        end
 
         def update_github_status
           Txgh::GithubStatus.update(project, repo, branch)
