@@ -20,6 +20,8 @@ module TxghServer
         end
 
         def handle_request
+          publish_event
+
           handle_safely do
             handler = TxghServer::Webhooks::Transifex::HookHandler.new(
               project: config.transifex_project,
@@ -34,6 +36,15 @@ module TxghServer
         end
 
         private
+
+        def publish_event
+          Txgh.events.publish(
+            'transifex.webhook_received', {
+              payload: payload,
+              signature: TransifexRequestAuth.signature_from(request)
+            }
+          )
+        end
 
         def handle_safely
           if authentic_request?

@@ -54,18 +54,9 @@ describe HookHandler do
       receive(:update).with(transifex_project, github_repo, ref)
     )
 
-    expect(Txgh.events.published_in('transifex.webhook_received')).to be_empty
-
     response = handler.execute
     expect(response.status).to eq(200)
     expect(response.body).to eq(true)
-
-    event = Txgh.events.published_in('transifex.webhook_received').first
-    event_options = event[:options]
-    expect(event_options[:project]).to eq(transifex_project)
-    expect(event_options[:repo]).to eq(github_repo)
-    expect(event_options[:tx_resource].resource_slug).to eq(resource_slug)
-    expect(event_options[:language]).to eq(language)
   end
 
   it "responds with an error if the config can't be found" do
