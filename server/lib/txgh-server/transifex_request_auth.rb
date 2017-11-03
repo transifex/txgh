@@ -11,12 +11,16 @@ module TxghServer
       def authentic_request?(request, secret)
         request.body.rewind
         expected_signature = header_value(request.body.read, secret)
-        actual_signature = request.env[RACK_HEADER]
+        actual_signature = signature_from(request)
         actual_signature == expected_signature
       end
 
       def header_value(content, secret)
         digest(transform(content), secret)
+      end
+
+      def signature_from(request)
+        request.env[RACK_HEADER]
       end
 
       private

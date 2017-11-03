@@ -10,11 +10,24 @@ describe Transifex::RequestHandler do
 
   let(:logger) { NilLogger.new }
   let(:body) { URI.encode_www_form(payload.to_a) }
-  let(:request) { TestRequest.new(body: body) }
+  let(:signature) { 'abc123' }
+  let(:headers) { { TxghServer::TransifexRequestAuth::RACK_HEADER => signature } }
+  let(:request) { TestRequest.new(body: body, headers: headers) }
   let(:handler) { described_class.new(request, logger) }
   let(:payload) { { 'project' => project_name, 'resource' => resource_slug, 'language' => 'pt' } }
 
   describe '#handle_request' do
+    it 'publishes an event' do
+      expect { handler.handle_request }.to(
+        change { Txgh.events.published_in('transifex.webhook_received').size }.by(1)
+      )
+
+      event = Txgh.events.published_in('transifex.webhook_received').first
+      expect(event[:options][:payload]).to eq(Txgh::Utils.deep_symbolize_keys(payload))
+      expect(event[:options][:raw_payload]).to eq(body)
+      expect(event[:options][:signature]).to eq(signature)
+    end
+
     it 'does not execute if unauthorized' do
       expect_any_instance_of(Transifex::HookHandler).to_not receive(:execute)
       response = handler.handle_request

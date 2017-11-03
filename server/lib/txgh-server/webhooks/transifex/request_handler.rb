@@ -20,6 +20,8 @@ module TxghServer
         end
 
         def handle_request
+          publish_event
+
           handle_safely do
             handler = TxghServer::Webhooks::Transifex::HookHandler.new(
               project: config.transifex_project,
@@ -34,6 +36,16 @@ module TxghServer
         end
 
         private
+
+        def publish_event
+          Txgh.events.publish(
+            'transifex.webhook_received', {
+              payload: payload,
+              raw_payload: raw_payload,
+              signature: TransifexRequestAuth.signature_from(request)
+            }
+          )
+        end
 
         def handle_safely
           if authentic_request?
@@ -63,12 +75,17 @@ module TxghServer
           @config ||= Txgh::Config::KeyManager.config_from_project(payload[:project])
         end
 
+        def raw_payload
+          @raw_payload ||= begin
+            request.body.rewind
+            request.body.read
+          end
+        end
+
         def payload
           @payload ||= begin
-            request.body.rewind
-
             Txgh::Utils.deep_symbolize_keys(
-              Hash[URI.decode_www_form(request.body.read)]
+              Hash[URI.decode_www_form(raw_payload)]
             )
           end
         end
