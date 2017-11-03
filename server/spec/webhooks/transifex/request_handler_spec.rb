@@ -24,6 +24,7 @@ describe Transifex::RequestHandler do
 
       event = Txgh.events.published_in('transifex.webhook_received').first
       expect(event[:options][:payload]).to eq(Txgh::Utils.deep_symbolize_keys(payload))
+      expect(event[:options][:raw_payload]).to eq(body)
       expect(event[:options][:signature]).to eq(signature)
     end
 

@@ -41,6 +41,7 @@ module TxghServer
           Txgh.events.publish(
             'transifex.webhook_received', {
               payload: payload,
+              raw_payload: raw_payload,
               signature: TransifexRequestAuth.signature_from(request)
             }
           )
@@ -74,12 +75,17 @@ module TxghServer
           @config ||= Txgh::Config::KeyManager.config_from_project(payload[:project])
         end
 
+        def raw_payload
+          @raw_payload ||= begin
+            request.body.rewind
+            request.body.read
+          end
+        end
+
         def payload
           @payload ||= begin
-            request.body.rewind
-
             Txgh::Utils.deep_symbolize_keys(
-              Hash[URI.decode_www_form(request.body.read)]
+              Hash[URI.decode_www_form(raw_payload)]
             )
           end
         end
