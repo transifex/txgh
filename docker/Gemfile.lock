@@ -97,7 +97,7 @@ GEM
       sinatra-contrib (~> 1.4)
       txgh (~> 6.0)
       txgh-server (~> 2.2)
-    txgh-server (2.3.0)
+    txgh-server (2.4.0)
       mime-types (~> 2.0)
       rubyzip (>= 1.0, <= 1.1.2)
       sinatra (~> 1.4)
@@ -118,4 +118,4 @@ DEPENDENCIES
   txgh-server (~> 2.0)
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
