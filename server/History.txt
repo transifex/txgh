@@ -1,3 +1,6 @@
+== 2.4.0
+* Publish event upon receiving Transifex webhook.
+
 == 2.3.0
 * Mark github statuses as errored if an error occurs during push.
 
