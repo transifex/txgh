@@ -54,7 +54,7 @@ describe 'integration tests', integration: true do
     params = URI.decode_www_form(body)
     header(
       TransifexRequestAuth::TRANSIFEX_HEADER,
-      TransifexRequestAuth.header_value(params, config.transifex_project.webhook_secret)
+      TransifexRequestAuth.header_value_v1(params, config.transifex_project.webhook_secret)
     )
   end
 
