@@ -123,6 +123,9 @@ txgh:
 
 tx.config - This is a configuration which maps the source file, languages, and target translation files.  It is based on this specification: http://docs.transifex.com/client/config/#txconfig
 
+---
+There is a check for both V1 and V2 Transifex webhook signatures, but the V1 signature implementation is no logger maintain. Changes in the webhook response may cause V1 signature calculation to be wrong. Make sure you use the latest master that include both checks.
+
 Getting Help
 ---
 You can always get additional help via [GitHub Issues](https://github.com/transifex/txgh/issues) or [Transifex support email](support@transifex.com)
@@ -133,5 +136,20 @@ Txgh is primarily distributed under the terms of the Apache License (Version 2.0
 
 See [LICENSE](https://github.com/transifex/txgh/blob/master/LICENSE) for details.
 
+Development
+---
+In order to test and debug a local instance of TXGH you can do the following:
+1. Run TXGH with:
+```
+puma -p 9292
+```
+2. Use [https://ngrok.com](https://ngrok.com) to expose the local server
+```
+./ngrok http 9292
+```
+3. Take the host name ngrok generated, something like http://f61da052.ngrok.io and setup the following webhooks:
+  * For Github: http://f61da051.ngrok.io/hooks/github
+  * For Transifex: http://f61da051.ngrok.io/hooks/transifex
 
+  Make sure the secret you have used in each case are the same as the ones that are configured in txgh.yml.
 
