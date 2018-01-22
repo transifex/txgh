@@ -1,4 +1,4 @@
-FROM ruby:2.1-onbuild
+FROM ruby:2.2.9-onbuild
 ENV RACK_ENV production
 ENV GITHUB_PUSH_SOURCE_TO Transifex Project Name
 ENV GITHUB_USERNAME Your github username
@@ -13,5 +13,3 @@ ENV TX_WEBHOOK_SECRET Auth for Transifex Webhook
 
 EXPOSE 9292
 CMD ["puma", "-p", "9292"]
-
-
