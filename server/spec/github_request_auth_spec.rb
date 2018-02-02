@@ -30,9 +30,9 @@ describe GithubRequestAuth do
     end
   end
 
-  describe '.header' do
+  describe '.compute_signature' do
     it 'calculates the signature and formats it as an http header' do
-      value = GithubRequestAuth.header_value(params, secret)
+      value = GithubRequestAuth.compute_signature(params, secret)
       expect(value).to eq("sha1=#{valid_signature}")
     end
   end

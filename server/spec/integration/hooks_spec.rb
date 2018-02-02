@@ -93,14 +93,27 @@ describe 'hook integration tests', integration: true do
   def sign_github_request(body)
     header(
       GithubRequestAuth::GITHUB_HEADER,
-      GithubRequestAuth.header_value(body, config.github_repo.webhook_secret)
+      GithubRequestAuth.compute_signature(
+        body, config.github_repo.webhook_secret
+      )
     )
   end
 
   def sign_transifex_request(body)
+    date_str = Time.now.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+    header('Date', date_str)
+    header('X-Tx-Url', 'http://example.org/transifex')
+
     header(
-      TransifexRequestAuth::TRANSIFEX_HEADER,
-      TransifexRequestAuth.header_value(body, config.transifex_project.webhook_secret)
+      TxghServer::TransifexRequestAuth::TRANSIFEX_HEADER,
+      TxghServer::TransifexRequestAuth.compute_signature(
+        http_verb: 'POST',
+        url: 'http://example.org/transifex',
+        date_str: date_str,
+        content: body,
+        secret: config.transifex_project.webhook_secret
+      )
     )
   end
 
@@ -115,7 +128,7 @@ describe 'hook integration tests', integration: true do
         'language' => 'el_GR', 'translated' => 100
       }
 
-      payload = URI.encode_www_form(params.to_a)
+      payload = params.to_json
 
       sign_transifex_request(payload)
       post '/transifex', payload

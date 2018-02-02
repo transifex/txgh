@@ -21,10 +21,19 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
 
   describe '/transifex/enqueue' do
     def sign_with(body)
+      date_str = Time.now.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+      header('Date', date_str)
+      header('X-Tx-Url', 'http://example.org/transifex')
+
       header(
         TxghServer::TransifexRequestAuth::TRANSIFEX_HEADER,
-        TxghServer::TransifexRequestAuth.header_value(
-          body, config.transifex_project.webhook_secret
+        TxghServer::TransifexRequestAuth.compute_signature(
+          http_verb: 'POST',
+          url: 'http://example.org/transifex',
+          date_str: date_str,
+          content: body,
+          secret: config.transifex_project.webhook_secret
         )
       )
     end
@@ -40,7 +49,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
     end
 
     it 'enqueues a new job' do
-      payload = URI.encode_www_form(params.to_a)
+      payload = params.to_json
       sign_with payload
 
       expect { post '/transifex/enqueue', payload }.to(
@@ -64,7 +73,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
     def sign_with(body)
       header(
         TxghServer::GithubRequestAuth::GITHUB_HEADER,
-        TxghServer::GithubRequestAuth.header_value(
+        TxghServer::GithubRequestAuth.compute_signature(
           body, config.github_repo.webhook_secret
         )
       )
