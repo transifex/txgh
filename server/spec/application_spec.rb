@@ -109,10 +109,19 @@ describe TxghServer::WebhookEndpoints do
 
   describe '/transifex' do
     def sign_with(body)
+      date_str = Time.now.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+      header('Date', date_str)
+      header('X-Tx-Url', 'http://example.org/transifex')
+
       header(
         TxghServer::TransifexRequestAuth::TRANSIFEX_HEADER,
-        TxghServer::TransifexRequestAuth.header_value(
-          body, config.transifex_project.webhook_secret
+        TxghServer::TransifexRequestAuth.compute_signature(
+          http_verb: 'POST',
+          url: 'http://example.org/transifex',
+          date_str: date_str,
+          content: body,
+          secret: config.transifex_project.webhook_secret
         )
       )
     end
@@ -128,7 +137,7 @@ describe TxghServer::WebhookEndpoints do
       }
     end
 
-    let(:payload) { URI.encode_www_form(params.to_a) }
+    let(:payload) { params.to_json }
 
     before(:each) do
       allow(TxghServer::Webhooks::Transifex::HookHandler).to(
@@ -145,7 +154,7 @@ describe TxghServer::WebhookEndpoints do
         receive(:execute).and_return(respond_with(200, true))
       )
 
-      payload = URI.encode_www_form(params.to_a)
+      payload = params.to_json
       sign_with payload
       post '/transifex', payload
       expect(last_response).to be_ok
@@ -174,7 +183,7 @@ describe TxghServer::WebhookEndpoints do
     def sign_with(body)
       header(
         TxghServer::GithubRequestAuth::GITHUB_HEADER,
-        TxghServer::GithubRequestAuth.header_value(
+        TxghServer::GithubRequestAuth.compute_signature(
           body, config.github_repo.webhook_secret
         )
       )

@@ -10,7 +10,7 @@ describe Transifex::RequestHandler, auto_configure: true do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
-  let(:body) { URI.encode_www_form(payload.to_a) }
+  let(:body) { payload.to_json }
   let(:request) { TestRequest.new(body: body) }
   let(:handler) { described_class.new(request, logger) }
   let(:payload) do
@@ -42,7 +42,7 @@ describe Transifex::RequestHandler, auto_configure: true do
       end
 
       let(:backend) { TxghQueue::Config.backend }
-      let(:producer) { backend.producer_for("transifex.hook") }
+      let(:producer) { backend.producer_for('transifex.hook') }
 
       it 'does not enqueue if unauthorized' do
         expect { handler.handle_request }.to_not(

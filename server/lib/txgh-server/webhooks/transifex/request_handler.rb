@@ -1,4 +1,4 @@
-require 'uri'
+require 'json'
 
 module TxghServer
   module Webhooks
@@ -20,7 +20,10 @@ module TxghServer
         end
 
         def handle_request
-          publish_event
+          if publish_event
+            # the event handled the request
+            return respond_with(204, '')  # no content
+          end
 
           handle_safely do
             handler = TxghServer::Webhooks::Transifex::HookHandler.new(
@@ -38,13 +41,18 @@ module TxghServer
         private
 
         def publish_event
-          Txgh.events.publish(
-            'transifex.webhook_received', {
-              payload: payload,
-              raw_payload: raw_payload,
-              signature: TransifexRequestAuth.signature_from(request)
-            }
-          )
+          if Txgh.events.channel_hash.include?('transifex.webhook_received')
+            Txgh.events.publish(
+              'transifex.webhook_received', {
+                payload: payload,
+                raw_payload: raw_payload,
+                signature: TransifexRequestAuth.signature_from(request),
+                url: request.env['HTTP_X_TX_URL'],
+                date_str: request.env['HTTP_DATE'],
+                http_verb: request.request_method
+              }
+            )
+          end
         end
 
         def handle_safely
@@ -83,11 +91,9 @@ module TxghServer
         end
 
         def payload
-          @payload ||= begin
-            Txgh::Utils.deep_symbolize_keys(
-              Hash[URI.decode_www_form(raw_payload)]
-            )
-          end
+          @payload ||= Txgh::Utils.deep_symbolize_keys(
+            JSON.parse(raw_payload)
+          )
         end
 
       end
