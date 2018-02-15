@@ -67,7 +67,7 @@ How it works
 You configure a service hook in Github and point it to this server. The URL path to the service hook endpoint: /hooks/github
 You do the same for Transifex, in your project settings page, and point it to the service hook endpoint: /hooks/transifex
 
-Currently there are 4 use cases that are supported:
+Currently, there are 4 use cases that are supported:
 
 1) When a resource (configured in this service) in Transifex reaches 100% translated, the Txgh service will pull the translations and commit them to the target repository.
 
@@ -87,7 +87,7 @@ We recommend running it using Ruby 2.2.2 and installing dependencies via bundler
 
 There are 2 important configuration files.
 
-txgh.yml - This is the base configuration for the service.  To avoid needing to checkin sensitive password information, this file should pull it's settings from the Ruby ENV in production.  Additionally, this file can be located in the users HOME directory to support running the server with local values.
+txgh.yml - This is the base configuration for the service.  To avoid needing to checkin sensitive password information, this file should pull its settings from the Ruby ENV in production.  Additionally, this file can be located in the users HOME directory to support running the server with local values.
 
 ```yaml
 txgh:
@@ -124,7 +124,7 @@ txgh:
 tx.config - This is a configuration which maps the source file, languages, and target translation files.  It is based on this specification: http://docs.transifex.com/client/config/#txconfig
 
 ---
-There is a check for both V1 and V2 Transifex webhook signatures, but the V1 signature implementation is no logger maintain. Changes in the webhook response may cause V1 signature calculation to be wrong. Make sure you use the latest master that include both checks.
+There is a check for both V1 and V2 Transifex webhook signatures, but the V1 signature implementation is no longer maintained. Changes in the webhook response may cause V1 signature calculation to be wrong. Make sure you use the latest master that include both checks.
 
 Getting Help
 ---
