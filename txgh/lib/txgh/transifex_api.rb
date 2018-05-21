@@ -94,9 +94,15 @@ module Txgh
       false
     end
 
-    def download(tx_resource, lang)
-      project_slug = tx_resource.project_slug
-      resource_slug = tx_resource.resource_slug
+    def download(*args)
+      project_slug, resource_slug = case args.first
+        when TxResource, TxBranchResource
+          [args.first.project_slug, args.first.resource_slug]
+        else
+          [args[0], args[1]]
+      end
+
+      lang = args.last
 
       json_data = get_json(
         "#{API_ROOT}/project/#{project_slug}/resource/#{resource_slug}/translation/#{lang}/"
