@@ -140,6 +140,8 @@ describe TxghServer::WebhookEndpoints do
     let(:payload) { params.to_json }
 
     before(:each) do
+      header('Content-Type', 'application/json')
+
       allow(TxghServer::Webhooks::Transifex::HookHandler).to(
         receive(:new) do |options|
           expect(options[:project].name).to eq(project_name)
