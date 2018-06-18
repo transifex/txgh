@@ -11,7 +11,8 @@ describe Transifex::RequestHandler, auto_configure: true do
 
   let(:logger) { NilLogger.new }
   let(:body) { payload.to_json }
-  let(:request) { TestRequest.new(body: body) }
+  let(:headers) { { 'CONTENT_TYPE' => 'application/json' } }
+  let(:request) { TestRequest.new(body: body, headers: headers) }
   let(:handler) { described_class.new(request, logger) }
   let(:payload) do
     { 'project' => project_name, 'resource' => resource_slug, 'language' => 'pt' }
