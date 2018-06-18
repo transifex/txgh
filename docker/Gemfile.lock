@@ -97,7 +97,7 @@ GEM
       sinatra-contrib (~> 1.4)
       txgh (~> 6.0)
       txgh-server (~> 3.0)
-    txgh-server (3.0.0)
+    txgh-server (3.1.0)
       mime-types (~> 2.0)
       rubyzip (>= 1.0, <= 1.1.2)
       sinatra (~> 1.4)
