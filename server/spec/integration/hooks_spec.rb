@@ -66,6 +66,8 @@ describe 'hook integration tests', integration: true do
   end
 
   before(:each) do
+    header('Content-Type', 'application/json')
+
     allow(Txgh::Config::KeyManager).to(
       receive(:raw_config).and_return("raw://#{YAML.dump(base_config)}")
     )

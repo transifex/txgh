@@ -1,4 +1,5 @@
 require 'json'
+require 'uri'
 
 module TxghServer
   module Webhooks
@@ -92,7 +93,12 @@ module TxghServer
 
         def payload
           @payload ||= Txgh::Utils.deep_symbolize_keys(
-            JSON.parse(raw_payload)
+            case request.env['CONTENT_TYPE']
+              when 'application/json'
+                JSON.parse(raw_payload)
+              else
+                Hash[URI.decode_www_form(raw_payload)]
+            end
           )
         end
 

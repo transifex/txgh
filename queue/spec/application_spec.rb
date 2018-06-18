@@ -25,6 +25,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
 
       header('Date', date_str)
       header('X-Tx-Url', 'http://example.org/transifex')
+      header('Content-Type', 'application/json')
 
       header(
         TxghServer::TransifexRequestAuth::TRANSIFEX_HEADER,
