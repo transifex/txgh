@@ -61,15 +61,15 @@ namespace :version do
   end
 
   task :history do
-    history = File.read('History.txt')
-    history = "== #{TxghServer::VERSION}\n* \n\n#{history}"
-    File.write('History.txt', history)
-    system "vi History.txt"
+    history = File.read('CHANGELOG.md')
+    history = "# #{TxghServer::VERSION}\n* \n\n#{history}"
+    File.write('CHANGELOG.md', history)
+    system "vi CHANGELOG.md"
   end
 
   task :commit_and_push do
     system "git add lib/txgh-server/version.rb"
-    system "git add History.txt"
+    system "git add CHANGELOG.md"
     system "git commit -m 'Bumping version to #{TxghServer::VERSION}'"
     system "git push origin HEAD"
   end

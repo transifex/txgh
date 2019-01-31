@@ -35,7 +35,7 @@
 * Upgrade to txgh v6.2.1.
 
 == 6.3.0
-* Upgrade to txgh v6.2.0. 
+* Upgrade to txgh v6.2.0.
 
 == 6.2.3
 * Upgrade to txgh v6.1.2.
@@ -63,7 +63,7 @@
 * Upgrade to txgh v6.0.6.
 
 == 6.0.4
-* Upgrade to txgh v6.0.5. 
+* Upgrade to txgh v6.0.5.
 
 == 6.0.3
 * Upgrade to txgh v6.0.4.
@@ -92,7 +92,7 @@
 * Fix for nested YAML arrays, which broke after the array preservation stuff.
 
 == 5.4.2
-* Array preservation should only affect string arrays (i.e. not nested objects). 
+* Array preservation should only affect string arrays (i.e. not nested objects).
 
 == 5.4.1
 * Treat arrays as single units to conform to Transifex's string handling behavior.
