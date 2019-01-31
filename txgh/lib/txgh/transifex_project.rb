@@ -43,7 +43,7 @@ module Txgh
     end
 
     def serialization_options
-      config.fetch('serialization_options', {})
+      config['serialization_options']
     end
 
     def supported_language?(language)
