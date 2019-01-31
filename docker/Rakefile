@@ -79,7 +79,7 @@ namespace :publish do
   end
 
   task :update_docker_base_image do
-    system("docker pull ruby:2.3")
+    system("docker pull ruby:2.5")
   end
 
   task :build_docker do

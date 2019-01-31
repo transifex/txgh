@@ -108,6 +108,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-darwin-17
 
 DEPENDENCIES
   puma
@@ -118,4 +119,4 @@ DEPENDENCIES
   txgh-server (~> 3.0)
 
 BUNDLED WITH
-   1.16.2
+   1.17.3
