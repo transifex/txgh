@@ -6,18 +6,24 @@ module Txgh
     EXTRACTOR_MAP = {
       'YML'          => 'yaml/rails',
       'YAML'         => 'yaml/rails',
-      'KEYVALUEJSON' => 'json/key-value',
+      'KEYVALUEJSON' => 'json/dotted-key',
       'ANDROID'      => 'xml/android',
       'TXT'          => 'txt/lines'
-    }
+    }.freeze
 
     SERIALIZER_MAP = {
       'YML'          => 'yaml/rails',
       'YAML'         => 'yaml/rails',
-      'KEYVALUEJSON' => 'json/key-value',
+      'KEYVALUEJSON' => 'json/dotted-key',
       'ANDROID'      => 'xml/android',
       'TXT'          => 'txt/lines'
-    }
+    }.freeze
+
+    DEFAULT_OPTIONS_MAP = {
+      'json/dotted-key' => {
+        pretty: true, indent_size: 4
+      }.freeze
+    }.freeze
 
     class << self
       def from_phrase_list(tx_resource, phrases)
@@ -30,11 +36,16 @@ module Txgh
     end
 
     attr_reader :tx_resource
+    attr_writer :serialization_options
 
     def initialize(tx_resource, options)
       @tx_resource = tx_resource
       @phrases = options[:phrases]
       @raw = options[:raw]
+    end
+
+    def serialization_options
+      @serialization_options || DEFAULT_OPTIONS_MAP.fetch(serializer_id, {})
     end
 
     def phrases
@@ -55,7 +66,7 @@ module Txgh
     # want to override the resource's source language using the second
     # parameter here.
     def write_to(stream, language = tx_resource.source_lang)
-      serializer.from_stream(stream, language) do |serializer|
+      serializer.from_stream(stream, language, serialization_options) do |serializer|
         phrases.each do |phrase|
           serializer.write_key_value(
             phrase['key'], str(phrase['string'] || '')
@@ -106,24 +117,28 @@ module Txgh
       end
     end
 
-    def extractor
-      id = EXTRACTOR_MAP.fetch(tx_resource.type) do
+    def extractor_id
+      EXTRACTOR_MAP.fetch(tx_resource.type) do
         raise TxghInternalError,
           "'#{tx_resource.type}' is not a file type that is supported when "\
           "uploading diffs."
       end
+    end
 
-      Abroad.extractor(id)
+    def extractor
+      Abroad.extractor(extractor_id)
+    end
+
+    def serializer_id
+      SERIALIZER_MAP.fetch(tx_resource.type) do
+        raise TxghInternalError,
+          "'#{tx_resource.type}' is not a file type that is supported when "\
+          "uploading diffs."
+      end
     end
 
     def serializer
-      id = SERIALIZER_MAP.fetch(tx_resource.type) do
-        raise TxghInternalError,
-          "'#{tx_resource.type}' is not a file type that is supported when "\
-          "uploading diffs."
-      end
-
-      Abroad.serializer(id)
+      Abroad.serializer(serializer_id)
     end
   end
 end

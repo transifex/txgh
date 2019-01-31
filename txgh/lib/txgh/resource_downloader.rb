@@ -43,6 +43,7 @@ module Txgh
         head_content = wrap(transifex_download(head_resource, language_code), head_resource)
         diff_point_content = wrap(transifex_download(diff_point_resource, language_code), diff_point_resource)
         contents = diff_point_content.merge(head_content, source_diff)
+        contents.serialization_options = Txgh::Utils.deep_symbolize_keys(project.serialization_options)
 
         yield file_name, contents.to_s(language_code)
       end
