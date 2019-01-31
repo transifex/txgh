@@ -1,3 +1,6 @@
+# 7.3.1
+* Upgrade to txgh v6.7.1.
+
 # 7.3.0
 * Upgrade to txgh v6.7.0.
 
