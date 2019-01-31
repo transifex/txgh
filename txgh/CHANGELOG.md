@@ -1,3 +1,6 @@
+# 6.7.1
+* Apply default serialization options correctly.
+
 # 6.7.0
 * Upgrade to abroad 4.6.0 in order to support nested JSON.
 
