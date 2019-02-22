@@ -1,3 +1,6 @@
+# 6.8.1
+* Actually support ERB tags in config files.
+
 # 6.8.0
 * Support ERB tags in config files.
 
