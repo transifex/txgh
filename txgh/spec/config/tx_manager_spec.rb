@@ -15,9 +15,9 @@ describe TxManager do
     it 'loads tx config from the given file' do
       path = 'file://path/to/tx_config'
       project_config.merge!('tx_config' => path)
-      expect(TxConfig).to receive(:load_file).with('path/to/tx_config').and_return(:tx_config)
+      expect(File).to receive(:read).with('path/to/tx_config').and_return('{}')
       config = TxManager.tx_config(project, repo)
-      expect(config).to eq(:tx_config)
+      expect(config).to be_a(TxConfig)
     end
 
     context 'with git-based config' do
