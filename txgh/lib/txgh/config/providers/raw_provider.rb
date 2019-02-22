@@ -1,3 +1,5 @@
+require 'erb'
+
 module Txgh
   module Config
     module Providers
@@ -10,7 +12,7 @@ module Txgh
           end
 
           def load(payload, parser, options = {})
-            parser.load(payload)
+            parser.load(ERB.new(payload).result(binding))
           end
 
           def scheme
