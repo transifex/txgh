@@ -1,3 +1,6 @@
+# 2.1.0
+* Support ERB tags in config files.
+
 # 2.0.0
 * Upgrade to txgh-server 3.0 to conform to new Transifex auth strategy.
 
