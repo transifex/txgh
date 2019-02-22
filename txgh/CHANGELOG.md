@@ -1,3 +1,6 @@
+# 6.8.0
+* Support ERB tags in config files.
+
 # 6.7.1
 * Apply default serialization options correctly.
 
