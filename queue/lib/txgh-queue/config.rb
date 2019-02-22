@@ -1,3 +1,4 @@
+require 'erb'
 require 'yaml'
 
 module TxghQueue
@@ -37,11 +38,15 @@ module TxghQueue
       end
 
       def load_file(payload)
-        Txgh::Utils.deep_symbolize_keys(YAML.load_file(payload))
+        Txgh::Utils.deep_symbolize_keys(parse(File.read(payload)))
       end
 
       def load_raw(payload)
-        Txgh::Utils.deep_symbolize_keys(YAML.load(payload))
+        Txgh::Utils.deep_symbolize_keys(parse(payload))
+      end
+
+      def parse(str)
+        YAML.load(ERB.new(str).result(binding))
       end
     end
   end
