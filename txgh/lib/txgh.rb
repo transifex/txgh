@@ -51,9 +51,9 @@ module Txgh
   end
 
   # default set of tx config providers
-  tx_manager.register_provider(providers::FileProvider, Txgh::Config::TxConfig)
-  tx_manager.register_provider(providers::GitProvider,  Txgh::Config::TxConfig)
-  tx_manager.register_provider(providers::RawProvider,  Txgh::Config::TxConfig, default: true)
+  tx_manager.register_provider(providers::FileProvider,   Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::GitHubProvider, Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::RawProvider,    Txgh::Config::TxConfig, default: true)
 
   # default set of base config providers
   key_manager.register_provider(providers::FileProvider, YAML)

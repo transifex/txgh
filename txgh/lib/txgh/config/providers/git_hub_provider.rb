@@ -1,7 +1,7 @@
 module Txgh
   module Config
     module Providers
-      class GitProvider
+      class GitHubProvider
         SCHEME = 'git'
 
         class << self
