@@ -55,7 +55,7 @@ module TxghServer
         def authentic_request?
           # TODO
           if repo.webhook_protected?
-            GithubRequestAuth.authentic_request?(
+            GitlabRequestAuth.authentic_request?(
               request, repo.webhook_secret
             )
           else
