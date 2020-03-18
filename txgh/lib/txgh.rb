@@ -9,7 +9,9 @@ module Txgh
   autoload :Events,                'txgh/events'
   autoload :GithubApi,             'txgh/github_api'
   autoload :GithubRepo,            'txgh/github_repo'
+  autoload :GitlabRepo,            'txgh/gitlab_repo'
   autoload :GithubStatus,          'txgh/github_status'
+  autoload :GitlabStatus,          'txgh/gitlab_status'
   autoload :MergeCalculator,       'txgh/merge_calculator'
   autoload :ParseConfig,           'txgh/parse_config'
   autoload :Puller,                'txgh/puller'
@@ -52,7 +54,8 @@ module Txgh
 
   # default set of tx config providers
   tx_manager.register_provider(providers::FileProvider,   Txgh::Config::TxConfig)
-  tx_manager.register_provider(providers::GitHubProvider, Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::GithubProvider, Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::GitlabProvider, Txgh::Config::TxConfig)
   tx_manager.register_provider(providers::RawProvider,    Txgh::Config::TxConfig, default: true)
 
   # default set of base config providers

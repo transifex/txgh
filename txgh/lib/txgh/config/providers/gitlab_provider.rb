@@ -1,7 +1,7 @@
 module Txgh
   module Config
     module Providers
-      class GitHubProvider
+      class GitlabProvider
         SCHEME = 'git'
 
         class << self
@@ -24,7 +24,7 @@ module Txgh
           @payload = payload
           @parser = parser
           @ref = options[:ref]
-          @github_repo = options[:github_repo]
+          @gitlab_repo = options[:gitlab_repo]
         end
 
         def config
@@ -34,7 +34,7 @@ module Txgh
         private
 
         def download
-          github_repo.api.download(payload, ref)[:content]
+          gitlab_repo.api.download(payload, ref)[:content]
         rescue Octokit::NotFound
           raise Txgh::GitConfigNotFoundError, "Config file #{payload} not found in #{ref}"
         end
@@ -48,13 +48,13 @@ module Txgh
           @ref
         end
 
-        def github_repo
-          unless @github_repo
+        def gitlab_repo
+          unless @gitlab_repo
             raise TxghError,
               "TX_CONFIG specified a file from git but did not provide a repo."
           end
 
-          @github_repo
+          @gitlab_repo
         end
       end
     end
