@@ -8,6 +8,7 @@ module Txgh
   autoload :EmptyResourceContents, 'txgh/empty_resource_contents'
   autoload :Events,                'txgh/events'
   autoload :GithubApi,             'txgh/github_api'
+  autoload :GitlabApi,             'txgh/gitlab_api'
   autoload :GithubRepo,            'txgh/github_repo'
   autoload :GitlabRepo,            'txgh/gitlab_repo'
   autoload :GithubStatus,          'txgh/github_status'
