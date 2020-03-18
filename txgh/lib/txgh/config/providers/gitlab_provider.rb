@@ -1,7 +1,7 @@
 module Txgh
   module Config
     module Providers
-      class GitlabProvider < Txgh::Config::Providers::GitlabProvider
+      class GitlabProvider < Txgh::Config::Providers::GithubProvider
         def initialize(payload, parser, options = {})
           @payload = payload
           @parser = parser
