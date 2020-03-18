@@ -6,6 +6,7 @@ module TxghServer
     class PullHandler < Handler
 
       def execute
+        # TODO
         puller.pull_slug(resource_slug)
         update_github_status
         respond_with(200, true)
@@ -14,6 +15,7 @@ module TxghServer
       private
 
       def update_github_status
+        # TODO
         Txgh::GithubStatus.update(project, repo, branch)
       rescue Octokit::UnprocessableEntity
         # raised because we've tried to create too many statuses for the commit

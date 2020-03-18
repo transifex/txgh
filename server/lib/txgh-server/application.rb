@@ -47,6 +47,7 @@ module TxghServer
       branch = Txgh::Utils.absolute_branch(params[:branch])
 
       begin
+        # TODO
         tx_config = Txgh::Config::TxManager.tx_config(
           config.transifex_project, config.github_repo, branch
         )
@@ -93,6 +94,12 @@ module TxghServer
     post '/github' do
       respond_with(
         Github::RequestHandler.handle_request(request, settings.logger)
+      )
+    end
+
+    post '/gitlab' do
+      respond_with(
+        Gitlab::RequestHandler.handle_request(request, settings.logger)
       )
     end
   end
