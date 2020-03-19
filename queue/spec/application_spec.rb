@@ -75,7 +75,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
       header(
         TxghServer::GithubRequestAuth::GITHUB_HEADER,
         TxghServer::GithubRequestAuth.compute_signature(
-          body, config.github_repo.webhook_secret
+          body, config.git_repo.webhook_secret
         )
       )
     end

@@ -7,7 +7,7 @@ describe ResourceUpdater do
   include StandardTxghSetup
 
   let(:updater) do
-    ResourceUpdater.new(transifex_project, github_repo, logger)
+    ResourceUpdater.new(transifex_project, git_repo, logger)
   end
 
   let(:branch) { nil }

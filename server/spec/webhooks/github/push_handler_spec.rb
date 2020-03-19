@@ -9,7 +9,7 @@ describe PushHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    PushHandler.new(transifex_project, github_repo, logger, attributes)
+    PushHandler.new(transifex_project, git_repo, logger, attributes)
   end
 
   let(:attributes) do
@@ -49,7 +49,7 @@ describe PushHandler do
     end
 
     expect(Txgh::GithubStatus).to(
-      receive(:update).with(transifex_project, github_repo, ref)
+      receive(:update).with(transifex_project, git_repo, ref)
     )
 
     response = handler.execute
@@ -74,7 +74,7 @@ describe PushHandler do
 
     it 'reports errors and updates the github status' do
       expect(Txgh::GithubStatus).to(
-        receive(:error).with(transifex_project, github_repo, ref, status_params)
+        receive(:error).with(transifex_project, git_repo, ref, status_params)
       )
 
       expect(handler).to receive(:should_process?).and_raise(StandardError)

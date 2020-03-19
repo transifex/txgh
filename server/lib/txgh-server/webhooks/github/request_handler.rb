@@ -73,16 +73,16 @@ module TxghServer
           request.env['HTTP_X_GITHUB_EVENT']
         end
 
-        def github_repo_name
+        def git_repo_name
           payload.fetch('repository', {})['full_name']
         end
 
         def config
-          @config ||= Txgh::Config::KeyManager.config_from_repo(github_repo_name)
+          @config ||= Txgh::Config::KeyManager.config_from_repo(git_repo_name)
         end
 
         def repo
-          config.github_repo
+          config.git_repo
         end
 
         def project

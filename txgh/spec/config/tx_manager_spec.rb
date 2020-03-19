@@ -10,7 +10,7 @@ describe TxManager do
   describe '.tx_config' do
     let(:config) { KeyManager.config_from(project_name, repo_name) }
     let(:project) { config.transifex_project }
-    let(:repo) { config.github_repo }
+    let(:repo) { config.git_repo }
 
     it 'loads tx config from the given file' do
       path = 'file://path/to/tx_config'

@@ -6,7 +6,7 @@ include TxghServer::Webhooks::Github
 describe StatusUpdater do
   include StandardTxghSetup
 
-  let(:updater) { StatusUpdater.new(transifex_project, github_repo, ref) }
+  let(:updater) { StatusUpdater.new(transifex_project, git_repo, ref) }
 
   describe '#report_error_and_update_status' do
     let(:description) { 'An error done occurred, fool' }
@@ -25,7 +25,7 @@ describe StatusUpdater do
 
     it 'reports the error and updates the status' do
       expect(Txgh::GithubStatus).to(
-        receive(:error).with(transifex_project, github_repo, ref, status_params)
+        receive(:error).with(transifex_project, git_repo, ref, status_params)
       )
 
       expect(Txgh.events).to receive(:publish_error!)

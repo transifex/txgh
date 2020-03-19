@@ -96,7 +96,7 @@ describe 'hook integration tests', integration: true do
     header(
       GithubRequestAuth::GITHUB_HEADER,
       GithubRequestAuth.compute_signature(
-        body, config.github_repo.webhook_secret
+        body, config.git_repo.webhook_secret
       )
     )
   end

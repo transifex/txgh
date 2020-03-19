@@ -29,7 +29,7 @@ module TxghQueue
     def handle_expected(payload)
       config = config_from(payload)
       project = config.transifex_project
-      repo = config.github_repo
+      repo = config.git_repo
 
       case payload.fetch('txgh_event')
         when 'github.push'

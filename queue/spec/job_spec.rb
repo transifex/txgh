@@ -5,7 +5,7 @@ include TxghQueue
 describe Job, auto_configure: true do
   let(:logger) { NilLogger.new }
   let(:repo_name) { 'my_repo' }
-  let(:txgh_config) { Txgh::Config::ConfigPair.new(:github_repo, :transifex_project) }
+  let(:txgh_config) { Txgh::Config::ConfigPair.new(:git_repo, :transifex_project) }
   let(:job) { described_class.new(logger) }
 
   before(:each) do

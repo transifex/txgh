@@ -5,9 +5,8 @@ module TxghServer
     module Gitlab
       class RequestHandler < TxghServer::Webhooks::Github::RequestHandler
         def handle_request
-          # TODO
           handle_safely do
-            case github_event
+            case gitlab_event
               when 'push'
                 PushHandler.new(project, repo, logger, attributes).execute
               when 'delete'
@@ -23,8 +22,7 @@ module TxghServer
         private
 
         def attributes
-          # TODO
-          case github_event
+          case gitlab_event
             when 'push'
               PushAttributes.from_webhook_payload(payload)
             when 'delete'
@@ -34,26 +32,23 @@ module TxghServer
           end
         end
 
-        def github_event
+        def gitlab_event
           request.env['HTTP_X_GITLAB_EVENT']
         end
 
-        def github_repo_name
+        def git_repo_name
           payload.fetch('repository', {})['name']
         end
 
         def config
-          # TODO
-          @config ||= Txgh::Config::KeyManager.config_from_repo(github_repo_name)
+          @config ||= Txgh::Config::KeyManager.config_from_repo(git_repo_name)
         end
 
         def repo
-          # TODO
-          config.github_repo
+          config.git_repo
         end
 
         def authentic_request?
-          # TODO
           if repo.webhook_protected?
             GitlabRequestAuth.authentic_request?(
               request, repo.webhook_secret

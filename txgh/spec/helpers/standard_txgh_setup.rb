@@ -92,7 +92,7 @@ module StandardTxghSetup
     Txgh::TransifexProject.new(project_config, transifex_api)
   end
 
-  let(:github_repo) do
+  let(:git_repo) do
     Txgh::GithubRepo.new(repo_config, github_api)
   end
 end

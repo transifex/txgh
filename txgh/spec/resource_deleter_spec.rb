@@ -10,7 +10,7 @@ describe ResourceDeleter do
   let(:branch) { 'heads/master' }
 
   let(:deleter) do
-    ResourceDeleter.new(transifex_project, github_repo, branch)
+    ResourceDeleter.new(transifex_project, git_repo, branch)
   end
 
   let(:resource_api_response) do
@@ -45,7 +45,7 @@ describe ResourceDeleter do
   end
 
   it "does not delete resources that don't have a matching branch" do
-    deleter = ResourceDeleter.new(transifex_project, github_repo, 'heads/fake')
+    deleter = ResourceDeleter.new(transifex_project, git_repo, 'heads/fake')
     expect(transifex_api).to(
       receive(:get_resources).and_return(resource_api_response)
     )

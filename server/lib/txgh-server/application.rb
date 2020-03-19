@@ -47,9 +47,8 @@ module TxghServer
       branch = Txgh::Utils.absolute_branch(params[:branch])
 
       begin
-        # TODO
         tx_config = Txgh::Config::TxManager.tx_config(
-          config.transifex_project, config.github_repo, branch
+          config.transifex_project, config.git_repo, branch
         )
 
         data = tx_config.to_h

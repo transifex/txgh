@@ -25,10 +25,9 @@ module TxghServer
         end
 
         def handler_for(config, request, logger)
-          # TODO
           new(
             project: config.transifex_project,
-            repo: config.github_repo,
+            repo: config.git_repo,
             branch: request.params.fetch('branch'),
             resource_slug: request.params.fetch('resource_slug'),
             logger: logger
