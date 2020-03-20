@@ -7,13 +7,12 @@ module TxghServer
     module Gitlab
       class PushHandler < TxghServer::Webhooks::Github::PushHandler
         def execute
-          # TODO
           # Check if the branch in the hook data is the configured branch we want
-          logger.info("request github branch: #{branch}")
-          logger.info("config github branch: #{repo.github_config_branch}")
+          logger.info("request gitlab branch: #{branch}")
+          logger.info("config gitlab branch: #{repo.gitlab_config_branch}")
 
           if should_process?
-            logger.info('found branch in github request')
+            logger.info('found branch in gitlab request')
 
             pusher.push_resources(added_and_modified_resources) do |tx_resource|
               # block should return categories for the passed-in resource
