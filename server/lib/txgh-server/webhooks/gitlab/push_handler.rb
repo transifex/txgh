@@ -7,7 +7,6 @@ module TxghServer
     module Gitlab
       class PushHandler < TxghServer::Webhooks::Github::PushHandler
         def execute
-          # Check if the branch in the hook data is the configured branch we want
           logger.info("request gitlab branch: #{branch}")
           logger.info("config gitlab branch: #{repo.gitlab_config_branch}")
 
