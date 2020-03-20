@@ -61,13 +61,13 @@ module Txgh
       # mock github response
       {
         object: {
-          sha: client.commit(repo_name, ref).short_id
+          sha: client.commit(repo_name, ref.gsub('heads/', '')).short_id
         }
       }
     end
 
     def download(path, branch)
-      file = client.get_file(repo_name, path, branch)
+      file = client.get_file(repo_name, path, branch.gsub('heads/', ''))
 
       # mock github response
       {

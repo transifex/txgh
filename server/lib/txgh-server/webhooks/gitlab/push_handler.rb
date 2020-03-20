@@ -26,6 +26,10 @@ module TxghServer
           status_updater.report_error_and_update_status(e)
           respond_with_error(500, "Internal server error: #{e.message}", e)
         end
+
+        def status_updater
+          @status_updater = TxghServer::Webhooks::Gitlab::StatusUpdater.new(project, repo, branch)
+        end
       end
     end
   end
