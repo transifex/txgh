@@ -68,14 +68,14 @@ module TxghQueue
     end
 
     def handle_gitlab_push(project, repo, payload)
-      attributes = Gitlab::PushAttributes.new(payload)
-      handler = Gitlab::PushHandler.new(project, repo, logger, attributes)
+      attributes = TxghServer::Webhooks::Gitlab::PushAttributes.new(payload)
+      handler = TxghServer::Webhooks::Gitlab::PushHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 
     def handle_gitlab_delete(project, repo, payload)
-      attributes = Gitlab::DeleteAttributes.new(payload)
-      handler = Gitlab::DeleteHandler.new(project, repo, logger, attributes)
+      attributes = TxghServer::Webhooks::Gitlab::DeleteAttributes.new(payload)
+      handler = TxghServer::Webhooks::Gitlab::DeleteHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 

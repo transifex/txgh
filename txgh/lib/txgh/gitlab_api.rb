@@ -36,7 +36,7 @@ module Txgh
         file_sha = file_params.fetch(:sha) do
           begin
             client.get_file(repo_name, path, branch).content_sha256
-          rescue Gitlab::Error::NotFound
+          rescue ::Gitlab::Error::NotFound
             nil
           end
         end

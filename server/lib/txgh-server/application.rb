@@ -98,7 +98,7 @@ module TxghServer
 
     post '/gitlab' do
       respond_with(
-        Gitlab::RequestHandler.handle_request(request, settings.logger)
+        TxghServer::Webhooks::Gitlab::RequestHandler.handle_request(request, settings.logger)
       )
     end
   end
