@@ -26,7 +26,7 @@ module TxghServer
 
         def update_status_safely
           yield
-        rescue ::Gitlab::Error::Unprocessable
+        rescue ::Gitlab::Error::Unprocessable, ::Gitlab::Error::BadRequest
           # raised because we've tried to create too many statuses for the commit
         rescue Txgh::TransifexNotFoundError
           # raised if transifex resource can't be found

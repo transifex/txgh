@@ -6,11 +6,14 @@ module TxghServer
       class RequestHandler < TxghServer::Webhooks::Github::RequestHandler
         def handle_request
           handle_safely do
-            case gitlab_event
-              when 'Push Hook'
-                PushHandler.new(project, repo, logger, PushAttributes.from_webhook_payload(payload)).execute
+            if gitlab_event == 'Push Hook'
+              if payload.fetch('after') == '0000000000000000000000000000000000000000'
+                DeleteHandler.new(project, repo, logger, DeleteAttributes.from_webhook_payload(payload)).execute
               else
-                respond_with_error(400, 'Unexpected event type')
+                PushHandler.new(project, repo, logger, PushAttributes.from_webhook_payload(payload)).execute
+              end
+            else
+              respond_with_error(400, 'Unexpected event type')
             end
           end
         end
