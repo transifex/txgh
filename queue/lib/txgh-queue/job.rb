@@ -4,6 +4,7 @@ require 'txgh-server'
 module TxghQueue
   class Job
     Github = TxghServer::Webhooks::Github
+    Gitlab = TxghServer::Webhooks::Gitlab
     Transifex = TxghServer::Webhooks::Transifex
     include TxghServer::ResponseHelpers
 
@@ -16,7 +17,7 @@ module TxghQueue
     def process(payload)
       Supervisor.supervise do
         case payload.fetch('txgh_event')
-          when 'github.push', 'github.delete', 'transifex.hook'
+          when 'github.push', 'github.delete', 'gitlab.push', 'gitlab.delete', 'transifex.hook'
             handle_expected(payload)
           else
             handle_unexpected
@@ -36,6 +37,10 @@ module TxghQueue
           handle_github_push(project, repo, payload)
         when 'github.delete'
           handle_github_delete(project, repo, payload)
+        when 'gitlab.push'
+          handle_gitlab_push(project, repo, payload)
+        when 'gitlab.delete'
+          handle_gitlab_delete(project, repo, payload)
         when 'transifex.hook'
           handle_transifex_hook(project, repo, payload)
       end
@@ -43,7 +48,7 @@ module TxghQueue
 
     def config_from(payload)
       case payload.fetch('txgh_event')
-        when 'github.push', 'github.delete'
+        when 'github.push', 'github.delete', 'gitlab.push', 'gitlab.delete'
           Txgh::Config::KeyManager.config_from_repo(payload.fetch('repo_name'))
         when 'transifex.hook'
           Txgh::Config::KeyManager.config_from_project(payload.fetch('project'))
@@ -59,6 +64,18 @@ module TxghQueue
     def handle_github_delete(project, repo, payload)
       attributes = Github::DeleteAttributes.new(payload)
       handler = Github::DeleteHandler.new(project, repo, logger, attributes)
+      execute(handler)
+    end
+
+    def handle_gitlab_push(project, repo, payload)
+      attributes = Gitlab::PushAttributes.new(payload)
+      handler = Gitlab::PushHandler.new(project, repo, logger, attributes)
+      execute(handler)
+    end
+
+    def handle_gitlab_delete(project, repo, payload)
+      attributes = Gitlab::DeleteAttributes.new(payload)
+      handler = Gitlab::DeleteHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 

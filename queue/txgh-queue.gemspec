@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
 
   s.add_dependency 'aws-sdk', '~> 2.0'
-  s.add_dependency 'txgh', '~> 6.0'
-  s.add_dependency 'txgh-server', '~> 3.0'
+  # s.add_dependency 'txgh', '~> 6.0'
+  # s.add_dependency 'txgh-server', '~> 3.0'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
 
