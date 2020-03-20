@@ -13,21 +13,6 @@ module Txgh
       end
     end
 
-    def tree(sha)
-      # never used
-      raise NotImplementedError
-    end
-
-    def blob(sha)
-      # never used
-      raise NotImplementedError
-    end
-
-    def create_ref(branch, sha)
-      # never used
-      raise NotImplementedError
-    end
-
     def update_contents(branch, content_list, message)
       content_list.each do |file_params|
         path = file_params.fetch(:path)
@@ -50,11 +35,6 @@ module Txgh
 
         client.edit_file(repo_name, path, branch, new_contents, message) if current_sha != new_sha
       end
-    end
-
-    def get_commit(sha)
-      # never used
-      raise NotImplementedError
     end
 
     def get_ref(ref)

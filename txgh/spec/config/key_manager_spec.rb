@@ -85,10 +85,4 @@ describe KeyManager do
       expect(KeyManager.project_names).to eq([project_name])
     end
   end
-
-  describe '#repo_names' do
-    it "gets an array of all the configured repo's names" do
-      expect(KeyManager.repo_names).to eq([repo_name])
-    end
-  end
 end

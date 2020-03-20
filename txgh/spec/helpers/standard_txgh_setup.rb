@@ -11,6 +11,7 @@ module StandardTxghSetup
   let(:project_name) { 'my_awesome_project' }
   let(:resource_slug) { 'my_resource' }
   let(:repo_name) { 'my_org/my_repo' }
+  let(:another_repo_name) { 'my_org/my_another_repo' }
   let(:branch) { 'master' }
   let(:tag) { 'all' }
   let(:ref) { 'heads/master' }
@@ -39,6 +40,7 @@ module StandardTxghSetup
     {
       'api_username' => 'github_api_username',
       'api_token' => 'github_api_token',
+      'git_repo_source' => 'github',
       'push_source_to' => project_name,
       'branch' => branch,
       'tag' => tag,
@@ -78,6 +80,11 @@ module StandardTxghSetup
       'github' => {
         'repos' => {
           repo_name => repo_config
+        }
+      },
+      'gitlab' => {
+        'repos' => {
+          repo_name => another_repo_name
         }
       },
       'transifex' => {

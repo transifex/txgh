@@ -29,10 +29,6 @@ module Txgh
           base_config['transifex']['projects'].keys
         end
 
-        def repo_names
-          base_config['github']['repos'].keys + base_config['gitlab']['repos'].keys
-        end
-
         private
 
         def raw_config
