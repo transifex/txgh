@@ -5,6 +5,7 @@ module Txgh
   class GitlabApi < Txgh::GithubApi
     class << self
       def create_from_credentials(_login, access_token, repo_name)
+        Gitlab.endpoint = 'https://gitlab.com/api/v4'
         create_from_client(
           Gitlab.client(private_token: access_token),
           repo_name
