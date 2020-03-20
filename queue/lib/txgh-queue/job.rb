@@ -39,8 +39,6 @@ module TxghQueue
           handle_github_delete(project, repo, payload)
         when 'gitlab.push'
           handle_gitlab_push(project, repo, payload)
-        when 'gitlab.delete'
-          handle_gitlab_delete(project, repo, payload)
         when 'transifex.hook'
           handle_transifex_hook(project, repo, payload)
       end
@@ -70,12 +68,6 @@ module TxghQueue
     def handle_gitlab_push(project, repo, payload)
       attributes = TxghServer::Webhooks::Gitlab::PushAttributes.new(payload)
       handler = TxghServer::Webhooks::Gitlab::PushHandler.new(project, repo, logger, attributes)
-      execute(handler)
-    end
-
-    def handle_gitlab_delete(project, repo, payload)
-      attributes = TxghServer::Webhooks::Gitlab::DeleteAttributes.new(payload)
-      handler = TxghServer::Webhooks::Gitlab::DeleteHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 
