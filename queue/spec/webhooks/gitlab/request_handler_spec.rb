@@ -1,23 +1,25 @@
 require 'spec_helper'
-require 'helpers/github_payload_builder'
+require 'helpers/gitlab_payload_builder'
 require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 require 'helpers/test_request'
 
-describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
+describe TxghQueue::Webhooks::Gitlab::RequestHandler, auto_configure: true do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
   let(:ref) { 'heads/my_ref' }
-  let(:headers) { { 'HTTP_X_GITHUB_EVENT' => event } }
+  let(:headers) { { 'HTTP_X_GITLAB_EVENT' => hook_event } }
   let(:body) { payload.to_json }
   let(:request) { TestRequest.new(body: body, headers: headers) }
   let(:handler) { described_class.new(request, logger) }
+  let(:hook_event) { 'Push Hook' }
 
   describe '#handle_request' do
     let(:queue_config) { {} }
-    let(:payload) { { repository: { full_name: github_repo_name } } }
-    let(:event) { 'push' }
+    # let(:payload) { { repository: { name: gitlab_repo_name } } }
+    let(:payload) { GitlabPayloadBuilder.push_payload(gitlab_repo_name, ref) }
+    let(:txgh_event) { 'push' }
 
     it "responds with an error when a queue backend isn't configured" do
       allow(handler).to receive(:authentic_request?).and_return(true)
@@ -41,11 +43,11 @@ describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
       end
 
       let(:backend) { TxghQueue::Config.backend }
-      let(:producer) { backend.producer_for("github.#{event}") }
+      let(:producer) { backend.producer_for("gitlab.#{txgh_event}") }
 
       context 'push event' do
-        let(:event) { 'push' }
-        let(:payload) { GithubPayloadBuilder.push_payload(github_repo_name, ref).tap { |p| p.add_commit } }
+        let(:txgh_event) { 'push' }
+        let(:payload) { GitlabPayloadBuilder.push_payload(gitlab_repo_name, ref).tap { |p| p.add_commit } }
 
         it 'does not enqueue if unauthorized' do
           expect { handler.handle_request }.to_not(
@@ -74,9 +76,9 @@ describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
             params = producer.enqueued_jobs.first
             expect(params[:payload]).to include(
               event: 'push',
-              txgh_event: 'github.push',
+              txgh_event: 'gitlab.push',
               ref: "refs/#{ref}",
-              repo_name: github_repo_name
+              repo_name: gitlab_repo_name.split('/').last
             )
           end
 
@@ -88,8 +90,8 @@ describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
       end
 
       context 'delete event' do
-        let(:event) { 'delete' }
-        let(:payload) { GithubPayloadBuilder.delete_payload(github_repo_name, ref) }
+        let(:txgh_event) { 'delete' }
+        let(:payload) { GitlabPayloadBuilder.delete_payload(gitlab_repo_name, ref) }
 
         it 'does not enqueue if unauthorized' do
           expect { handler.handle_request }.to_not change { producer.enqueued_jobs.size }
@@ -116,9 +118,9 @@ describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
             params = producer.enqueued_jobs.first
             expect(params[:payload]).to include(
               event: 'delete',
-              txgh_event: 'github.delete',
+              txgh_event: 'gitlab.delete',
               ref: "refs/#{ref}",
-              repo_name: github_repo_name
+              repo_name: gitlab_repo_name.split('/').last
             )
           end
 
@@ -130,7 +132,7 @@ describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
       end
 
       context 'unrecognized event' do
-        let(:event) { 'foo' }
+        let(:hook_event) { 'foo' }
 
         it 'responds with a 400' do
           allow(handler).to receive(:authentic_request?).and_return(true)

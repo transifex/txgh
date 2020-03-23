@@ -37,7 +37,7 @@ module TxghServer
         end
 
         def delete_event?
-          payload.fetch('after') == '0000000000000000000000000000000000000000'
+          payload.fetch('after', {}) == '0000000000000000000000000000000000000000'
         end
 
         def git_repo_name
