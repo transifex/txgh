@@ -8,7 +8,7 @@ module TxghQueue
           handle_safely do
             case gitlab_event
               when 'Push Hook'
-                txgh_event = "gitlab.push"
+                txgh_event = delete_event? ? 'gitlab.delete' : 'gitlab.push'
 
                 result = ::TxghQueue::Config.backend
                   .producer_for(txgh_event, logger)

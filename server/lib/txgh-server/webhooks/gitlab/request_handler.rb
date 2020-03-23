@@ -7,10 +7,10 @@ module TxghServer
         def handle_request
           handle_safely do
             if gitlab_event == 'Push Hook'
-              if payload.fetch('after') == '0000000000000000000000000000000000000000'
-                DeleteHandler.new(project, repo, logger, DeleteAttributes.from_webhook_payload(payload)).execute
+              if delete_event?
+                DeleteHandler.new(project, repo, logger, attributes).execute
               else
-                PushHandler.new(project, repo, logger, PushAttributes.from_webhook_payload(payload)).execute
+                PushHandler.new(project, repo, logger, attributes).execute
               end
             else
               respond_with_error(400, 'Unexpected event type')
@@ -20,8 +20,24 @@ module TxghServer
 
         private
 
+        def attributes
+          unless gitlab_event == 'Push Hook'
+            return BlankAttributes.from_webhook_payload(payload)
+          end
+
+          if delete_event?
+            return DeleteAttributes.from_webhook_payload(payload)
+          end
+
+          PushAttributes.from_webhook_payload(payload)
+        end
+
         def gitlab_event
           request.env['HTTP_X_GITLAB_EVENT']
+        end
+
+        def delete_event?
+          payload.fetch('after') == '0000000000000000000000000000000000000000'
         end
 
         def git_repo_name
