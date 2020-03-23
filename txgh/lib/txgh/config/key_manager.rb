@@ -59,9 +59,9 @@ module Txgh
         end
 
         def repo_config_for(repo_name)
-          if config = base_config['github']['repos'][repo_name]
+          if config = base_config.dig('github', 'repos', repo_name)
             config.merge('name' => repo_name, 'git_repo_source' => 'github')
-          elsif config = base_config['gitlab']['repos'][repo_name]
+          elsif config = base_config.dig('gitlab', 'repos', repo_name)
             config.merge('name' => repo_name, 'git_repo_source' => 'gitlab')
           else
             raise Txgh::RepoConfigNotFoundError,
