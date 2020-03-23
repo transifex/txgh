@@ -10,7 +10,7 @@ module StandardTxghSetup
 
   let(:project_name) { 'my_awesome_project' }
   let(:resource_slug) { 'my_resource' }
-  let(:repo_name) { 'my_org/my_repo' }
+  let(:github_repo_name) { 'my_org/my_repo' }
   let(:gitlab_repo_name) { 'my_org/gitlab_repo' }
   let(:branch) { 'master' }
   let(:tag) { 'all' }
@@ -26,7 +26,7 @@ module StandardTxghSetup
     {
       'api_username' => 'transifex_api_username',
       'api_password' => 'transifex_api_password',
-      'push_translations_to' => repo_name,
+      'push_translations_to' => github_repo_name,
       'name' => project_name,
       'tx_config' => "raw://#{tx_config_raw}",
       'webhook_secret' => 'abc123',
@@ -44,7 +44,7 @@ module StandardTxghSetup
       'push_source_to' => project_name,
       'branch' => branch,
       'tag' => tag,
-      'name' => repo_name,
+      'name' => github_repo_name,
       'webhook_secret' => 'abc123',
       'diff_point' => diff_point,
       'commit_message' => commit_message_template
@@ -92,12 +92,12 @@ module StandardTxghSetup
     {
       'github' => {
         'repos' => {
-          repo_name => github_config
+          github_repo_name => github_config
         }
       },
       'gitlab' => {
         'repos' => {
-          repo_name => github_config
+          gitlab_repo_name => github_config
         }
       },
       'transifex' => {

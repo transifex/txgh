@@ -17,7 +17,7 @@ describe PushHandler do
   end
 
   let(:payload) do
-    GithubPayloadBuilder.push_payload(repo_name, ref)
+    GithubPayloadBuilder.push_payload(github_repo_name, ref)
   end
 
   let(:modified_files) do
@@ -87,7 +87,7 @@ describe PushHandler do
     let(:after) { '0' * 40 }
 
     let(:payload) do
-      GithubPayloadBuilder.push_payload(repo_name, ref, before, after)
+      GithubPayloadBuilder.push_payload(github_repo_name, ref, before, after)
     end
 
     it "doesn't upload anything" do

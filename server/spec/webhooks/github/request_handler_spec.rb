@@ -19,7 +19,7 @@ describe Github::RequestHandler do
   describe '#handle_request' do
     context 'push event' do
       let(:event) { 'push' }
-      let(:payload) { GithubPayloadBuilder.push_payload(repo_name, ref).tap { |p| p.add_commit } }
+      let(:payload) { GithubPayloadBuilder.push_payload(github_repo_name, ref).tap { |p| p.add_commit } }
 
       it 'does not execute if unauthorized' do
         expect_any_instance_of(Github::PushHandler).to_not receive(:execute)
@@ -41,7 +41,7 @@ describe Github::RequestHandler do
 
     context 'delete event' do
       let(:event) { 'delete' }
-      let(:payload) { GithubPayloadBuilder.delete_payload(repo_name, ref) }
+      let(:payload) { GithubPayloadBuilder.delete_payload(github_repo_name, ref) }
 
       it 'does not execute if unauthorized' do
         expect_any_instance_of(Github::DeleteHandler).to_not receive(:execute)
@@ -63,7 +63,7 @@ describe Github::RequestHandler do
 
     context 'unrecognized event' do
       let(:event) { 'foo' }
-      let(:payload) { { repository: { full_name: repo_name } } }
+      let(:payload) { { repository: { full_name: github_repo_name } } }
 
       it 'responds with a 400' do
         allow(handler).to receive(:authentic_request?).and_return(true)

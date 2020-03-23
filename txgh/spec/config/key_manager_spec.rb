@@ -39,12 +39,12 @@ describe KeyManager do
 
   describe '.config_from_repo' do
     it 'creates a config object' do
-      config = KeyManager.config_from_repo(repo_name)
+      config = KeyManager.config_from_repo(github_repo_name)
       expect(config).to be_a(Txgh::Config)
     end
 
     it 'creates a config object that contains both project and repo configs' do
-      config = KeyManager.config_from_repo(repo_name)
+      config = KeyManager.config_from_repo(github_repo_name)
       expect(config.project_config).to eq(project_config)
       expect(config.repo_config).to eq(github_config)
     end
@@ -61,7 +61,7 @@ describe KeyManager do
         receive(:raw_config).and_return(YAML.dump(base_config))
       )
 
-      expect { KeyManager.config_from_repo(repo_name) }.to(
+      expect { KeyManager.config_from_repo(github_repo_name) }.to(
         raise_error(InvalidProviderError)
       )
     end
@@ -69,12 +69,12 @@ describe KeyManager do
 
   describe '.config_from' do
     it 'creates a config object' do
-      config = KeyManager.config_from(project_name, repo_name)
+      config = KeyManager.config_from(project_name, github_repo_name)
       expect(config).to be_a(Txgh::Config)
     end
 
     it 'creates a config object that contains both project and repo configs' do
-      config = KeyManager.config_from(project_name, repo_name)
+      config = KeyManager.config_from(project_name, github_repo_name)
       expect(config.project_config).to eq(project_config)
       expect(config.repo_config).to eq(github_config)
     end

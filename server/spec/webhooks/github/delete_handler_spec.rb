@@ -17,7 +17,7 @@ describe DeleteHandler do
   end
 
   let(:payload) do
-    GithubPayloadBuilder.delete_payload(repo_name, ref)
+    GithubPayloadBuilder.delete_payload(github_repo_name, ref)
   end
 
   it 'deletes resources' do

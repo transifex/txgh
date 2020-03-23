@@ -83,7 +83,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
     let(:producer) { backend.producer_for('github.push') }
 
     it 'enqueues a new job' do
-      payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+      payload = GithubPayloadBuilder.push_payload(github_repo_name, ref)
       payload.add_commit
 
       sign_with payload.to_json
@@ -99,7 +99,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
       expect(job[:payload]).to include(
         event: 'push',
         txgh_event: 'github.push',
-        repo_name: repo_name,
+        repo_name: github_repo_name,
         ref: "refs/#{ref}"
       )
     end

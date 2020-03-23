@@ -8,7 +8,7 @@ describe TxManager do
   include StandardTxghSetup
 
   describe '.tx_config' do
-    let(:config) { KeyManager.config_from(project_name, repo_name) }
+    let(:config) { KeyManager.config_from(project_name, github_repo_name) }
     let(:project) { config.transifex_project }
     let(:repo) { config.git_repo }
 

@@ -15,7 +15,7 @@ describe ConfigPair do
       it 'instantiates a github repo with the right config' do
         repo = config.git_repo
         expect(repo).to be_a(GithubRepo)
-        expect(repo.name).to eq(repo_name)
+        expect(repo.name).to eq(github_repo_name)
         expect(repo.branch).to eq(branch)
       end
     end
