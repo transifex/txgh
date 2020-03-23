@@ -2,7 +2,7 @@ require 'base64'
 require 'gitlab'
 
 module Txgh
-  class GitlabApi < Txgh::GithubApi
+  class GitlabApi
     class << self
       def create_from_credentials(_login, access_token, repo_name)
         Gitlab.endpoint = 'https://gitlab.com/api/v4'
@@ -11,6 +11,17 @@ module Txgh
           repo_name
         )
       end
+
+      def create_from_client(client, repo_name)
+        new(client, repo_name)
+      end
+    end
+
+    attr_reader :client, :repo_name
+
+    def initialize(client, repo_name)
+      @client = client
+      @repo_name = repo_name
     end
 
     def update_contents(branch, content_list, message)
@@ -33,7 +44,9 @@ module Txgh
         current_sha = file_sha || '0' * 40
         new_sha = Utils.git_hash_blob(new_contents)
 
-        client.edit_file(repo_name, path, branch, new_contents, message) if current_sha != new_sha
+        if current_sha != new_sha
+          client.edit_file(repo_name, path, branch, new_contents, message)
+        end
       end
     end
 
@@ -51,8 +64,7 @@ module Txgh
 
       # mock github response
       {
-        content: file.encoding == 'base64' ? Base64.decode64(file.content) : file.content.force_encoding(file.encoding),
-        path: path
+        content: file.encoding == 'base64' ? Base64.decode64(file.content) : file.content.force_encoding(file.encoding)
       }
     end
 
