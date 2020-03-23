@@ -1,9 +1,13 @@
 source 'https://rubygems.org'
 
 gem 'puma'
-gem 'txgh', '~> 6.0'
-gem 'txgh-queue', '~> 2.0'
-gem 'txgh-server', '~> 3.0'
+gem 'txgh', path: '../txgh'
+gem 'txgh-queue', path: '../queue'
+gem 'txgh-server', path: '../server'
+
+# gem 'txgh', '~> 6.0'
+# gem 'txgh-queue', '~> 2.0'
+# gem 'txgh-server', '~> 3.0'
 
 group :development, :test do
   gem 'rack'
