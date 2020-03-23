@@ -22,12 +22,13 @@ module StandardTxghSetup
   let(:diff_point) { nil }
   let(:organization) { 'myorg' }
   let(:commit_message_template) { nil }  # i.e. use the default
+  let(:push_translations_to) { github_repo_name }
 
   let(:project_config) do
     {
       'api_username' => 'transifex_api_username',
       'api_password' => 'transifex_api_password',
-      'push_translations_to' => github_repo_name,
+      'push_translations_to' => push_translations_to,
       'name' => project_name,
       'tx_config' => "raw://#{tx_config_raw}",
       'webhook_secret' => 'abc123',
