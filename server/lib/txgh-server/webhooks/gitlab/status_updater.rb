@@ -1,4 +1,4 @@
-require 'octokit'
+require 'gitlab'
 
 module TxghServer
   module Webhooks
