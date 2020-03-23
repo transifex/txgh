@@ -15,7 +15,7 @@ describe HookHandler do
   let(:handler) do
     HookHandler.new(
       project: transifex_project,
-      repo: git_repo,
+      repo: github_repo,
       resource_slug: requested_resource_slug,
       language: language,
       logger: logger
@@ -51,7 +51,7 @@ describe HookHandler do
     )
 
     expect(Txgh::GithubStatus).to(
-      receive(:update).with(transifex_project, git_repo, ref)
+      receive(:update).with(transifex_project, github_repo, ref)
     )
 
     response = handler.execute
@@ -102,7 +102,7 @@ describe HookHandler do
       )
 
       expect(Txgh::GithubStatus).to(
-        receive(:update).with(transifex_project, git_repo, ref)
+        receive(:update).with(transifex_project, github_repo, ref)
       )
 
       response = handler.execute
@@ -124,7 +124,7 @@ describe HookHandler do
       )
 
       expect(Txgh::GithubStatus).to(
-        receive(:update).with(transifex_project, git_repo, branch)
+        receive(:update).with(transifex_project, github_repo, branch)
       )
 
       response = handler.execute

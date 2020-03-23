@@ -11,7 +11,7 @@ describe ResourceDownloader do
   let(:format) { '.zip' }
 
   let(:downloader) do
-    ResourceDownloader.new(transifex_project, git_repo, ref)
+    ResourceDownloader.new(transifex_project, github_repo, ref)
   end
 
   before(:each) do

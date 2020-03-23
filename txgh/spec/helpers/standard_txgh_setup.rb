@@ -6,6 +6,7 @@ module StandardTxghSetup
 
   let(:logger) { NilLogger.new }
   let(:github_api) { double(:github_api) }
+  let(:gitlab_api) { double(:gitlab_api) }
   let(:transifex_api) { double(:transifex_api) }
 
   let(:project_name) { 'my_awesome_project' }
@@ -97,7 +98,7 @@ module StandardTxghSetup
       },
       'gitlab' => {
         'repos' => {
-          gitlab_repo_name => github_config
+          gitlab_repo_name => gitlab_config
         }
       },
       'transifex' => {
@@ -112,7 +113,11 @@ module StandardTxghSetup
     Txgh::TransifexProject.new(project_config, transifex_api)
   end
 
-  let(:git_repo) do
+  let(:github_repo) do
     Txgh::GithubRepo.new(github_config, github_api)
+  end
+
+  let(:gitlab_repo) do
+    Txgh::GitlabRepo.new(gitlab_config, gitlab_api)
   end
 end

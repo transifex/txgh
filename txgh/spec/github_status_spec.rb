@@ -6,7 +6,7 @@ include Txgh
 describe GithubStatus do
   include StandardTxghSetup
 
-  let(:status) { GithubStatus.new(transifex_project, git_repo, branch) }
+  let(:status) { GithubStatus.new(transifex_project, github_repo, branch) }
   let(:resource) { tx_config.resource(resource_slug) }
   let(:branch) { 'heads/master' }
   let(:sha) { 'abc123shashasha' }

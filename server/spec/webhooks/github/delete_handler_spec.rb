@@ -9,7 +9,7 @@ describe DeleteHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    DeleteHandler.new(transifex_project, git_repo, logger, attributes)
+    DeleteHandler.new(transifex_project, github_repo, logger, attributes)
   end
 
   let(:attributes) do

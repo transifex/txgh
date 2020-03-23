@@ -58,7 +58,7 @@ describe DownloadHandler do
 
   context '#execute' do
     let(:handler) do
-      DownloadHandler.new(transifex_project, git_repo, params, logger)
+      DownloadHandler.new(transifex_project, github_repo, params, logger)
     end
 
     it 'responds with a streaming zip download' do
