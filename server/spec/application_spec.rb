@@ -94,7 +94,7 @@ describe TxghServer::WebhookEndpoints do
   end
 
   let(:config) do
-    Txgh::Config::ConfigPair.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, github_config)
   end
 
   before(:each) do
@@ -266,7 +266,7 @@ describe TxghServer::TriggerEndpoints do
   end
 
   let(:config) do
-    Txgh::Config::ConfigPair.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, github_config)
   end
 
   before(:each) do

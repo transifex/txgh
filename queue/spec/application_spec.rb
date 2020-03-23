@@ -14,7 +14,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
   end
 
   let(:config) do
-    Txgh::Config::ConfigPair.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, github_config)
   end
 
   let(:backend) { TxghQueue::Config.backend }

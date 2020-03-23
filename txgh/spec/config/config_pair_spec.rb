@@ -7,7 +7,7 @@ describe ConfigPair do
   include StandardTxghSetup
 
   let(:config) do
-    ConfigPair.new(project_config, repo_config)
+    ConfigPair.new(project_config, github_config)
   end
 
   describe '#git_repo' do
@@ -37,11 +37,23 @@ describe ConfigPair do
   end
 
   describe '#github_api' do
-    it 'instantiates an API instance' do
+    it 'instantiates a github API instance' do
       api = config.github_api
       expect(api).to be_a(GithubApi)
-      expect(api.client.login).to eq(repo_config['api_username'])
-      expect(api.client.access_token).to eq(repo_config['api_token'])
+      expect(api.client.login).to eq(github_config['api_username'])
+      expect(api.client.access_token).to eq(github_config['api_token'])
+    end
+  end
+
+  describe '#gitlab_api' do
+    let(:config) do
+      ConfigPair.new(project_config, gitlab_config)
+    end
+
+    it 'instantiates a gitlab API instance' do
+      api = config.gitlab_api
+      expect(api).to be_a(GitlabApi)
+      expect(api.client.private_token).to eq(gitlab_config['api_token'])
     end
   end
 end

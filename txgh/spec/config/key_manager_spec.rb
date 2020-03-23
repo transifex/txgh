@@ -16,7 +16,7 @@ describe KeyManager do
     it 'creates a config object that contains both project and repo configs' do
       config = KeyManager.config_from_project(project_name)
       expect(config.project_config).to eq(project_config)
-      expect(config.repo_config).to eq(repo_config)
+      expect(config.repo_config).to eq(github_config)
     end
 
     it "raises an error if config can't be found" do
@@ -46,7 +46,7 @@ describe KeyManager do
     it 'creates a config object that contains both project and repo configs' do
       config = KeyManager.config_from_repo(repo_name)
       expect(config.project_config).to eq(project_config)
-      expect(config.repo_config).to eq(repo_config)
+      expect(config.repo_config).to eq(github_config)
     end
 
     it "raises an error if config can't be found" do
@@ -76,7 +76,7 @@ describe KeyManager do
     it 'creates a config object that contains both project and repo configs' do
       config = KeyManager.config_from(project_name, repo_name)
       expect(config.project_config).to eq(project_config)
-      expect(config.repo_config).to eq(repo_config)
+      expect(config.repo_config).to eq(github_config)
     end
   end
 
