@@ -1,6 +1,5 @@
 module Txgh
   class GitlabRepo < Txgh::GithubRepo
-
     def gitlab_config_branch
       @gitlab_config_branch ||= process_all_branches? ? 'all' : Utils.absolute_branch(branch || 'master')
     end
