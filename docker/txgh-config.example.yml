@@ -27,7 +27,7 @@ transifex:
       api_username: txgh.user
       api_password: txgh.user password
       push_translations_to: idanci/txgl-test
-      protected_branches:
+      protected_branches: heads/master
       webhook_secret: '123456789'
       auto_delete_resources: 'true'
       languages:
