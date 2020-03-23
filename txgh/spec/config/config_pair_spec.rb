@@ -11,11 +11,26 @@ describe ConfigPair do
   end
 
   describe '#git_repo' do
-    it 'instantiates a github repo with the right config' do
-      repo = config.git_repo
-      expect(repo).to be_a(GithubRepo)
-      expect(repo.name).to eq(repo_name)
-      expect(repo.branch).to eq(branch)
+    context 'Github' do
+      it 'instantiates a github repo with the right config' do
+        repo = config.git_repo
+        expect(repo).to be_a(GithubRepo)
+        expect(repo.name).to eq(repo_name)
+        expect(repo.branch).to eq(branch)
+      end
+    end
+
+    context 'Gitlab' do
+      let(:config) do
+        ConfigPair.new(project_config, gitlab_config)
+      end
+
+      it 'instantiates a github repo with the right config' do
+        repo = config.git_repo
+        expect(repo).to be_a(GitlabRepo)
+        expect(repo.name).to eq(gitlab_repo_name)
+        expect(repo.branch).to eq(branch)
+      end
     end
   end
 
