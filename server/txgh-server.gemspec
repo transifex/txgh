@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.description = s.summary = 'An HTTP server for interacting with txgh.'
 
   s.platform = Gem::Platform::RUBY
-  s.has_rdoc = true
 
   s.add_dependency 'mime-types', '~> 2.0'
   s.add_dependency 'sinatra', '~> 1.4'

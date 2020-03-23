@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.description = s.summary = 'A library for syncing translation resources between Github and Transifex.'
 
   s.platform = Gem::Platform::RUBY
-  s.has_rdoc = true
 
   s.add_dependency 'abroad', '~> 4.6'
   s.add_dependency 'celluloid'
