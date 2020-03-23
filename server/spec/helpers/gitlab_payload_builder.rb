@@ -54,6 +54,11 @@ class GitlabDeletePayload < GitlabPayload
 
     @result = {
       ref: "refs/#{ref}",
+      before: generate_sha,
+      after: blank_commit_id,
+      project: {
+        path_with_namespace: repo
+      },
       repository: {
         name: repo.split('/').last
       }
@@ -82,6 +87,9 @@ class GitlabPushPayload < GitlabPayload
       after: @after,
       commits: [],
       user_name: DEFAULT_USER[:username],
+      project: {
+        path_with_namespace: repo
+      },
       repository: {
         name: repo.split('/').last
       }
