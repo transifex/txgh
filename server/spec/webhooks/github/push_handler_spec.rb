@@ -2,18 +2,15 @@ require 'spec_helper'
 require 'helpers/github_payload_builder'
 require 'helpers/standard_txgh_setup'
 
-include TxghServer
-include TxghServer::Webhooks::Github
-
-describe PushHandler do
+describe TxghServer::Webhooks::Github::PushHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    PushHandler.new(transifex_project, github_repo, logger, attributes)
+    TxghServer::Webhooks::Github::PushHandler.new(transifex_project, github_repo, logger, attributes)
   end
 
   let(:attributes) do
-    PushAttributes.from_webhook_payload(payload.to_h)
+    TxghServer::Webhooks::Github::PushAttributes.from_webhook_payload(payload.to_h)
   end
 
   let(:payload) do

@@ -1,10 +1,7 @@
 require 'spec_helper'
 require 'helpers/gitlab_payload_builder'
 
-include TxghServer
-include TxghServer::Webhooks::Gitlab
-
-describe PushAttributes do
+describe TxghServer::Webhooks::Gitlab::PushAttributes do
   let(:repo_name) { 'my_repo' }
   let(:ref) { 'heads/my_ref' }
   let(:added) { ['added_file.txt'] }
@@ -15,7 +12,7 @@ describe PushAttributes do
   end
 
   describe '#from_webhook_payload' do
-    let(:attributes) { PushAttributes.from_webhook_payload(payload.to_h) }
+    let(:attributes) { TxghServer::Webhooks::Gitlab::PushAttributes.from_webhook_payload(payload.to_h) }
 
     it "when no head commit, uses the pusher's name instead" do
       payload.merge!(user_name: 'Fu Barro')
@@ -29,7 +26,7 @@ describe PushAttributes do
     end
 
     describe '#from_webhook_payload' do
-      let(:attributes) { PushAttributes.from_webhook_payload(payload.to_h) }
+      let(:attributes) { TxghServer::Webhooks::Gitlab::PushAttributes.from_webhook_payload(payload.to_h) }
 
       it 'pulls out repo name' do
         expect(attributes.repo_name).to eq(repo_name)

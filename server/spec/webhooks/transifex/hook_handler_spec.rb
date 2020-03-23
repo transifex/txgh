@@ -2,10 +2,7 @@ require 'spec_helper'
 require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 
-include TxghServer
-include TxghServer::Webhooks::Transifex
-
-describe HookHandler do
+describe TxghServer::Webhooks::Transifex::HookHandler do
   include StandardTxghSetup
 
   let(:requested_resource_slug) do
@@ -13,7 +10,7 @@ describe HookHandler do
   end
 
   let(:handler) do
-    HookHandler.new(
+    TxghServer::Webhooks::Transifex::HookHandler.new(
       project: transifex_project,
       repo: github_repo,
       resource_slug: requested_resource_slug,

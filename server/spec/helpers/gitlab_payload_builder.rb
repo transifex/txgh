@@ -105,10 +105,9 @@ class GitlabPushPayload < GitlabPayload
 
     commit_data = {
       id: id,
-      distinct: options.fetch(:distinct, true),
       message: options.fetch(:message, 'Default commit message'),
       timestamp: options.fetch(:timestamp) { generate_timestamp },
-      url: "https://github.com/#{repo}/commit/#{id}",
+      url: "https://gitlab.com/#{repo}/-/commit/#{id}",
       author: options.fetch(:author, DEFAULT_USER),
       committer: options.fetch(:committer, DEFAULT_USER),
       added: options.fetch(:added, []),

@@ -2,22 +2,19 @@ require 'spec_helper'
 require 'helpers/gitlab_payload_builder'
 require 'helpers/standard_txgh_setup'
 
-include TxghServer
-include TxghServer::Webhooks::Gitlab
-
-describe DeleteHandler do
+describe TxghServer::Webhooks::Gitlab::DeleteHandler do
   include StandardTxghSetup
 
   let(:handler) do
-    DeleteHandler.new(transifex_project, gitlab_repo, logger, attributes)
+    TxghServer::Webhooks::Gitlab::DeleteHandler.new(transifex_project, gitlab_repo, logger, attributes)
   end
 
   let(:attributes) do
-    DeleteAttributes.from_webhook_payload(payload.to_h)
+    TxghServer::Webhooks::Gitlab::DeleteAttributes.from_webhook_payload(payload.to_h)
   end
 
   let(:payload) do
-    GitlabPayloadBuilder.delete_payload(github_repo_name, ref)
+    GitlabPayloadBuilder.delete_payload(gitlab_repo_name, ref)
   end
 
   it 'deletes resources' do

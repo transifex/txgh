@@ -4,9 +4,7 @@ require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 require 'helpers/test_request'
 
-include TxghServer::Webhooks
-
-describe Gitlab::RequestHandler do
+describe TxghServer::Webhooks::Gitlab::RequestHandler do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
@@ -22,7 +20,7 @@ describe Gitlab::RequestHandler do
       let(:payload) { GitlabPayloadBuilder.push_payload(gitlab_repo_name, ref).tap { |p| p.add_commit } }
 
       it 'does not execute if unauthorized' do
-        expect_any_instance_of(Gitlab::PushHandler).to_not receive(:execute)
+        expect_any_instance_of(TxghServer::Webhooks::Gitlab::PushHandler).to_not receive(:execute)
         response = handler.handle_request
         expect(response.status).to eq(401)
       end
@@ -33,7 +31,7 @@ describe Gitlab::RequestHandler do
         end
 
         it 'handles the request with the push handler' do
-          expect_any_instance_of(Gitlab::PushHandler).to receive(:execute).and_return(:response)
+          expect_any_instance_of(TxghServer::Webhooks::Gitlab::PushHandler).to receive(:execute).and_return(:response)
           expect(handler.handle_request).to eq(:response)
         end
       end
@@ -44,7 +42,7 @@ describe Gitlab::RequestHandler do
       let(:payload) { GitlabPayloadBuilder.delete_payload(gitlab_repo_name, ref) }
 
       it 'does not execute if unauthorized' do
-        expect_any_instance_of(Gitlab::DeleteHandler).to_not receive(:execute)
+        expect_any_instance_of(TxghServer::Webhooks::Gitlab::DeleteHandler).to_not receive(:execute)
         response = handler.handle_request
         expect(response.status).to eq(401)
       end
@@ -55,7 +53,7 @@ describe Gitlab::RequestHandler do
         end
 
         it 'handles the request with the delete handler' do
-          expect_any_instance_of(Gitlab::DeleteHandler).to receive(:execute).and_return(:response)
+          expect_any_instance_of(TxghServer::Webhooks::Gitlab::DeleteHandler).to receive(:execute).and_return(:response)
           expect(handler.handle_request).to eq(:response)
         end
       end

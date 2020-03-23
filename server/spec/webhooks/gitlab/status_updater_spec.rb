@@ -1,12 +1,10 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include TxghServer::Webhooks::Gitlab
-
-describe StatusUpdater do
+describe TxghServer::Webhooks::Gitlab::StatusUpdater do
   include StandardTxghSetup
 
-  let(:updater) { StatusUpdater.new(transifex_project, gitlab_repo, ref) }
+  let(:updater) { TxghServer::Webhooks::Gitlab::StatusUpdater.new(transifex_project, gitlab_repo, ref) }
   let(:gitlab_error_response) do
     OpenStruct.new({
       code: 404,

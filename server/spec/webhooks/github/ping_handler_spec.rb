@@ -1,12 +1,9 @@
 require 'spec_helper'
 require 'helpers/nil_logger'
 
-include TxghServer
-include TxghServer::Webhooks::Github
-
-describe PingHandler do
+describe TxghServer::Webhooks::Github::PingHandler do
   let(:handler) do
-    PingHandler.new(NilLogger.new)
+    TxghServer::Webhooks::Github::PingHandler.new(NilLogger.new)
   end
 
   it 'responds with a 200 success' do

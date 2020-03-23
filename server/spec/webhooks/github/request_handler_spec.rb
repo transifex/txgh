@@ -4,9 +4,7 @@ require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 require 'helpers/test_request'
 
-include TxghServer::Webhooks
-
-describe Github::RequestHandler do
+describe TxghServer::Webhooks::Github::RequestHandler do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
