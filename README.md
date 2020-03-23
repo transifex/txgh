@@ -41,13 +41,15 @@ Txgh supports a significant number of configuration options, and you'll need to 
 
 3. If you've configured Txgh to upload diffs, visit your project's page in Transifex and upload each of the files described in your tx config. Use Transifex's categories feature to add a category of `branch:heads/master` to each resource. These full resources will provide the base set of translations for your project.
 
-3. At this point, you're ready to deploy Txgh. There are a number of ways to do this, including using a host like AWS or Heroku. It's important your Txgh instance is publicly accessible over the Internet, because the next few steps involve setting up webhooks, which rely on being able to reach it.
+4. At this point, you're ready to deploy Txgh. There are a number of ways to do this, including using a host like AWS or Heroku. It's important your Txgh instance is publicly accessible over the Internet, because the next few steps involve setting up webhooks, which rely on being able to reach it.
 
-4. Visit the settings page for your Github repository, click on "Webhooks and Services," then click the "Add webhook" button. Under payload URL, fill in the URL of your publicly accessible Txgh instance and the path to the Github hook. For example, `http://mytxgh.herokuapp.com/hooks/github`. Fill in the "Secret" field with the Github `webhook_secret` generated for you in `config.yml`. Make sure to enable the "push" event, and also the "delete" event if you have configured Txgh to automatically delete resources. When the webhook is first created, Github will send your Txgh instance a "ping" test event. Your Txgh instance should respond with a 200 OK.
+5.
+* Github: Visit the settings page for your Github repository, click on "Webhooks and Services," then click the "Add webhook" button. Under payload URL, fill in the URL of your publicly accessible Txgh instance and the path to the Github hook. For example, `http://mytxgh.herokuapp.com/hooks/github`. Fill in the "Secret" field with the Github `webhook_secret` generated for you in `config.yml`. Make sure to enable the "push" event, and also the "delete" event if you have configured Txgh to automatically delete resources. When the webhook is first created, Github will send your Txgh instance a "ping" test event. Your Txgh instance should respond with a 200 OK.
+* Gitlab: Visit the webhooks settings page for your Gitlab repository. Under payload URL, fill in the URL of your publicly accessible Txgh instance and the path to the Gitlab hook. For example, `http://mytxgh.herokuapp.com/hooks/gitlab`. Fill in the "Secret" field with the Gitlab `webhook_secret` generated for you in `config.yml`. Make sure to enable the "Push events" trigger, it also includes the "delete" event if you have configured Txgh to automatically delete resources. When the webhook is first created, Gitlab will send your Txgh instance a test event. Your Txgh instance should respond with a 200 OK.
 
-5. Visit the Manage -> Edit Project page for your Transifex project. Scroll down to the "Features" header and look for the "Web Hook URL" field. Fill it in with the URL of your publicly accessible Txgh instance and the path to the Transifex hook. For example, `http://mytxgh.herokuapp.com/hooks/transifex`. Fill in the "Secret Key" field with the Transifex `webhook_secret` generated for you in `config.yml`.
+6. Visit the Manage -> Edit Project page for your Transifex project. Scroll down to the "Features" header and look for the "Web Hook URL" field. Fill it in with the URL of your publicly accessible Txgh instance and the path to the Transifex hook. For example, `http://mytxgh.herokuapp.com/hooks/transifex`. Fill in the "Secret Key" field with the Transifex `webhook_secret` generated for you in `config.yml`.
 
-6. Congratulations, you now have a running, fully configured Txgh instance! Note that the configuration script you ran in step 1 automatically configured Txgh to process all branches, so you should be able to create a test branch, modify some translations, and push your changes. Txgh is configured correctly if a new resource appears in Transifex with the new branch name attached.
+7. Congratulations, you now have a running, fully configured Txgh instance! Note that the configuration script you ran in step 1 automatically configured Txgh to process all branches, so you should be able to create a test branch, modify some translations, and push your changes. Txgh is configured correctly if a new resource appears in Transifex with the new branch name attached.
 
 Available Endpoints
 ---
@@ -55,6 +57,8 @@ Available Endpoints
 Txgh exposes the following endpoints:
 
 * **`POST /hooks/github`**: Receives and processes Github webhook requests. Request body is expected to be a Github webhook payload in JSON format. Uploads any modified translatable content to Transifex. This endpoint is protected by shared secret signature authorization.
+
+* **`POST /hooks/gitlab`**: Receives and processes Gitlab webhook requests. Request body is expected to be a Gitlab webhook payload in JSON format. Uploads any modified translatable content to Transifex. This endpoint is protected by shared secret authorization.
 
 * **`POST /hooks/transifex`**: Receives and processes Transifex webhook requests. Request body is expected to be a Transifex webhook payload in JSON format. Commits translations back to the Github repository. This endpoint is protected by shared secret signature authorization.
 
@@ -69,7 +73,7 @@ Txgh exposes the following endpoints:
 Configuring Txgh
 ---
 
-Config is written in the YAML markup language and is comprised of two sections, one for Github options and one for Transifex options:
+Config is written in the YAML markup language and is comprised of three sections, one for Github options, one for Gitlab options and one for Transifex options:
 
 ```yaml
 github:
@@ -82,6 +86,15 @@ github:
       tag: tag to watch for changes, or "all" to watch all of them
       webhook_secret: 123abcdef456ghi github webhook secret
       diff_point: branch to diff against (usually master)
+gitlab:
+  repos:
+    idanci/txgl-test:
+      api_token: gitlab api token
+      push_source_to: txgl-test
+      branch: all
+      webhook_secret: '123456789' gitlab webhook secret
+      diff_point: heads/master
+      commit_message: "[skip ci] Updating %{language} translations in %{file_name}"
 transifex:
   projects:
     project-slug:
@@ -107,6 +120,18 @@ transifex:
 * **`tag`**: The Github tag to watch for new translatable content. If you want Txgh to watch all tags, use the special value "all".
 
 * **`webhook_secret`**: A user-defined string that Github will use to sign webhook requests. If present, Txgh will use this value to verify the authenticity of these webhook requests and reject those that are improperly signed. Make sure you use this same value when configuring the webhook in the Github UI.
+
+* **`diff_point`**: The branch to compare against when submitting new translatable content to Transifex, usually `master`. Set this option to enable diffing. If not set, Txgh will upload changed files in their entirety.
+
+### Gitlab Configuration
+
+* **`api_token`**: A valid Gitlab access token. The token should be generated by the user who has access to the relevant repo. In Gitlab, visit your account settings and generate a personal access token with all the read/write permissions https://gitlab.com/profile/personal_access_tokens
+
+* **`push_source_to`**: The slug of the Transifex project you want to push new translatable content to. The slug is basically the name of the project, but with URL-unfriendly characters removed. You can find the slug of your project by inspecting the URL on any Transifex project page.
+
+* **`branch`**: The Gitlab branch to watch for new translatable content. If you want Txgh to watch all branches, use the special value "all". By default, branch is `master`.
+
+* **`webhook_secret`**: A user-defined string that Gitlab will send in the headers for webhook requests. If present, Txgh will use this value to verify the authenticity of these webhook requests and reject those that are missmatching. Make sure you use this same value when configuring the webhook in the Gitlab UI.
 
 * **`diff_point`**: The branch to compare against when submitting new translatable content to Transifex, usually `master`. Set this option to enable diffing. If not set, Txgh will upload changed files in their entirety.
 
