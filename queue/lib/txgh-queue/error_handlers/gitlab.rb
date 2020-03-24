@@ -3,6 +3,7 @@ require 'gitlab'
 module TxghQueue
   module ErrorHandlers
     class Gitlab
+      # https://github.com/NARKOZ/gitlab/blob/master/lib/gitlab/error.rb
       ERROR_CLASSES = {
         ::Gitlab::Error::BadGateway          => Status.retry_without_delay,
         ::Gitlab::Error::BadRequest          => Status.fail,
