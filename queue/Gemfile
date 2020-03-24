@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem "txgh", :path => "../txgh"
-gem "txgh-server", :path => "../server"
+gem 'txgh', path: '../txgh'
+gem 'txgh-server', path: '../server'
 
 group :development, :test do
   gem 'pry-byebug'
