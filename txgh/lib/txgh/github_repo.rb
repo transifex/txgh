@@ -78,9 +78,7 @@ module Txgh
     private
 
     def should_process_branch?(candidate)
-      process_all_branches? ||
-        candidate.include?(github_config_branch) ||
-        candidate.include?('L10N')
+      process_all_branches? || candidate.include?(github_config_branch)
     end
 
     def should_process_tag?(candidate)

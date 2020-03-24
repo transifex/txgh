@@ -87,10 +87,6 @@ describe GithubRepo do
       expect(repo.should_process_ref?('heads/foo')).to eq(false)
     end
 
-    it 'returns true if the branch contains the special L10N text' do
-      expect(repo.should_process_ref?('heads/L10N_foo')).to eq(true)
-    end
-
     it 'returns true if the given tag matches the configured one' do
       expect(repo.should_process_ref?('tags/foo')).to eq(true)
     end
