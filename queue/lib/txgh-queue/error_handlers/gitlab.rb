@@ -20,7 +20,7 @@ module TxghQueue
 
       class << self
         def can_handle?(error_or_response)
-          error_or_response.is_a?(Octokit::Error)
+          error_or_response.is_a?(::Gitlab::Error::Error)
         end
 
         def status_for(error)
