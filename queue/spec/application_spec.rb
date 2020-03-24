@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'rack/test'
 
 require 'helpers/github_payload_builder'
+require 'helpers/gitlab_payload_builder'
 require 'helpers/standard_txgh_setup'
 
 describe TxghQueue::WebhookEndpoints, auto_configure: true do
@@ -100,6 +101,35 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
         event: 'push',
         txgh_event: 'github.push',
         repo_name: github_repo_name,
+        ref: "refs/#{ref}"
+      )
+    end
+  end
+
+  describe '/gitlab/enqueue' do
+    let(:producer) { backend.producer_for('gitlab.push') }
+    let(:config) do
+      Txgh::Config::ConfigPair.new(project_config, gitlab_config)
+    end
+
+    it 'enqueues a new job' do
+      payload = GitlabPayloadBuilder.push_payload(gitlab_repo_name, ref)
+      payload.add_commit
+
+      header 'X-GitLab-Event', 'Push Hook'
+      header 'X-Gitlab-Token', config.git_repo.webhook_secret
+
+      expect { post '/gitlab/enqueue', payload.to_json }.to(
+        change { producer.enqueued_jobs.size }.from(0).to(1)
+      )
+
+      expect(last_response).to be_accepted
+
+      job = producer.enqueued_jobs.first
+      expect(job[:payload]).to include(
+        event: 'push',
+        txgh_event: 'gitlab.push',
+        repo_name: gitlab_repo_name.split('/').last,
         ref: "refs/#{ref}"
       )
     end

@@ -31,5 +31,11 @@ module TxghQueue
         Github::RequestHandler.handle_request(request, settings.logger)
       )
     end
+
+    post '/gitlab/enqueue' do
+      respond_with(
+        Gitlab::RequestHandler.handle_request(request, settings.logger)
+      )
+    end
   end
 end

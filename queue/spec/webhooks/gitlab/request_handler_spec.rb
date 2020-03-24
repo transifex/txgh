@@ -17,7 +17,6 @@ describe TxghQueue::Webhooks::Gitlab::RequestHandler, auto_configure: true do
 
   describe '#handle_request' do
     let(:queue_config) { {} }
-    # let(:payload) { { repository: { name: gitlab_repo_name } } }
     let(:payload) { GitlabPayloadBuilder.push_payload(gitlab_repo_name, ref) }
     let(:txgh_event) { 'push' }
 
