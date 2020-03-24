@@ -1,7 +1,7 @@
 module TxghServer
   module Webhooks
     module Gitlab
-      class PushAttributes < TxghServer::Webhooks::Github::PushAttributes
+      class PushAttributes < TxghServer::Webhooks::Git::PushAttributes
         class << self
           def repo_name(payload)
             payload.fetch('repository').fetch('name')

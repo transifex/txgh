@@ -3,7 +3,7 @@ require 'gitlab'
 module TxghServer
   module Webhooks
     module Gitlab
-      class StatusUpdater < TxghServer::Webhooks::Github::StatusUpdater
+      class StatusUpdater < TxghServer::Webhooks::Git::StatusUpdater
         def report_error_and_update_status(error)
           error_params = Txgh.events.publish_error!(error)
 

@@ -3,7 +3,7 @@ require 'json'
 module TxghServer
   module Webhooks
     module Gitlab
-      class RequestHandler < TxghServer::Webhooks::Github::RequestHandler
+      class RequestHandler < TxghServer::Webhooks::Git::RequestHandler
         def handle_request
           handle_safely do
             if gitlab_event == 'Push Hook'
@@ -42,14 +42,6 @@ module TxghServer
 
         def git_repo_name
           payload.fetch('project', {})['path_with_namespace']
-        end
-
-        def config
-          @config ||= Txgh::Config::KeyManager.config_from_repo(git_repo_name)
-        end
-
-        def repo
-          config.git_repo
         end
 
         def authentic_request?
