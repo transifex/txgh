@@ -96,12 +96,12 @@ describe GithubRepo do
     end
   end
 
-  describe '#github_config_branch' do
+  describe '#git_config_branch' do
     context 'with all branches indicated' do
       let(:branch) { 'all' }
 
       it "doesn't modify the passed branch, i.e. returns 'all'" do
-        expect(repo.github_config_branch).to eq('all')
+        expect(repo.git_config_branch).to eq('all')
       end
     end
 
@@ -109,7 +109,7 @@ describe GithubRepo do
       let(:branch) { nil }
 
       it 'chooses master by default' do
-        expect(repo.github_config_branch).to eq('heads/master')
+        expect(repo.git_config_branch).to eq('heads/master')
       end
     end
 
@@ -117,17 +117,17 @@ describe GithubRepo do
       let(:branch) { 'foobar' }
 
       it 'correctly prefixes the branch' do
-        expect(repo.github_config_branch).to eq('heads/foobar')
+        expect(repo.git_config_branch).to eq('heads/foobar')
       end
     end
   end
 
-  describe '#github_config_tag' do
+  describe '#git_config_tag' do
     context 'with all tags indicated' do
       let(:tag) { 'all' }
 
       it "doesn't modify the passed tag, i.e. returns 'all'" do
-        expect(repo.github_config_tag).to eq('all')
+        expect(repo.git_config_tag).to eq('all')
       end
     end
 
@@ -135,7 +135,7 @@ describe GithubRepo do
       let(:tag) { nil }
 
       it 'returns nil' do
-        expect(repo.github_config_tag).to be_nil
+        expect(repo.git_config_tag).to be_nil
       end
     end
 
@@ -143,7 +143,7 @@ describe GithubRepo do
       let(:tag) { 'tags/foobar' }
 
       it 'leaves the prefix intact' do
-        expect(repo.github_config_tag).to eq('tags/foobar')
+        expect(repo.git_config_tag).to eq('tags/foobar')
       end
     end
   end

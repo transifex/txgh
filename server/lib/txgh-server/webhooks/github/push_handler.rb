@@ -20,7 +20,7 @@ module TxghServer
         def execute
           # Check if the branch in the hook data is the configured branch we want
           logger.info("request github branch: #{branch}")
-          logger.info("config github branch: #{repo.github_config_branch}")
+          logger.info("config github branch: #{repo.git_config_branch}")
 
           if should_process?
             logger.info('found branch in github request')

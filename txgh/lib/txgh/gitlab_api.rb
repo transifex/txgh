@@ -1,8 +1,7 @@
-require 'base64'
 require 'gitlab'
 
 module Txgh
-  class GitlabApi
+  class GitlabApi < GitApi
     class << self
       def create_from_credentials(_login, access_token, repo_name)
         Gitlab.endpoint = 'https://gitlab.com/api/v4'
@@ -11,17 +10,6 @@ module Txgh
           repo_name
         )
       end
-
-      def create_from_client(client, repo_name)
-        new(client, repo_name)
-      end
-    end
-
-    attr_reader :client, :repo_name
-
-    def initialize(client, repo_name)
-      @client = client
-      @repo_name = repo_name
     end
 
     def update_contents(branch, content_list, message)

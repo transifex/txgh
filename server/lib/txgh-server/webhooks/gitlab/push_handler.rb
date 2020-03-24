@@ -8,7 +8,7 @@ module TxghServer
       class PushHandler < TxghServer::Webhooks::Github::PushHandler
         def execute
           logger.info("request gitlab branch: #{branch}")
-          logger.info("config gitlab branch: #{repo.gitlab_config_branch}")
+          logger.info("config gitlab branch: #{repo.git_config_branch}")
 
           if should_process?
             logger.info('found branch in gitlab request')

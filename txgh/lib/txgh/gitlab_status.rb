@@ -1,4 +1,4 @@
 module Txgh
-  class GitlabStatus < Txgh::GithubStatus
+  class GitlabStatus < Txgh::GitStatus
   end
 end
