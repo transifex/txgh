@@ -1,10 +1,7 @@
 require 'spec_helper'
 require 'helpers/sqs/sqs_test_message'
 
-include TxghQueue
-include TxghQueue::Backends
-
-describe Sqs::HistorySequence do
+describe TxghQueue::Backends::Sqs::HistorySequence do
   let(:message) { SqsTestMessage.new('abc123', '{}', attributes_hash) }
   let(:attributes_hash) do
     {

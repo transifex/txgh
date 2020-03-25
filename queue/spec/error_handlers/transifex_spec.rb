@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe ErrorHandlers::Transifex do
+describe TxghQueue::ErrorHandlers::Transifex do
   describe '.can_handle?' do
     it 'can reply to transifex api errors' do
       error = Txgh::TransifexApiError.new(500, 'Internal error')
@@ -27,17 +25,17 @@ describe ErrorHandlers::Transifex do
   describe '.status_for' do
     it 'retries with delay on api error' do
       error = Txgh::TransifexApiError.new(500, 'Internal error')
-      expect(described_class.status_for(error)).to eq(Status.retry_with_delay)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.retry_with_delay)
     end
 
     it 'fails on not found error' do
       error = Txgh::TransifexNotFoundError.new
-      expect(described_class.status_for(error)).to eq(Status.fail)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.fail)
     end
 
     it 'fails on unauthorized error' do
       error = Txgh::TransifexUnauthorizedError.new
-      expect(described_class.status_for(error)).to eq(Status.fail)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.fail)
     end
   end
 end

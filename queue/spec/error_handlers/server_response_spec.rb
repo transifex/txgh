@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe ErrorHandlers::ServerResponse do
+describe TxghQueue::ErrorHandlers::ServerResponse do
   describe '.can_handle?' do
     it 'can reply to TxghServer responses' do
       server_response = TxghServer::Response.new(200, 'Ok')
@@ -18,25 +16,25 @@ describe ErrorHandlers::ServerResponse do
     it 'replies with ok if the status code is in the 200 range' do
       server_response = TxghServer::Response.new(201, 'Created')
       reply = described_class.status_for(server_response)
-      expect(reply).to eq(Status.ok)
+      expect(reply).to eq(TxghQueue::Status.ok)
     end
 
     it 'replies with ok if the status code is in the 300 range' do
       server_response = TxghServer::Response.new(304, 'Not modified')
       reply = described_class.status_for(server_response)
-      expect(reply).to eq(Status.ok)
+      expect(reply).to eq(TxghQueue::Status.ok)
     end
 
     it 'replies with fail if the status code is in the 400 range' do
       server_response = TxghServer::Response.new(404, 'Not found')
       reply = described_class.status_for(server_response)
-      expect(reply).to eq(Status.fail)
+      expect(reply).to eq(TxghQueue::Status.fail)
     end
 
     it 'replies with fail if the status code is in the 500 range' do
       server_response = TxghServer::Response.new(502, 'Bad gateway')
       reply = described_class.status_for(server_response)
-      expect(reply).to eq(Status.fail)
+      expect(reply).to eq(TxghQueue::Status.fail)
     end
   end
 end

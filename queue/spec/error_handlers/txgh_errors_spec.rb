@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe ErrorHandlers::TxghErrors do
+describe TxghQueue::ErrorHandlers::TxghErrors do
   describe '.can_handle?' do
     it 'can reply to all configured error classes' do
       described_class::ERROR_CLASSES.keys.each do |klass|

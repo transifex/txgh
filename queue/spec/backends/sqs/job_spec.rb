@@ -1,13 +1,10 @@
 require 'spec_helper'
 require 'helpers/sqs/sqs_test_message'
 
-include TxghQueue
-include TxghQueue::Backends
-
-describe Sqs::Job, auto_configure: true do
+describe TxghQueue::Backends::Sqs::Job, auto_configure: true do
   let(:queue_config) { sqs_queue_config }
-  let(:queue) { Sqs::Config.queues.first }
-  let(:failure_queue) { Sqs::Config.failure_queue }
+  let(:queue) { TxghQueue::Backends::Sqs::Config.queues.first }
+  let(:failure_queue) { TxghQueue::Backends::Sqs::Config.failure_queue }
   let(:logger) { NilLogger.new }
   let(:body) { { 'foo' => 'bar' } }
   let(:message) { SqsTestMessage.new('123abc', body.to_json) }
@@ -18,12 +15,12 @@ describe Sqs::Job, auto_configure: true do
     it 'updates the history sequence with failure details for an exception' do
       error = StandardError.new('foobar')
       error.set_backtrace('path/to/file.rb:10')
-      result = Result.new(status, error)
+      result = TxghQueue::Result.new(status, error)
       expect(job).to receive(:process).with(body).and_return(result)
 
       # this call to send_message signifies a retry
       expect(send(queue_sym)).to receive(:send_message) do |body, attributes|
-        message_attributes = Sqs::MessageAttributes.from_h(attributes[:message_attributes])
+        message_attributes = TxghQueue::Backends::Sqs::MessageAttributes.from_h(attributes[:message_attributes])
         current_retry = message_attributes.history_sequence.current
         expect(current_retry).to include(
           response_type: 'error',
@@ -40,12 +37,12 @@ describe Sqs::Job, auto_configure: true do
 
     it 'updates the history sequence with failure details for a txgh response' do
       response = TxghServer::Response.new(502, 'Bad gateway')
-      result = Result.new(status, response)
+      result = TxghQueue::Result.new(status, response)
       expect(job).to receive(:process).with(body).and_return(result)
 
       # this call to send_message signifies a retry
       expect(send(queue_sym)).to receive(:send_message) do |body, attributes|
-        message_attributes = Sqs::MessageAttributes.from_h(attributes[:message_attributes])
+        message_attributes = TxghQueue::Backends::Sqs::MessageAttributes.from_h(attributes[:message_attributes])
         current_retry = message_attributes.history_sequence.current
         expect(current_retry).to include(
           response_type: 'response',
@@ -62,7 +59,7 @@ describe Sqs::Job, auto_configure: true do
 
   describe '#complete' do
     it 'processes a single job and deletes the message' do
-      result = Result.new(Status.ok, TxghServer::Response.new(200, 'Ok'))
+      result = TxghQueue::Result.new(TxghQueue::Status.ok, TxghServer::Response.new(200, 'Ok'))
       expect(queue).to receive(:delete_message).with(message.receipt_handle)
       expect(job).to receive(:process).with(body).and_return(result)
       job.complete
@@ -70,7 +67,7 @@ describe Sqs::Job, auto_configure: true do
 
     context 'error reporting' do
       let(:error) { StandardError.new('jelly beans') }
-      let(:result) { Result.new(Status.fail, error) }
+      let(:result) { TxghQueue::Result.new(TxghQueue::Status.fail, error) }
 
       before(:each) do
         expect(job).to receive(:process).and_return(result)
@@ -93,7 +90,7 @@ describe Sqs::Job, auto_configure: true do
       it 'includes error tracking details returned from publishing the event' do
         expect(Txgh.events).to receive(:publish_error).and_return(foo: 'bar')
         expect(failure_queue).to receive(:send_message) do |body, attributes|
-          message_attributes = Sqs::MessageAttributes.from_h(attributes[:message_attributes])
+          message_attributes = TxghQueue::Backends::Sqs::MessageAttributes.from_h(attributes[:message_attributes])
           current_retry = message_attributes.history_sequence.current
           expect(current_retry).to include(error_tracking: { foo: 'bar' })
         end
@@ -112,12 +109,12 @@ describe Sqs::Job, auto_configure: true do
 
       it 're-enqueues the message if told to retry' do
         response = TxghServer::Response.new(502, 'Bad gateway')
-        result = Result.new(Status.retry_without_delay, response)
+        result = TxghQueue::Result.new(TxghQueue::Status.retry_without_delay, response)
         expect(job).to receive(:process).with(body).and_return(result)
 
         # this call to send_message signifies a retry
         expect(queue).to receive(:send_message) do |body, attributes|
-          message_attributes = Sqs::MessageAttributes.from_h(attributes[:message_attributes])
+          message_attributes = TxghQueue::Backends::Sqs::MessageAttributes.from_h(attributes[:message_attributes])
           history_sequence = message_attributes.history_sequence.sequence.map { |elem| elem[:status] }
           expect(history_sequence).to eq(%w(retry_without_delay))
           new_message
@@ -128,17 +125,17 @@ describe Sqs::Job, auto_configure: true do
 
       it 're-enqueues with delay if told to do so' do
         response = TxghServer::Response.new(502, 'Bad gateway')
-        result = Result.new(Status.retry_with_delay, response)
+        result = TxghQueue::Result.new(TxghQueue::Status.retry_with_delay, response)
         expect(job).to receive(:process).with(body).and_return(result)
 
         # this call to send_message signifies a retry
         expect(queue).to receive(:send_message) do |body, attributes|
-          message_attributes = Sqs::MessageAttributes.from_h(attributes[:message_attributes])
+          message_attributes = TxghQueue::Backends::Sqs::MessageAttributes.from_h(attributes[:message_attributes])
           history_sequence = message_attributes.history_sequence.sequence.map { |elem| elem[:status] }
           expect(history_sequence).to eq(%w(retry_with_delay))
 
           expect(attributes[:delay_seconds]).to eq(
-            Sqs::RetryLogic::DELAY_INTERVALS.first
+            TxghQueue::Backends::Sqs::RetryLogic::DELAY_INTERVALS.first
           )
 
           new_message
@@ -151,7 +148,7 @@ describe Sqs::Job, auto_configure: true do
         let(:message) do
           SqsTestMessage.new('123abc', body.to_json, {
             'history_sequence' => {
-              'string_value' => (Sqs::RetryLogic::OVERALL_MAX_RETRIES - 1).times.map do
+              'string_value' => (TxghQueue::Backends::Sqs::RetryLogic::OVERALL_MAX_RETRIES - 1).times.map do
                 { status: 'retry_without_delay' }
               end.to_json
             }
@@ -160,15 +157,15 @@ describe Sqs::Job, auto_configure: true do
 
         it 'deletes the message and adds it to the failure queue' do
           response = TxghServer::Response.new(502, 'Bad gateway')
-          result = Result.new(Status.retry_with_delay, response)
+          result = TxghQueue::Result.new(TxghQueue::Status.retry_with_delay, response)
           expect(job).to receive(:process).with(body).and_return(result)
           expect(failure_queue).to receive(:send_message).and_return(new_message)
           job.complete
         end
       end
 
-      it_behaves_like "it updates the message's history sequence", Status.retry_without_delay, :queue
-      it_behaves_like "it updates the message's history sequence", Status.retry_with_delay, :queue
+      it_behaves_like "it updates the message's history sequence", TxghQueue::Status.retry_without_delay, :queue
+      it_behaves_like "it updates the message's history sequence", TxghQueue::Status.retry_with_delay, :queue
     end
 
     context 'failures' do
@@ -177,13 +174,13 @@ describe Sqs::Job, auto_configure: true do
       end
 
       it 'sends the message to the failure queue' do
-        result = Result.new(Status.fail, TxghServer::Response.new(500, '💩'))
+        result = TxghQueue::Result.new(TxghQueue::Status.fail, TxghServer::Response.new(500, '💩'))
         expect(failure_queue).to receive(:send_message).with(body.to_json, anything)
         expect(job).to receive(:process).with(body).and_return(result)
         job.complete
       end
 
-      it_behaves_like "it updates the message's history sequence", Status.fail, :failure_queue
+      it_behaves_like "it updates the message's history sequence", TxghQueue::Status.fail, :failure_queue
     end
   end
 end
