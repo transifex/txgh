@@ -1,3 +1,6 @@
+# 3.0.0
+* Add GitLab integration.
+
 # 2.1.0
 * Support ERB tags in config files.
 

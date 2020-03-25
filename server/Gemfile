@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-# @TODO: remove
-gem 'txgh', path: '../txgh'
-
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'

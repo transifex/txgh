@@ -1,3 +1,6 @@
+# 7.0.0
+* Add GitLab integration.
+
 # 6.8.1
 * Actually support ERB tags in config files.
 

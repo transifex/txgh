@@ -1,3 +1,6 @@
+# 4.0.0
+* Add GitLab integration.
+
 # 3.1.0
 * Support both application/json and application/x-www-form-encoded payloads for Transifex webhooks.
 
