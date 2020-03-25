@@ -2,12 +2,10 @@ require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 require 'yaml'
 
-include TxghServer
-
-describe DownloadHandler do
+describe TxghServer::DownloadHandler do
   include StandardTxghSetup
 
-  let(:format) { DownloadHandler::DEFAULT_FORMAT }
+  let(:format) { described_class::DEFAULT_FORMAT }
 
   let(:params) do
     {
@@ -30,7 +28,7 @@ describe DownloadHandler do
     end
 
     it 'responds with a streaming zip and has the project name as the attachment' do
-      response = DownloadHandler.handle_request(request)
+      response = described_class.handle_request(request)
       expect(response).to be_streaming
       expect(response).to be_a(ZipStreamResponse)
       expect(response.attachment).to eq(project_name)
@@ -40,7 +38,7 @@ describe DownloadHandler do
       let(:format) { '.tgz' }
 
       it 'responds with a streaming tgz download' do
-        response = DownloadHandler.handle_request(request)
+        response = described_class.handle_request(request)
         expect(response).to be_streaming
         expect(response).to be_a(TgzStreamResponse)
       end
@@ -49,7 +47,7 @@ describe DownloadHandler do
     context 'when an error occurs' do
       before(:each) do
         expect(request).to receive(:params).and_raise(StandardError)
-        response = DownloadHandler.handle_request(request)
+        response = described_class.handle_request(request)
         expect(response).to_not be_streaming
         expect(response.status).to eq(500)
       end
@@ -58,7 +56,7 @@ describe DownloadHandler do
 
   context '#execute' do
     let(:handler) do
-      DownloadHandler.new(transifex_project, github_repo, params, logger)
+      described_class.new(transifex_project, github_repo, params, logger)
     end
 
     it 'responds with a streaming zip download' do

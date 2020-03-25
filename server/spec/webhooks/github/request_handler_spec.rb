@@ -20,7 +20,7 @@ describe TxghServer::Webhooks::Github::RequestHandler do
       let(:payload) { GithubPayloadBuilder.push_payload(github_repo_name, ref).tap { |p| p.add_commit } }
 
       it 'does not execute if unauthorized' do
-        expect_any_instance_of(Github::PushHandler).to_not receive(:execute)
+        expect_any_instance_of(TxghServer::Webhooks::Github::PushHandler).to_not receive(:execute)
         response = handler.handle_request
         expect(response.status).to eq(401)
       end
@@ -31,7 +31,7 @@ describe TxghServer::Webhooks::Github::RequestHandler do
         end
 
         it 'handles the request with the push handler' do
-          expect_any_instance_of(Github::PushHandler).to receive(:execute).and_return(:response)
+          expect_any_instance_of(TxghServer::Webhooks::Github::PushHandler).to receive(:execute).and_return(:response)
           expect(handler.handle_request).to eq(:response)
         end
       end
@@ -42,7 +42,7 @@ describe TxghServer::Webhooks::Github::RequestHandler do
       let(:payload) { GithubPayloadBuilder.delete_payload(github_repo_name, ref) }
 
       it 'does not execute if unauthorized' do
-        expect_any_instance_of(Github::DeleteHandler).to_not receive(:execute)
+        expect_any_instance_of(TxghServer::Webhooks::Github::DeleteHandler).to_not receive(:execute)
         response = handler.handle_request
         expect(response.status).to eq(401)
       end
@@ -53,7 +53,7 @@ describe TxghServer::Webhooks::Github::RequestHandler do
         end
 
         it 'handles the request with the delete handler' do
-          expect_any_instance_of(Github::DeleteHandler).to receive(:execute).and_return(:response)
+          expect_any_instance_of(TxghServer::Webhooks::Github::DeleteHandler).to receive(:execute).and_return(:response)
           expect(handler.handle_request).to eq(:response)
         end
       end

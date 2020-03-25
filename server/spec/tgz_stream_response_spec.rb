@@ -3,9 +3,7 @@ require 'spec_helper'
 require 'stringio'
 require 'zlib'
 
-include TxghServer
-
-describe TgzStreamResponse do
+describe TxghServer::TgzStreamResponse do
   def read_tgz_from(io)
     contents = {}
 
@@ -29,7 +27,7 @@ describe TgzStreamResponse do
   end
 
   let(:response) do
-    TgzStreamResponse.new(attachment, enum)
+    described_class.new(attachment, enum)
   end
 
   describe '#write_to' do

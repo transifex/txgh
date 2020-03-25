@@ -4,9 +4,7 @@ require 'helpers/standard_txgh_setup'
 require 'helpers/test_request'
 require 'uri'
 
-include TxghServer::Webhooks
-
-describe Transifex::RequestHandler do
+describe TxghServer::Webhooks::Transifex::RequestHandler do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
@@ -44,7 +42,7 @@ describe Transifex::RequestHandler do
     end
 
     it 'does not execute if unauthorized' do
-      expect_any_instance_of(Transifex::HookHandler).to_not receive(:execute)
+      expect_any_instance_of(TxghServer::Webhooks::Transifex::HookHandler).to_not receive(:execute)
       response = handler.handle_request
       expect(response.status).to eq(401)
     end
@@ -55,7 +53,7 @@ describe Transifex::RequestHandler do
       end
 
       it 'handles the request with the hook handler' do
-        expect_any_instance_of(Transifex::HookHandler).to receive(:execute).and_return(:response)
+        expect_any_instance_of(TxghServer::Webhooks::Transifex::HookHandler).to receive(:execute).and_return(:response)
         expect(handler.handle_request).to eq(:response)
       end
 
