@@ -3,9 +3,6 @@ require 'txgh-server'
 
 module TxghQueue
   class Job
-    Github = TxghServer::Webhooks::Github
-    Gitlab = TxghServer::Webhooks::Gitlab
-    Transifex = TxghServer::Webhooks::Transifex
     include TxghServer::ResponseHelpers
 
     attr_reader :logger
@@ -56,14 +53,14 @@ module TxghQueue
     end
 
     def handle_github_push(project, repo, payload)
-      attributes = Github::PushAttributes.new(payload)
-      handler = Github::PushHandler.new(project, repo, logger, attributes)
+      attributes = TxghServer::Webhooks::Github::PushAttributes.new(payload)
+      handler = TxghServer::Webhooks::Github::PushHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 
     def handle_github_delete(project, repo, payload)
-      attributes = Github::DeleteAttributes.new(payload)
-      handler = Github::DeleteHandler.new(project, repo, logger, attributes)
+      attributes = TxghServer::Webhooks::Github::DeleteAttributes.new(payload)
+      handler = TxghServer::Webhooks::Github::DeleteHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 
@@ -74,13 +71,13 @@ module TxghQueue
     end
 
     def handle_gitlab_delete(project, repo, payload)
-      attributes = Gitlab::DeleteAttributes.new(payload)
-      handler = Gitlab::DeleteHandler.new(project, repo, logger, attributes)
+      attributes = TxghServer::Webhooks::Gitlab::DeleteAttributes.new(payload)
+      handler = TxghServer::Webhooks::Gitlab::DeleteHandler.new(project, repo, logger, attributes)
       execute(handler)
     end
 
     def handle_transifex_hook(project, repo, payload)
-      handler = Transifex::HookHandler.new(
+      handler = TxghServer::Webhooks::Transifex::HookHandler.new(
         project: project,
         repo: repo,
         resource_slug: payload['resource'],
