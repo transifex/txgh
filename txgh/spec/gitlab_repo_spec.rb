@@ -1,13 +1,11 @@
 require 'spec_helper'
 
-include Txgh
-
-describe GitlabRepo do
+describe Txgh::GitlabRepo do
   let(:repo_name) { 'my_org/my_repo' }
   let(:branch) { 'master' }
   let(:tag) { 'tags/foo' }
   let(:api) { :api }
-  let(:repo) { GitlabRepo.new(config, api) }
+  let(:repo) { described_class.new(config, api) }
   let(:diff_point) { nil }
   let(:config) do
     {

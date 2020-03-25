@@ -1,15 +1,12 @@
 require 'spec_helper'
 require 'helpers/test_provider'
 
-include Txgh
-include Txgh::Config
-
-describe ProviderInstance do
+describe Txgh::Config::ProviderInstance do
   let(:provider) { TestProvider }
   let(:payload) { :fake_payload }
   let(:parser) { :fake_parser }
   let(:options) { :fake_options }
-  let(:instance) { ProviderInstance.new(provider, parser) }
+  let(:instance) { described_class.new(provider, parser) }
 
   describe '#supports?' do
     it 'returns true if the scheme matches' do
@@ -27,7 +24,7 @@ describe ProviderInstance do
     end
 
     context 'with a default provider' do
-      let(:instance) { ProviderInstance.new(provider, parser, default: true) }
+      let(:instance) { described_class.new(provider, parser, default: true) }
 
       it 'returns true if marked as the default provider' do
         expect(instance).to be_default

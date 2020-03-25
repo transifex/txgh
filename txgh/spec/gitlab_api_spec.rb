@@ -1,11 +1,9 @@
 require 'spec_helper'
 require 'base64'
 
-include Txgh
-
-describe GitlabApi do
+describe Txgh::GitlabApi do
   let(:client) { double(:client) }
-  let(:api) { GitlabApi.create_from_client(client, repo) }
+  let(:api) { described_class.create_from_client(client, repo) }
   let(:repo) { 'my_org/my_repo' }
   let(:branch) { 'master' }
   let(:sha) { 'abc123' }

@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'stringio'
 
-include Txgh
-
-describe ResourceContents do
+describe Txgh::ResourceContents do
   let(:tx_resource) do
     TxResource.new(
       'project_slug', 'resource_slug', 'YAML',
@@ -33,7 +31,7 @@ describe ResourceContents do
   end
 
   let(:contents) do
-    ResourceContents.from_string(tx_resource, default_contents)
+    described_class.from_string(tx_resource, default_contents)
   end
 
   describe '#phrases' do
@@ -45,7 +43,7 @@ describe ResourceContents do
     end
 
     it 'preserves arrays' do
-      rsrc_contents = ResourceContents.from_string(tx_resource, array_contents)
+      rsrc_contents = described_class.from_string(tx_resource, array_contents)
       expect(rsrc_contents.phrases).to eq([
         { 'key' => 'captains', 'string' => %w(Janeway Picard Sisko Kirk) }
       ])
@@ -70,7 +68,7 @@ describe ResourceContents do
 
     it 'serializes arrays correctly' do
       stream = StringIO.new
-      rsrc_contents = ResourceContents.from_string(tx_resource, array_contents)
+      rsrc_contents = described_class.from_string(tx_resource, array_contents)
       rsrc_contents.write_to(stream)
       expect(stream.string).to eq(array_contents)
     end
@@ -108,7 +106,7 @@ describe ResourceContents do
 
   describe '#empty?' do
     it 'returns true if the resource contains no phrases' do
-      contents = ResourceContents.from_phrase_list(tx_resource, [])
+      contents = described_class.from_phrase_list(tx_resource, [])
       expect(contents).to be_empty
     end
 
@@ -119,11 +117,11 @@ describe ResourceContents do
 
   describe '#diff' do
     let(:head) do
-      ResourceContents.from_string(tx_resource, head_contents)
+      described_class.from_string(tx_resource, head_contents)
     end
 
     let(:diff_point) do
-      ResourceContents.from_string(tx_resource, diff_point_contents)
+      described_class.from_string(tx_resource, diff_point_contents)
     end
 
     let(:diff) do
@@ -156,7 +154,7 @@ describe ResourceContents do
       end
 
       it 'returns an instance of ResourceContents' do
-        expect(diff).to be_a(ResourceContents)
+        expect(diff).to be_a(described_class)
       end
     end
 

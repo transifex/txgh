@@ -1,12 +1,10 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe GitlabStatus do
+describe Txgh::GitlabStatus do
   include StandardTxghSetup
 
-  let(:status) { GitlabStatus.new(transifex_project, gitlab_repo, branch) }
+  let(:status) { described_class.new(transifex_project, gitlab_repo, branch) }
   let(:resource) { tx_config.resource(resource_slug) }
   let(:branch) { 'heads/master' }
   let(:sha) { 'abc123shashasha' }
@@ -39,7 +37,7 @@ describe GitlabStatus do
       it 'reports status as success' do
         expect(gitlab_api).to receive(:create_status) do |commit_sha, state, options|
           expect(commit_sha).to eq(sha)
-          expect(state).to eq(GitlabStatus::State.success)
+          expect(state).to eq(described_class::State.success)
           expect(options[:description]).to eq('Translations complete!')
           expect(options[:context]).to eq('continuous-localization/txgh')
           expect(options[:target_url]).to eq(
@@ -67,7 +65,7 @@ describe GitlabStatus do
 
       it 'reports status as pending' do
         expect(gitlab_api).to receive(:create_status) do |commit_sha, state, options|
-          expect(state).to eq(GitlabStatus::State.pending)
+          expect(state).to eq(described_class::State.pending)
           expect(options[:description]).to eq('15/20 translations complete.')
         end
 
@@ -83,7 +81,7 @@ describe GitlabStatus do
 
       expect(gitlab_api).to receive(:create_status) do |commit_sha, state, options|
         expect(commit_sha).to eq(sha)
-        expect(state).to eq(GitlabStatus::State.error)
+        expect(state).to eq(described_class::State.error)
         expect(options[:description]).to eq(description)
         expect(options[:context]).to eq('continuous-localization/txgh')
         expect(options[:target_url]).to eq(target_url)

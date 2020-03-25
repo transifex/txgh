@@ -1,8 +1,6 @@
 require 'spec_helper'
 require 'tempfile'
 
-include Txgh
-
 describe Txgh::ParseConfig do
   let(:contents) do
     """
@@ -16,7 +14,7 @@ describe Txgh::ParseConfig do
 
   shared_examples 'a correct config loader' do
     it 'has correctly parsed the given config' do
-      expect(config).to be_a(::ParseConfig)
+      expect(config).to be_a(described_class)
       expect(config.groups).to eq(%w(header header2))
       expect(config.params).to eq(
         'header' => { 'key' => 'val' },
@@ -27,7 +25,7 @@ describe Txgh::ParseConfig do
 
   describe '.load' do
     let(:config) do
-      Txgh::ParseConfig.load(contents)
+      described_class.load(contents)
     end
 
     it_behaves_like 'a correct config loader'
@@ -44,7 +42,7 @@ describe Txgh::ParseConfig do
     end
 
     let(:config) do
-      Txgh::ParseConfig.load_file(@file.path)
+      described_class.load_file(@file.path)
     end
 
     it_behaves_like 'a correct config loader'

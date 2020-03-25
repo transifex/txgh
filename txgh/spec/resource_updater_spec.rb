@@ -1,13 +1,11 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe ResourceUpdater do
+describe Txgh::ResourceUpdater do
   include StandardTxghSetup
 
   let(:updater) do
-    ResourceUpdater.new(transifex_project, github_repo, logger)
+    described_class.new(transifex_project, github_repo, logger)
   end
 
   let(:branch) { nil }

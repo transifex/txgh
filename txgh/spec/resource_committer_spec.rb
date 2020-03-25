@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe ResourceCommitter do
+describe Txgh::ResourceCommitter do
   include StandardTxghSetup
 
   let(:language) { 'es' }
@@ -11,7 +9,7 @@ describe ResourceCommitter do
   let(:downloader) { instance_double(ResourceDownloader) }
   let(:file_name) { "translations/#{language}/sample.yml" }
   let(:committer) do
-    ResourceCommitter.new(transifex_project, github_repo, logger)
+    described_class.new(transifex_project, github_repo, logger)
   end
 
   let(:commit_message) do
