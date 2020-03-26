@@ -30,7 +30,7 @@ describe TxghServer::DownloadHandler do
     it 'responds with a streaming zip and has the project name as the attachment' do
       response = described_class.handle_request(request)
       expect(response).to be_streaming
-      expect(response).to be_a(ZipStreamResponse)
+      expect(response).to be_a(TxghServer::ZipStreamResponse)
       expect(response.attachment).to eq(project_name)
     end
 
@@ -40,7 +40,7 @@ describe TxghServer::DownloadHandler do
       it 'responds with a streaming tgz download' do
         response = described_class.handle_request(request)
         expect(response).to be_streaming
-        expect(response).to be_a(TgzStreamResponse)
+        expect(response).to be_a(TxghServer::TgzStreamResponse)
       end
     end
 
@@ -60,7 +60,7 @@ describe TxghServer::DownloadHandler do
     end
 
     it 'responds with a streaming zip download' do
-      expect(handler.execute).to be_a(ZipStreamResponse)
+      expect(handler.execute).to be_a(TxghServer::ZipStreamResponse)
     end
 
     it 'responds with the project name as the attachment' do
@@ -72,7 +72,7 @@ describe TxghServer::DownloadHandler do
       let(:format) { '.tgz' }
 
       it 'responds with a streaming tgz download' do
-        expect(handler.execute).to be_a(TgzStreamResponse)
+        expect(handler.execute).to be_a(TxghServer::TgzStreamResponse)
       end
     end
 
