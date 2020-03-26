@@ -1,3 +1,3 @@
 module TxghServer
-  VERSION = '4.0.0.beta'
+  VERSION = '4.0.0.beta3'
 end

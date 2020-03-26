@@ -1,3 +1,3 @@
 module TxghQueue
-  VERSION = '3.0.0.beta'
+  VERSION = '3.0.0.beta3'
 end
