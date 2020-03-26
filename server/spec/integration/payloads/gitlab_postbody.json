@@ -1,0 +1,62 @@
+{
+  "object_kind": "push",
+  "event_name": "push",
+  "before": "d2e8cee2a4119235ea5ffd91e50dc91fe2e6632e",
+  "after": "3bf889a1310b515ec4d8d64a93542977a6dbe106",
+  "ref": "refs/heads/test_hook",
+  "checkout_sha": "3bf889a1310b515ec4d8d64a93542977a6dbe106",
+  "message": null,
+  "user_id": 745271,
+  "user_name": "Ivan Danci",
+  "user_username": "idanci",
+  "user_email": "",
+  "user_avatar": "https://secure.gravatar.com/avatar/dbda838e9b7bca615829ac151e01f3c0?s=80&d=identicon",
+  "project_id": 17514841,
+  "project": {
+    "id": 17514841,
+    "name": "txgl-test",
+    "description": "Test transifex-gitlab",
+    "web_url": "https://gitlab.com/idanci/txgl-test",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.com:idanci/txgl-test.git",
+    "git_http_url": "https://gitlab.com/idanci/txgl-test.git",
+    "namespace": "Ivan Danci",
+    "visibility_level": 20,
+    "path_with_namespace": "idanci/txgl-test",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "https://gitlab.com/idanci/txgl-test",
+    "url": "git@gitlab.com:idanci/txgl-test.git",
+    "ssh_url": "git@gitlab.com:idanci/txgl-test.git",
+    "http_url": "https://gitlab.com/idanci/txgl-test.git"
+  },
+  "commits": [
+    {
+      "id": "3bf889a1310b515ec4d8d64a93542977a6dbe106",
+      "message": "Test\n",
+      "title": "Test",
+      "timestamp": "2020-03-26T18:27:52+02:00",
+      "url": "https://gitlab.com/idanci/txgl-test/-/commit/3bf889a1310b515ec4d8d64a93542977a6dbe106",
+      "author": {
+        "name": "Ivan Danci",
+        "email": "bah4uk@gmail.com"
+      },
+      "added": [],
+      "modified": [
+        "config/locales/en.yml"
+      ],
+      "removed": []
+    }
+  ],
+  "total_commits_count": 1,
+  "push_options": {},
+  "repository": {
+    "name": "txgl-test",
+    "url": "git@gitlab.com:idanci/txgl-test.git",
+    "description": "Test transifex-gitlab",
+    "homepage": "https://gitlab.com/idanci/txgl-test",
+    "git_http_url": "https://gitlab.com/idanci/txgl-test.git",
+    "git_ssh_url": "git@gitlab.com:idanci/txgl-test.git",
+    "visibility_level": 20
+  }
+}
