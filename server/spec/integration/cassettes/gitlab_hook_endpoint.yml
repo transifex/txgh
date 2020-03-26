@@ -93,7 +93,7 @@ http_interactions:
       User-Agent:
       - Faraday v0.17.3
       Authorization:
-      - Basic dHhnaC51c2VyOnQ0RkhhYXdmQVBEeVtuYSZlREpSWGMycWQ=
+      - Basic AUTH
       Accept:
       - application/json
       Accept-Encoding:
@@ -149,7 +149,7 @@ http_interactions:
       User-Agent:
       - Faraday v0.17.3
       Authorization:
-      - Basic dHhnaC51c2VyOnQ0RkhhYXdmQVBEeVtuYSZlREpSWGMycWQ=
+      - Basic AUTH
       Accept:
       - application/json
       Content-Type:
@@ -200,7 +200,7 @@ http_interactions:
       User-Agent:
       - Faraday v0.17.3
       Authorization:
-      - Basic dHhnaC51c2VyOnQ0RkhhYXdmQVBEeVtuYSZlREpSWGMycWQ=
+      - Basic AUTH
       Accept:
       - application/json
       Accept-Encoding:
@@ -325,7 +325,7 @@ http_interactions:
       User-Agent:
       - Faraday v0.17.3
       Authorization:
-      - Basic dHhnaC51c2VyOnQ0RkhhYXdmQVBEeVtuYSZlREpSWGMycWQ=
+      - Basic AUTH
       Accept:
       - application/json
       Accept-Encoding:

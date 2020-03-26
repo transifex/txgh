@@ -96,6 +96,22 @@ describe 'hook integration tests', integration: true do
         expect(last_response).to be_ok
       end
     end
+
+    it 'verifies the transifex hook endpoint works' do
+      VCR.use_cassette('transifex_hook_endpoint') do
+        params = {
+          'project' => project_name, 'resource' => 'enyml-heads_test_hook',
+          'language' => 'de', 'translated' => 100
+        }
+
+        payload = params.to_json
+
+        sign_transifex_request(payload)
+        post '/transifex', payload
+
+        expect(last_response).to be_ok
+      end
+    end
   end
 
   before(:all) do
@@ -170,21 +186,6 @@ describe 'hook integration tests', integration: true do
 
   it 'loads correct project config' do
     expect(config.project_config).to_not be_nil
-  end
-
-  it 'verifies the transifex hook endpoint works' do
-    VCR.use_cassette('transifex_hook_endpoint') do
-      params = {
-        'project' => 'test-project-88', 'resource' => 'samplepo',
-        'language' => 'el_GR', 'translated' => 100
-      }
-
-      payload = params.to_json
-
-      sign_transifex_request(payload)
-      post '/transifex', payload
-      expect(last_response).to be_ok
-    end
   end
 
   it 'verifies the github hook endpoint works' do
