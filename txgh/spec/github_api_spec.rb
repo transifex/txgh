@@ -37,7 +37,7 @@ describe Txgh::GithubApi do
   describe '#update_contents' do
     let(:path) { 'path/to/file.txt' }
     let(:old_contents) { 'abc123' }
-    let(:old_sha) { Utils.git_hash_blob(old_contents) }
+    let(:old_sha) { Txgh::Utils.git_hash_blob(old_contents) }
 
     it 'updates the given file contents' do
       new_contents = 'def456'

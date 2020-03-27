@@ -20,7 +20,7 @@ module Txgh
 
         file_sha = file_params.fetch(:sha) do
           begin
-            client.get_file(repo_name, path, branch).content_sha256
+            client.get_file(repo_name, path, branch).blob_id
           rescue ::Gitlab::Error::NotFound
             nil
           end
@@ -52,7 +52,8 @@ module Txgh
 
       # mock github response
       {
-        content: file.encoding == 'base64' ? Base64.decode64(file.content) : file.content.force_encoding(file.encoding)
+        content: file.encoding == 'base64' ? Base64.decode64(file.content) : file.content.force_encoding(file.encoding),
+        path: path
       }
     end
 

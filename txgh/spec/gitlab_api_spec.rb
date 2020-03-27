@@ -21,7 +21,7 @@ describe Txgh::GitlabApi do
   describe '#update_contents' do
     let(:path) { 'path/to/file.txt' }
     let(:old_contents) { 'abc123' }
-    let(:old_sha) { Utils.git_hash_blob(old_contents) }
+    let(:old_sha) { Txgh::Utils.git_hash_blob(old_contents) }
 
     it 'updates the given file contents' do
       new_contents = 'def456'
@@ -29,7 +29,7 @@ describe Txgh::GitlabApi do
       expect(client).to(
         receive(:get_file)
           .with(repo, path, branch)
-          .and_return(double(content_sha256: old_sha))
+          .and_return(double(blob_id: old_sha))
       )
 
       expect(client).to(
@@ -44,7 +44,7 @@ describe Txgh::GitlabApi do
       expect(client).to(
         receive(:get_file)
           .with(repo, path, branch)
-          .and_return(double(content_sha256: old_sha))
+          .and_return(double(blob_id: old_sha))
       )
 
       expect(client).to_not receive(:edit_file)
@@ -82,7 +82,7 @@ describe Txgh::GitlabApi do
           .and_return(double(content: 'content', encoding: 'utf-8'))
       )
 
-      expect(api.download(path, branch)).to eq({ content: 'content' })
+      expect(api.download(path, branch)).to eq({ content: 'content', path: path })
     end
 
     it 'encodes the string using the encoding specified in the response' do
@@ -106,7 +106,7 @@ describe Txgh::GitlabApi do
           .and_return(double(content: Base64.encode64('content'), encoding: 'base64'))
       )
 
-      expect(api.download(path, branch)).to eq({ content: 'content' })
+      expect(api.download(path, branch)).to eq({ content: 'content', path: path })
     end
   end
 end
