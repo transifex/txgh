@@ -1,3 +1,9 @@
+# 8.0.0
+* Add GitLab support.
+* Upgrade to txgh v7.0.0.
+* Upgrade to txgh-server v4.0.0.
+* Upgrade to txgh-queue v3.0.0.
+
 # 7.4.0
 * Upgrade to txgh v6.8.1.
 * Upgrade to txgh-queue v2.1.0.
