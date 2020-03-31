@@ -1,3 +1,5 @@
+require 'gitlab'
+
 module Txgh
   module Config
     module Providers

@@ -1,3 +1,5 @@
+require 'octokit'
+
 module Txgh
   module Config
     module Providers

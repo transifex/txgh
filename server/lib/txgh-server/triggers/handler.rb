@@ -1,3 +1,6 @@
+require 'octokit'
+require 'gitlab'
+
 module TxghServer
   module Triggers
     class Handler

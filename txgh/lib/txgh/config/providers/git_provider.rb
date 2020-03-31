@@ -40,7 +40,7 @@ module Txgh
         def ref
           unless @ref
             raise TxghError,
-              "TX_CONFIG specified a file from git but did not provide a ref."
+              'TX_CONFIG specified a file from git but did not provide a ref.'
           end
 
           @ref
@@ -49,7 +49,7 @@ module Txgh
         def git_repo
           unless @git_repo
             raise TxghError,
-              "TX_CONFIG specified a file from git but did not provide a repo."
+              'TX_CONFIG specified a file from git but did not provide a repo.'
           end
 
           @git_repo
