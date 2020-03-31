@@ -1,6 +1,7 @@
 /config/secret/*
 Gemfile.lock
 *.rbc
+*.gem
 *.sassc
 .sass-cache
 capybara-*.html

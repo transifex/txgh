@@ -1,3 +1,6 @@
+# 4.0.1
+* Update txgh to v7.0.1.
+
 # 4.0.0
 * Add GitLab integration.
 

@@ -1,3 +1,6 @@
+# 7.0.1
+* Add missing require statements.
+
 # 7.0.0
 * Add GitLab integration.
 
