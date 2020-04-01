@@ -77,7 +77,7 @@ describe TxghQueue::Webhooks::Gitlab::RequestHandler, auto_configure: true do
               event: 'push',
               txgh_event: 'gitlab.push',
               ref: "refs/#{ref}",
-              repo_name: gitlab_repo_name.split('/').last
+              repo_name: gitlab_repo_name
             )
           end
 
@@ -119,7 +119,7 @@ describe TxghQueue::Webhooks::Gitlab::RequestHandler, auto_configure: true do
               event: 'delete',
               txgh_event: 'gitlab.delete',
               ref: "refs/#{ref}",
-              repo_name: gitlab_repo_name.split('/').last
+              repo_name: gitlab_repo_name
             )
           end
 

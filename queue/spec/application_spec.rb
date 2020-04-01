@@ -129,7 +129,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
       expect(job[:payload]).to include(
         event: 'push',
         txgh_event: 'gitlab.push',
-        repo_name: gitlab_repo_name.split('/').last,
+        repo_name: gitlab_repo_name,
         ref: "refs/#{ref}"
       )
     end
