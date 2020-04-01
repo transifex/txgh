@@ -109,4 +109,23 @@ describe Txgh::GitlabApi do
       expect(api.download(path, branch)).to eq({ content: 'content', path: path })
     end
   end
+
+  describe '#create_status' do
+    let(:gitlab_response) do
+      OpenStruct.new({
+        code: 404,
+        request: double(base_uri: 'https://gitlab.com/api/v3', path: '/foo'),
+        parsed_response: Gitlab::ObjectifiedHash.new(
+          error_description: 'Cannot transition status via :enqueue from :pending',
+          error: 'also will not be displayed'
+        )
+      })
+    end
+
+    it 'does not raise error if cannot change status' do
+      expect(client).to receive(:update_commit_status).and_raise(::Gitlab::Error::BadRequest.new(gitlab_response))
+
+      api.create_status('sha', 'state', {})
+    end
+  end
 end
