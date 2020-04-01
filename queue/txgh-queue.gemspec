@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'aws-sdk', '~> 2.0'
   s.add_dependency 'txgh', '7.0.1'
-  s.add_dependency 'txgh-server', '4.0.1'
+  s.add_dependency 'txgh-server', '4.0.2'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
 

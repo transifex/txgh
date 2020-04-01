@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gem 'puma'
 
 gem 'txgh', '7.0.1'
-gem 'txgh-queue', '3.0.1'
-gem 'txgh-server', '4.0.1'
+gem 'txgh-queue', '3.0.2'
+gem 'txgh-server', '4.0.2'
 
 group :development, :test do
   gem 'rack'
