@@ -19,16 +19,8 @@ module TxghServer
             'delete'
           end
 
-          def repo_name(payload)
-            raise NotImplementedError
-          end
-
           def ref(payload)
             payload.fetch('ref')
-          end
-
-          def ref_type(payload)
-            raise NotImplementedError
           end
         end
 

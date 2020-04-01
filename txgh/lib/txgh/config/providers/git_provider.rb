@@ -33,10 +33,6 @@ module Txgh
 
         private
 
-        def download
-          raise NotImplementedError
-        end
-
         def ref
           unless @ref
             raise TxghError,

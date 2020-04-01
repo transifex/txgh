@@ -4,7 +4,7 @@ module TxghServer
       class DeleteAttributes < TxghServer::Webhooks::Git::DeleteAttributes
         class << self
           def repo_name(payload)
-            payload.fetch('repository').fetch('name')
+            payload.fetch('project', {})['path_with_namespace']
           end
 
           def ref_type(_payload)

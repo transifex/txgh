@@ -44,10 +44,6 @@ module TxghServer
           @pusher ||= Txgh::Pusher.new(project, repo, branch)
         end
 
-        def status_updater
-          raise NotImplementedError
-        end
-
         # finds the resources that were updated in each commit
         def added_and_modified_resources
           @amr ||= attributes.files.each_with_object(Set.new) do |file, ret|

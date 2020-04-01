@@ -19,15 +19,7 @@ module TxghServer
           @logger = logger
         end
 
-        def handle_request
-          raise NotImplementedError
-        end
-
         private
-
-        def attributes
-          raise NotImplementedError
-        end
 
         def handle_safely
           if authentic_request?
@@ -51,10 +43,6 @@ module TxghServer
           end
         end
 
-        def git_repo_name
-          raise NotImplementedError
-        end
-
         def config
           @config ||= Txgh::Config::KeyManager.config_from_repo(git_repo_name)
         end
@@ -65,10 +53,6 @@ module TxghServer
 
         def project
           config.transifex_project
-        end
-
-        def authentic_request?
-          raise NotImplementedError
         end
       end
     end

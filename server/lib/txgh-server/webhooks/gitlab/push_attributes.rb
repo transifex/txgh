@@ -4,7 +4,7 @@ module TxghServer
       class PushAttributes < TxghServer::Webhooks::Git::PushAttributes
         class << self
           def repo_name(payload)
-            payload.fetch('repository').fetch('name')
+            payload.fetch('project', {})['path_with_namespace']
           end
 
           def added_files(payload)

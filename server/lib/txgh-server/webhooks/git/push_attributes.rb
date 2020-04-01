@@ -20,10 +20,6 @@ module TxghServer
             'push'
           end
 
-          def repo_name(payload)
-            raise NotImplementedError
-          end
-
           def ref(payload)
             payload.fetch('ref')
           end
@@ -36,20 +32,8 @@ module TxghServer
             payload.fetch('after')
           end
 
-          def added_files(payload)
-            raise NotImplementedError
-          end
-
           def modified_files(payload)
             extract_files(payload, 'modified')
-          end
-
-          def author(payload)
-            raise NotImplementedError
-          end
-
-          def extract_files(payload, state)
-            raise NotImplementedError
           end
         end
 
