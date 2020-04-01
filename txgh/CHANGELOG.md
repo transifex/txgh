@@ -1,3 +1,6 @@
+# 7.0.2
+* Don't raise error when cannot update GitLab status.
+
 # 7.0.1
 * Add missing require statements.
 

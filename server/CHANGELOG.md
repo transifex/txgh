@@ -1,3 +1,6 @@
+# 4.0.3
+* Update txgh to v7.0.2.
+
 # 4.0.2
 * Fetch gitlab repo name with full path.
 
