@@ -6,11 +6,13 @@ module StandardTxghSetup
 
   let(:logger) { NilLogger.new }
   let(:github_api) { double(:github_api) }
+  let(:gitlab_api) { double(:gitlab_api) }
   let(:transifex_api) { double(:transifex_api) }
 
   let(:project_name) { 'my_awesome_project' }
   let(:resource_slug) { 'my_resource' }
-  let(:repo_name) { 'my_org/my_repo' }
+  let(:github_repo_name) { 'my_org/my_repo' }
+  let(:gitlab_repo_name) { 'my_org/gitlab_repo' }
   let(:branch) { 'master' }
   let(:tag) { 'all' }
   let(:ref) { 'heads/master' }
@@ -20,12 +22,13 @@ module StandardTxghSetup
   let(:diff_point) { nil }
   let(:organization) { 'myorg' }
   let(:commit_message_template) { nil }  # i.e. use the default
+  let(:push_translations_to) { github_repo_name }
 
   let(:project_config) do
     {
       'api_username' => 'transifex_api_username',
       'api_password' => 'transifex_api_password',
-      'push_translations_to' => repo_name,
+      'push_translations_to' => push_translations_to,
       'name' => project_name,
       'tx_config' => "raw://#{tx_config_raw}",
       'webhook_secret' => 'abc123',
@@ -35,14 +38,28 @@ module StandardTxghSetup
     }
   end
 
-  let(:repo_config) do
+  let(:github_config) do
     {
       'api_username' => 'github_api_username',
       'api_token' => 'github_api_token',
+      'git_repo_source' => 'github',
       'push_source_to' => project_name,
       'branch' => branch,
       'tag' => tag,
-      'name' => repo_name,
+      'name' => github_repo_name,
+      'webhook_secret' => 'abc123',
+      'diff_point' => diff_point,
+      'commit_message' => commit_message_template
+    }
+  end
+
+  let(:gitlab_config) do
+    {
+      'api_token' => 'gitlab_api_token',
+      'git_repo_source' => 'gitlab',
+      'push_source_to' => project_name,
+      'branch' => branch,
+      'name' => gitlab_repo_name,
       'webhook_secret' => 'abc123',
       'diff_point' => diff_point,
       'commit_message' => commit_message_template
@@ -77,7 +94,12 @@ module StandardTxghSetup
     {
       'github' => {
         'repos' => {
-          repo_name => repo_config
+          github_repo_name => github_config
+        }
+      },
+      'gitlab' => {
+        'repos' => {
+          gitlab_repo_name => gitlab_config
         }
       },
       'transifex' => {
@@ -93,6 +115,10 @@ module StandardTxghSetup
   end
 
   let(:github_repo) do
-    Txgh::GithubRepo.new(repo_config, github_api)
+    Txgh::GithubRepo.new(github_config, github_api)
+  end
+
+  let(:gitlab_repo) do
+    Txgh::GitlabRepo.new(gitlab_config, gitlab_api)
   end
 end

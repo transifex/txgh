@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe Status do
+describe TxghQueue::Status do
   describe '.retry_without_delay' do
     it 'returns the same object' do
       expect(described_class.retry_without_delay.object_id).to eq(

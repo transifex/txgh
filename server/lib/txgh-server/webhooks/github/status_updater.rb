@@ -3,15 +3,7 @@ require 'octokit'
 module TxghServer
   module Webhooks
     module Github
-      class StatusUpdater
-        attr_reader :project, :repo, :branch
-
-        def initialize(project, repo, branch)
-          @project = project
-          @repo = repo
-          @branch = branch
-        end
-
+      class StatusUpdater < TxghServer::Webhooks::Git::StatusUpdater
         def report_error_and_update_status(error)
           error_params = Txgh.events.publish_error!(error)
 

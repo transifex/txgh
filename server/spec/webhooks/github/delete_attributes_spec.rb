@@ -1,10 +1,7 @@
 require 'spec_helper'
 require 'helpers/github_payload_builder'
 
-include TxghServer
-include TxghServer::Webhooks::Github
-
-describe DeleteAttributes do
+describe TxghServer::Webhooks::Github::DeleteAttributes do
   let(:repo_name) { 'my_repo' }
   let(:ref) { 'heads/my_ref' }
 
@@ -13,7 +10,7 @@ describe DeleteAttributes do
   end
 
   describe '#from_webhook_payload' do
-    let(:attributes) { DeleteAttributes.from_webhook_payload(payload.to_h) }
+    let(:attributes) { TxghServer::Webhooks::Github::DeleteAttributes.from_webhook_payload(payload.to_h) }
 
     it 'pulls out repo name' do
       expect(attributes.repo_name).to eq(repo_name)

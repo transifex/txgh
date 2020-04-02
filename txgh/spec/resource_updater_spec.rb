@@ -1,13 +1,11 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe ResourceUpdater do
+describe Txgh::ResourceUpdater do
   include StandardTxghSetup
 
   let(:updater) do
-    ResourceUpdater.new(transifex_project, github_repo, logger)
+    described_class.new(transifex_project, github_repo, logger)
   end
 
   let(:branch) { nil }
@@ -66,7 +64,7 @@ describe ResourceUpdater do
 
     options = event[:options]
     expect(options[:project].name).to eq(project_name)
-    expect(options[:repo].name).to eq(repo_name)
+    expect(options[:repo].name).to eq(github_repo_name)
     expect(options[:branch]).to eq(ref)
     expect(options[:resource].original_resource_slug).to eq(resource_slug)
   end

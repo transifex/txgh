@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue::Backends
-
-describe Sqs::Queue do
+describe TxghQueue::Backends::Sqs::Queue do
   let(:options) { { name: 'test-queue', region: 'us-east-1', events: %w(a b c) } }
   let(:queue) { described_class.new(options) }
 

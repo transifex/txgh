@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'rack/test'
 
 require 'helpers/github_payload_builder'
+require 'helpers/gitlab_payload_builder'
 require 'helpers/standard_txgh_setup'
 
 describe TxghQueue::WebhookEndpoints, auto_configure: true do
@@ -14,7 +15,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
   end
 
   let(:config) do
-    Txgh::Config::ConfigPair.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, github_config)
   end
 
   let(:backend) { TxghQueue::Config.backend }
@@ -75,7 +76,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
       header(
         TxghServer::GithubRequestAuth::GITHUB_HEADER,
         TxghServer::GithubRequestAuth.compute_signature(
-          body, config.github_repo.webhook_secret
+          body, config.git_repo.webhook_secret
         )
       )
     end
@@ -83,7 +84,7 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
     let(:producer) { backend.producer_for('github.push') }
 
     it 'enqueues a new job' do
-      payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+      payload = GithubPayloadBuilder.push_payload(github_repo_name, ref)
       payload.add_commit
 
       sign_with payload.to_json
@@ -99,7 +100,36 @@ describe TxghQueue::WebhookEndpoints, auto_configure: true do
       expect(job[:payload]).to include(
         event: 'push',
         txgh_event: 'github.push',
-        repo_name: repo_name,
+        repo_name: github_repo_name,
+        ref: "refs/#{ref}"
+      )
+    end
+  end
+
+  describe '/gitlab/enqueue' do
+    let(:producer) { backend.producer_for('gitlab.push') }
+    let(:config) do
+      Txgh::Config::ConfigPair.new(project_config, gitlab_config)
+    end
+
+    it 'enqueues a new job' do
+      payload = GitlabPayloadBuilder.push_payload(gitlab_repo_name, ref)
+      payload.add_commit
+
+      header 'X-GitLab-Event', 'Push Hook'
+      header 'X-Gitlab-Token', config.git_repo.webhook_secret
+
+      expect { post '/gitlab/enqueue', payload.to_json }.to(
+        change { producer.enqueued_jobs.size }.from(0).to(1)
+      )
+
+      expect(last_response).to be_accepted
+
+      job = producer.enqueued_jobs.first
+      expect(job[:payload]).to include(
+        event: 'push',
+        txgh_event: 'gitlab.push',
+        repo_name: gitlab_repo_name,
         ref: "refs/#{ref}"
       )
     end

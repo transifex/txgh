@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe Backends do
+describe TxghQueue::Backends do
   describe '.register' do
     it 'associates the name of a backend with a class' do
       # use a string just for testing purposes; second argument should be a class

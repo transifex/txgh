@@ -9,7 +9,7 @@ module TxghServer
       def handle_request(request, logger = nil)
         handle_safely do
           config = config_from(request)
-          project, repo = [config.transifex_project, config.github_repo]
+          project, repo = [config.transifex_project, config.git_repo]
           params = params_from(request)
           handler = new(project, repo, params, logger)
           handler.execute

@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh::Config
-
-describe TxConfig do
+describe Txgh::Config::TxConfig do
   include StandardTxghSetup
 
   describe '.load' do
@@ -20,7 +18,7 @@ describe TxConfig do
         type = PO
       """
 
-      config = TxConfig.load(config_str)
+      config = described_class.load(config_str)
       expect(config.lang_map).to eq('pt-BR' => 'pt', 'ko-KR' => 'ko')
       expect(config.resources.size).to eq(1)
 

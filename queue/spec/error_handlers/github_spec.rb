@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe ErrorHandlers::Github do
+describe TxghQueue::ErrorHandlers::Github do
   describe '.can_handle?' do
     it 'can reply to all configured error classes' do
       described_class::ERROR_CLASSES.keys.each do |klass|
@@ -24,7 +22,7 @@ describe ErrorHandlers::Github do
 
     it 'replies to all unconfigured errors with fail' do
       # i.e. if octokit raises an error we didn't account for
-      expect(described_class.status_for(StandardError.new)).to eq(Status.fail)
+      expect(described_class.status_for(StandardError.new)).to eq(TxghQueue::Status.fail)
     end
   end
 end

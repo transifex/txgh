@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe ResourceCommitter do
+describe Txgh::ResourceCommitter do
   include StandardTxghSetup
 
   let(:language) { 'es' }
@@ -11,7 +9,7 @@ describe ResourceCommitter do
   let(:downloader) { instance_double(ResourceDownloader) }
   let(:file_name) { "translations/#{language}/sample.yml" }
   let(:committer) do
-    ResourceCommitter.new(transifex_project, github_repo, logger)
+    described_class.new(transifex_project, github_repo, logger)
   end
 
   let(:commit_message) do
@@ -51,7 +49,7 @@ describe ResourceCommitter do
 
         options = event[:options]
         expect(options[:project].name).to eq(project_name)
-        expect(options[:repo].name).to eq(repo_name)
+        expect(options[:repo].name).to eq(github_repo_name)
         expect(options[:branch]).to eq(branch)
         expect(options[:resource].original_resource_slug).to eq(resource_slug)
         expect(options[:language]).to eq(language)

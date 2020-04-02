@@ -1,15 +1,13 @@
 require 'spec_helper'
 
-include Txgh
-
-describe DiffCalculator do
+describe Txgh::DiffCalculator do
   def phrase(key, string)
     { 'key' => key, 'string' => string }
   end
 
   describe '.compare' do
     let(:diff) do
-      DiffCalculator.compare(head_phrases, diff_point_phrases)
+      described_class.compare(head_phrases, diff_point_phrases)
     end
 
     context 'with phrases added to HEAD' do

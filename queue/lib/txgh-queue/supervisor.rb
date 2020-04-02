@@ -11,6 +11,7 @@ module TxghQueue
     ERROR_HANDLERS = [
       ErrorHandlers::ServerResponse,
       ErrorHandlers::Github,
+      ErrorHandlers::Gitlab,
       ErrorHandlers::Transifex,
       ErrorHandlers::TxghErrors,
       ErrorHandlers::StandardErrors,

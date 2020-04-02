@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe ErrorHandlers::NetworkErrors do
+describe TxghQueue::ErrorHandlers::NetworkErrors do
   describe '.can_handle?' do
     it 'can reply to faraday connection errors' do
       error = Faraday::ConnectionFailed.new(StandardError.new)
@@ -28,22 +26,22 @@ describe ErrorHandlers::NetworkErrors do
   describe '.status_for' do
     it 'retries with delay on faraday connection error' do
       error = Faraday::ConnectionFailed.new(StandardError.new)
-      expect(described_class.status_for(error)).to eq(Status.retry_with_delay)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.retry_with_delay)
     end
 
     it 'retries with delay on faraday timeout error' do
       error = Faraday::TimeoutError.new
-      expect(described_class.status_for(error)).to eq(Status.retry_with_delay)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.retry_with_delay)
     end
 
     it 'retries with delay on ruby open timeout error' do
       error = Net::OpenTimeout.new
-      expect(described_class.status_for(error)).to eq(Status.retry_with_delay)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.retry_with_delay)
     end
 
     it 'retries with delay on ruby read timeout error' do
       error = Net::ReadTimeout.new
-      expect(described_class.status_for(error)).to eq(Status.retry_with_delay)
+      expect(described_class.status_for(error)).to eq(TxghQueue::Status.retry_with_delay)
     end
   end
 end

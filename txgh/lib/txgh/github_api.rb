@@ -1,25 +1,13 @@
-require 'base64'
 require 'octokit'
 
 module Txgh
-  class GithubApi
+  class GithubApi < GitApi
     class << self
       def create_from_credentials(login, access_token, repo_name)
         create_from_client(
           Octokit::Client.new(login: login, access_token: access_token), repo_name
         )
       end
-
-      def create_from_client(client, repo_name)
-        new(client, repo_name)
-      end
-    end
-
-    attr_reader :client, :repo_name
-
-    def initialize(client, repo_name)
-      @client = client
-      @repo_name = repo_name
     end
 
     def tree(sha)

@@ -1,11 +1,9 @@
 require 'spec_helper'
 
-include TxghQueue
-
-describe Result do
+describe TxghQueue::Result do
   context 'with a response' do
     let(:response) { TxghServer::Response.new(200, 'Ok') }
-    let(:result) { Result.new(Status.ok, response) }
+    let(:result) { described_class.new(TxghQueue::Status.ok, response) }
 
     describe 'has_response?' do
       it 'does have a response' do
@@ -34,7 +32,7 @@ describe Result do
 
   context 'with an error' do
     let(:error) { StandardError.new }
-    let(:result) { Result.new(Status.fail, error) }
+    let(:result) { described_class.new(TxghQueue::Status.fail, error) }
 
     describe 'has_response?' do
       it 'does not have a response' do

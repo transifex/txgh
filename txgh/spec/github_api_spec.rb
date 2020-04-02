@@ -1,11 +1,9 @@
 require 'spec_helper'
 require 'base64'
 
-include Txgh
-
-describe GithubApi do
+describe Txgh::GithubApi do
   let(:client) { double(:client) }
-  let(:api) { GithubApi.create_from_client(client, repo) }
+  let(:api) { described_class.create_from_client(client, repo) }
   let(:repo) { 'my_org/my_repo' }
   let(:branch) { 'master' }
   let(:sha) { 'abc123' }
@@ -39,7 +37,7 @@ describe GithubApi do
   describe '#update_contents' do
     let(:path) { 'path/to/file.txt' }
     let(:old_contents) { 'abc123' }
-    let(:old_sha) { Utils.git_hash_blob(old_contents) }
+    let(:old_sha) { Txgh::Utils.git_hash_blob(old_contents) }
 
     it 'updates the given file contents' do
       new_contents = 'def456'

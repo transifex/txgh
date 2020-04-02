@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe TransifexApi do
+describe Txgh::TransifexApi do
   FakeEnv = Struct.new(:url)
   FakeRequest = Struct.new(:body)
   FakeResponse = Struct.new(:env, :status, :body)
@@ -33,7 +31,7 @@ describe TransifexApi do
   include StandardTxghSetup
 
   let(:connection) { FakeConnection.new }
-  let(:api) { TransifexApi.create_from_connection(connection) }
+  let(:api) { described_class.create_from_connection(connection) }
   let(:resource) { tx_config.resource(resource_slug) }
 
   describe '#create_or_update' do

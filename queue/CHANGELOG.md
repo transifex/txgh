@@ -1,3 +1,15 @@
+# 3.0.3
+* Update txgh to v7.0.2 and txgh-server to v4.0.3.
+
+# 3.0.2
+* Update txgh-server to v4.0.2.
+
+# 3.0.1
+* Update txgh to v7.0.1 and txgh-server to v4.0.1.
+
+# 3.0.0
+* Add GitLab integration.
+
 # 2.1.0
 * Support ERB tags in config files.
 

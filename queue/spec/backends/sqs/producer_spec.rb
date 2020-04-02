@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'securerandom'
 
-include TxghQueue::Backends
-
-describe Sqs::Producer, auto_configure: true do
+describe TxghQueue::Backends::Sqs::Producer, auto_configure: true do
   let(:queue_config) { sqs_queue_config }
   let(:logger) { NilLogger.new }
   let(:queues) { TxghQueue::Backends::Sqs::Config.queues }

@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'rack'
 
-include TxghServer
-
-describe TransifexRequestAuth do
+describe TxghServer::TransifexRequestAuth do
   let(:secret) { 'abc123' }
   let(:params) { { param1: 'value1', param2: 'value2', param3: 123 }.to_json }
   let(:date_str) { Time.now.strftime('%a, %d %b %Y %H:%M:%S GMT') }
@@ -19,31 +17,31 @@ describe TransifexRequestAuth do
   describe '.authentic_request?' do
     it 'returns true if the request is signed correctly' do
       request = Rack::Request.new(
-        TransifexRequestAuth::RACK_HEADER => valid_signature,
+        described_class::RACK_HEADER => valid_signature,
         'HTTP_DATE' => date_str,
         'REQUEST_METHOD' => http_verb,
         'HTTP_X_TX_URL' => url,
         'rack.input' => StringIO.new(params)
       )
 
-      authentic = TransifexRequestAuth.authentic_request?(request, secret)
+      authentic = described_class.authentic_request?(request, secret)
       expect(authentic).to eq(true)
     end
 
     it 'returns false if the request is not signed correctly' do
       request = Rack::Request.new(
-        TransifexRequestAuth::RACK_HEADER => 'incorrect',
+        described_class::RACK_HEADER => 'incorrect',
         'rack.input' => StringIO.new(params)
       )
 
-      authentic = TransifexRequestAuth.authentic_request?(request, secret)
+      authentic = described_class.authentic_request?(request, secret)
       expect(authentic).to eq(false)
     end
   end
 
   describe '.compute_signature' do
     it 'calculates the signature and formats it as an http header' do
-      value = TransifexRequestAuth.compute_signature(
+      value = described_class.compute_signature(
         http_verb: http_verb,
         date_str: date_str,
         url: url,

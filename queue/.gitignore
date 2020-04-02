@@ -1,5 +1,6 @@
 /config/secret/*
 Gemfile.lock
+*.gem
 *.rbc
 *.sassc
 .sass-cache

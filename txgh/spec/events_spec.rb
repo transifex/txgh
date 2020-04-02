@@ -1,9 +1,7 @@
 require 'spec_helper'
 
-include Txgh
-
-describe Events do
-  let(:events) { Events.new }
+describe Txgh::Events do
+  let(:events) { subject }
 
   describe '#subscribe and #channels' do
     it "adds a channel if it doesn't already exist" do

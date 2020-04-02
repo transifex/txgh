@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-# @TODO: remove
-gem 'txgh', path: '../txgh'
-
 group :development, :test do
   gem 'pry-byebug'
   gem 'rake'
@@ -14,5 +11,5 @@ group :test do
   gem 'rack-test'
   gem 'rspec'
   gem 'vcr', '~> 3.0'
-  gem 'webmock', '~> 1.0'
+  gem 'webmock', '~> 3.8.3'
 end

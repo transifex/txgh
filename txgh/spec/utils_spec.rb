@@ -1,68 +1,66 @@
 require 'spec_helper'
 
-include Txgh
-
-describe Utils do
+describe Txgh::Utils do
   describe '.slugify' do
     it 'correctly slugifies a string with slashes' do
-      expect(Utils.slugify('abc/def/ghi')).to eq('abc_def_ghi')
+      expect(described_class.slugify('abc/def/ghi')).to eq('abc_def_ghi')
     end
 
     it 'does not replace underscores' do
-      expect(Utils.slugify('abc_def/ghi')).to eq('abc_def_ghi')
+      expect(described_class.slugify('abc_def/ghi')).to eq('abc_def_ghi')
     end
 
     it 'does not allow periods' do
-      expect(Utils.slugify('abc/def-4.0.13')).to eq('abc_def-4013')
+      expect(described_class.slugify('abc/def-4.0.13')).to eq('abc_def-4013')
     end
   end
 
   describe '.absolute_branch' do
     it 'does not modify tags' do
-      expect(Utils.absolute_branch('tags/foo')).to eq('tags/foo')
+      expect(described_class.absolute_branch('tags/foo')).to eq('tags/foo')
     end
 
     it 'does not modify heads' do
-      expect(Utils.absolute_branch('heads/foo')).to eq('heads/foo')
+      expect(described_class.absolute_branch('heads/foo')).to eq('heads/foo')
     end
 
     it 'prefixes heads/ to bare branch names' do
-      expect(Utils.absolute_branch('foo')).to eq('heads/foo')
+      expect(described_class.absolute_branch('foo')).to eq('heads/foo')
     end
 
     it 'handles a nil branch' do
-      expect(Utils.absolute_branch(nil)).to eq(nil)
+      expect(described_class.absolute_branch(nil)).to eq(nil)
     end
   end
 
   describe '.relative_branch' do
     it 'removes tags/ if present' do
-      expect(Utils.relative_branch('tags/foobar')).to eq('foobar')
+      expect(described_class.relative_branch('tags/foobar')).to eq('foobar')
     end
 
     it 'removes heads/ if present' do
-      expect(Utils.relative_branch('heads/foobar')).to eq('foobar')
+      expect(described_class.relative_branch('heads/foobar')).to eq('foobar')
     end
 
     it 'does nothing if no prefix can be removed' do
-      expect(Utils.relative_branch('abcdef')).to eq('abcdef')
+      expect(described_class.relative_branch('abcdef')).to eq('abcdef')
     end
   end
 
   describe '.is_tag?' do
     it 'returns true if given a tag' do
-      expect(Utils.is_tag?('tags/foo')).to eq(true)
+      expect(described_class.is_tag?('tags/foo')).to eq(true)
     end
 
     it 'returns false if not given a tag' do
-      expect(Utils.is_tag?('heads/foo')).to eq(false)
-      expect(Utils.is_tag?('foo')).to eq(false)
+      expect(described_class.is_tag?('heads/foo')).to eq(false)
+      expect(described_class.is_tag?('foo')).to eq(false)
     end
   end
 
   describe '.git_hash_blob' do
     it 'calculates the git blob hash for the given string' do
-      expect(Utils.git_hash_blob('foobarbaz')).to eq(
+      expect(described_class.git_hash_blob('foobarbaz')).to eq(
         '31e446dbb4751d2157c673a88826b3541ae073ea'
       )
     end
@@ -75,7 +73,7 @@ describe Utils do
         { 'name' => 'Kathryn Janeway', 'starship' => 'Voyager' }
       ]
 
-      expect(Utils.index_on('starship', arr)).to eq({
+      expect(described_class.index_on('starship', arr)).to eq({
         'Enterprise' => { 'name' => 'Jean Luc Picard', 'starship' => 'Enterprise' },
         'Voyager' => { 'name' => 'Kathryn Janeway', 'starship' => 'Voyager' }
       })
@@ -84,18 +82,18 @@ describe Utils do
 
   describe '.booleanize' do
     it 'converts a string into a bool' do
-      expect(Utils.booleanize('true')).to eq(true)
-      expect(Utils.booleanize('false')).to eq(false)
+      expect(described_class.booleanize('true')).to eq(true)
+      expect(described_class.booleanize('false')).to eq(false)
     end
 
     it 'converts a badly-cased string into a bool' do
-      expect(Utils.booleanize('TrUe')).to eq(true)
-      expect(Utils.booleanize('faLSE')).to eq(false)
+      expect(described_class.booleanize('TrUe')).to eq(true)
+      expect(described_class.booleanize('faLSE')).to eq(false)
     end
 
     it "doesn't convert bools" do
-      expect(Utils.booleanize(true)).to eq(true)
-      expect(Utils.booleanize(false)).to eq(false)
+      expect(described_class.booleanize(true)).to eq(true)
+      expect(described_class.booleanize(false)).to eq(false)
     end
   end
 end

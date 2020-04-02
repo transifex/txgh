@@ -1,12 +1,9 @@
 require 'spec_helper'
 require 'helpers/sqs/sqs_test_message'
 
-include TxghQueue
-include TxghQueue::Backends
-
-describe Sqs::Consumer, auto_configure: true do
+describe TxghQueue::Backends::Sqs::Consumer, auto_configure: true do
   let(:queue_config) { sqs_queue_config }
-  let(:queues) { Sqs::Config.queues }
+  let(:queues) { TxghQueue::Backends::Sqs::Config.queues }
   let(:logger) { NilLogger.new }
   let(:message) { SqsTestMessage.new('abc123', '{}') }
   let(:consumer) { described_class.new(queues, logger) }
@@ -16,7 +13,7 @@ describe Sqs::Consumer, auto_configure: true do
       job = double(:Job)
       expect(queue).to receive(:receive_message).and_return(message.to_bundle)
       expect(job).to receive(:complete)
-      expect(Sqs::Job).to(
+      expect(TxghQueue::Backends::Sqs::Job).to(
         receive(:new).with(message, queue, logger).and_return(job)
       )
     end

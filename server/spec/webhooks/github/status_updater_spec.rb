@@ -1,12 +1,10 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include TxghServer::Webhooks::Github
-
-describe StatusUpdater do
+describe TxghServer::Webhooks::Github::StatusUpdater do
   include StandardTxghSetup
 
-  let(:updater) { StatusUpdater.new(transifex_project, github_repo, ref) }
+  let(:updater) { TxghServer::Webhooks::Github::StatusUpdater.new(transifex_project, github_repo, ref) }
 
   describe '#report_error_and_update_status' do
     let(:description) { 'An error done occurred, fool' }

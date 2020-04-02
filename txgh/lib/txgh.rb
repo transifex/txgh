@@ -7,9 +7,15 @@ module Txgh
   autoload :DiffCalculator,        'txgh/diff_calculator'
   autoload :EmptyResourceContents, 'txgh/empty_resource_contents'
   autoload :Events,                'txgh/events'
+  autoload :GitApi,                'txgh/git_api'
   autoload :GithubApi,             'txgh/github_api'
+  autoload :GitlabApi,             'txgh/gitlab_api'
+  autoload :GitRepo,               'txgh/git_repo'
   autoload :GithubRepo,            'txgh/github_repo'
+  autoload :GitlabRepo,            'txgh/gitlab_repo'
+  autoload :GitStatus,             'txgh/git_status'
   autoload :GithubStatus,          'txgh/github_status'
+  autoload :GitlabStatus,          'txgh/gitlab_status'
   autoload :MergeCalculator,       'txgh/merge_calculator'
   autoload :ParseConfig,           'txgh/parse_config'
   autoload :Puller,                'txgh/puller'
@@ -51,9 +57,10 @@ module Txgh
   end
 
   # default set of tx config providers
-  tx_manager.register_provider(providers::FileProvider, Txgh::Config::TxConfig)
-  tx_manager.register_provider(providers::GitProvider,  Txgh::Config::TxConfig)
-  tx_manager.register_provider(providers::RawProvider,  Txgh::Config::TxConfig, default: true)
+  tx_manager.register_provider(providers::FileProvider,   Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::GithubProvider, Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::GitlabProvider, Txgh::Config::TxConfig)
+  tx_manager.register_provider(providers::RawProvider,    Txgh::Config::TxConfig, default: true)
 
   # default set of base config providers
   key_manager.register_provider(providers::FileProvider, YAML)

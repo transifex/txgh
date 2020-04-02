@@ -1,12 +1,9 @@
 require 'spec_helper'
 require 'helpers/test_provider'
 
-include Txgh
-include Txgh::Config
-
-describe ProviderSupport do
+describe Txgh::Config::ProviderSupport do
   let(:klass) do
-    Class.new { extend ProviderSupport }
+    Class.new { extend Txgh::Config::ProviderSupport }
   end
 
   let(:provider) { TestProvider }

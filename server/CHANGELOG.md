@@ -1,3 +1,15 @@
+# 4.0.3
+* Update txgh to v7.0.2.
+
+# 4.0.2
+* Fetch gitlab repo name with full path.
+
+# 4.0.1
+* Update txgh to v7.0.1.
+
+# 4.0.0
+* Add GitLab integration.
+
 # 3.1.0
 * Support both application/json and application/x-www-form-encoded payloads for Transifex webhooks.
 

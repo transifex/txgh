@@ -94,7 +94,7 @@ describe TxghServer::WebhookEndpoints do
   end
 
   let(:config) do
-    Txgh::Config::ConfigPair.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, github_config)
   end
 
   before(:each) do
@@ -103,7 +103,7 @@ describe TxghServer::WebhookEndpoints do
     )
 
     allow(Txgh::Config::KeyManager).to(
-      receive(:config_from_repo).with(repo_name).and_return(config)
+      receive(:config_from_repo).with(github_repo_name).and_return(config)
     )
   end
 
@@ -145,7 +145,7 @@ describe TxghServer::WebhookEndpoints do
       allow(TxghServer::Webhooks::Transifex::HookHandler).to(
         receive(:new) do |options|
           expect(options[:project].name).to eq(project_name)
-          expect(options[:repo].name).to eq(repo_name)
+          expect(options[:repo].name).to eq(github_repo_name)
           handler
         end
       )
@@ -186,7 +186,7 @@ describe TxghServer::WebhookEndpoints do
       header(
         TxghServer::GithubRequestAuth::GITHUB_HEADER,
         TxghServer::GithubRequestAuth.compute_signature(
-          body, config.github_repo.webhook_secret
+          body, config.git_repo.webhook_secret
         )
       )
     end
@@ -198,7 +198,7 @@ describe TxghServer::WebhookEndpoints do
         allow(TxghServer::Webhooks::Github::PushHandler).to(
           receive(:new) do |project, repo, logger, attributes|
             expect(project.name).to eq(project_name)
-            expect(repo.name).to eq(repo_name)
+            expect(repo.name).to eq(github_repo_name)
             handler
           end
         )
@@ -209,7 +209,7 @@ describe TxghServer::WebhookEndpoints do
           receive(:execute).and_return(respond_with(200, true))
         )
 
-        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(github_repo_name, ref)
         payload.add_commit
 
         sign_with payload.to_json
@@ -220,7 +220,7 @@ describe TxghServer::WebhookEndpoints do
       end
 
       it 'returns unauthorized if not properly signed' do
-        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(github_repo_name, ref)
 
         header 'X-GitHub-Event', 'push'
         post '/github', payload.to_json
@@ -229,7 +229,7 @@ describe TxghServer::WebhookEndpoints do
       end
 
       it 'returns invalid request if event unrecognized' do
-        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(github_repo_name, ref)
 
         sign_with payload.to_json
         header 'X-GitHub-Event', 'foobar'
@@ -239,7 +239,7 @@ describe TxghServer::WebhookEndpoints do
       end
 
       it 'returns internal error on unexpected error' do
-        payload = GithubPayloadBuilder.push_payload(repo_name, ref)
+        payload = GithubPayloadBuilder.push_payload(github_repo_name, ref)
 
         expect(Txgh::Config::KeyManager).to(
           receive(:config_from_repo).and_raise(StandardError)
@@ -266,7 +266,7 @@ describe TxghServer::TriggerEndpoints do
   end
 
   let(:config) do
-    Txgh::Config::ConfigPair.new(project_config, repo_config)
+    Txgh::Config::ConfigPair.new(project_config, github_config)
   end
 
   before(:each) do
@@ -275,7 +275,7 @@ describe TxghServer::TriggerEndpoints do
     )
 
     allow(Txgh::Config::KeyManager).to(
-      receive(:config_from_repo).with(repo_name).and_return(config)
+      receive(:config_from_repo).with(github_repo_name).and_return(config)
     )
   end
 

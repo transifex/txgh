@@ -24,7 +24,7 @@ module Txgh
           @payload = payload
           @parser = parser
           @ref = options[:ref]
-          @github_repo = options[:github_repo]
+          @git_repo = options[:git_repo]
         end
 
         def config
@@ -33,28 +33,22 @@ module Txgh
 
         private
 
-        def download
-          github_repo.api.download(payload, ref)[:content]
-        rescue Octokit::NotFound
-          raise Txgh::GitConfigNotFoundError, "Config file #{payload} not found in #{ref}"
-        end
-
         def ref
           unless @ref
             raise TxghError,
-              "TX_CONFIG specified a file from git but did not provide a ref."
+              'TX_CONFIG specified a file from git but did not provide a ref.'
           end
 
           @ref
         end
 
-        def github_repo
-          unless @github_repo
+        def git_repo
+          unless @git_repo
             raise TxghError,
-              "TX_CONFIG specified a file from git but did not provide a repo."
+              'TX_CONFIG specified a file from git but did not provide a repo.'
           end
 
-          @github_repo
+          @git_repo
         end
       end
     end

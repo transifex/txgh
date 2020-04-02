@@ -1,10 +1,8 @@
 require 'spec_helper'
 
-include Txgh
-
-describe TxResource do
+describe Txgh::TxResource do
   let(:resource) do
-    TxResource.new(
+    described_class.new(
       'project_slug', 'resource_slug', 'type',
       'source_lang', 'source_file', { 'ko-KR' => 'ko' }, 'translation_file/<lang>.foo'
     )

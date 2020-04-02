@@ -1,3 +1,12 @@
+# 7.0.2
+* Don't raise error when cannot update GitLab status.
+
+# 7.0.1
+* Add missing require statements.
+
+# 7.0.0
+* Add GitLab integration.
+
 # 6.8.1
 * Actually support ERB tags in config files.
 

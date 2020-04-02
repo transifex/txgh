@@ -2,16 +2,14 @@ require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 require 'yaml'
 
-include Txgh
-
-describe ResourceDownloader do
+describe Txgh::ResourceDownloader do
   include StandardTxghSetup
 
   let(:supported_languages) { %w(es de ja) }
   let(:format) { '.zip' }
 
   let(:downloader) do
-    ResourceDownloader.new(transifex_project, github_repo, ref)
+    described_class.new(transifex_project, github_repo, ref)
   end
 
   before(:each) do

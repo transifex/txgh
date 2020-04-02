@@ -13,10 +13,22 @@ describe KeyManager do
       expect(config).to be_a(Txgh::Config)
     end
 
-    it 'creates a config object that contains both project and repo configs' do
-      config = KeyManager.config_from_project(project_name)
-      expect(config.project_config).to eq(project_config)
-      expect(config.repo_config).to eq(repo_config)
+    context 'Github' do
+      it 'creates a config object that contains both project and repo configs' do
+        config = KeyManager.config_from_project(project_name)
+        expect(config.project_config).to eq(project_config)
+        expect(config.repo_config).to eq(github_config)
+      end
+    end
+
+    context 'Gitlab' do
+      let(:push_translations_to) { gitlab_repo_name }
+
+      it 'creates a config object that contains both project and repo configs' do
+        config = KeyManager.config_from_project(project_name)
+        expect(config.project_config).to eq(project_config)
+        expect(config.repo_config).to eq(gitlab_config)
+      end
     end
 
     it "raises an error if config can't be found" do
@@ -39,14 +51,21 @@ describe KeyManager do
 
   describe '.config_from_repo' do
     it 'creates a config object' do
-      config = KeyManager.config_from_repo(repo_name)
+      config = KeyManager.config_from_repo(github_repo_name)
+      expect(config).to be_a(Txgh::Config)
+
+      config = KeyManager.config_from_repo(gitlab_repo_name)
       expect(config).to be_a(Txgh::Config)
     end
 
     it 'creates a config object that contains both project and repo configs' do
-      config = KeyManager.config_from_repo(repo_name)
+      config = KeyManager.config_from_repo(github_repo_name)
       expect(config.project_config).to eq(project_config)
-      expect(config.repo_config).to eq(repo_config)
+      expect(config.repo_config).to eq(github_config)
+
+      config = KeyManager.config_from_repo(gitlab_repo_name)
+      expect(config.project_config).to eq(project_config)
+      expect(config.repo_config).to eq(gitlab_config)
     end
 
     it "raises an error if config can't be found" do
@@ -61,7 +80,7 @@ describe KeyManager do
         receive(:raw_config).and_return(YAML.dump(base_config))
       )
 
-      expect { KeyManager.config_from_repo(repo_name) }.to(
+      expect { KeyManager.config_from_repo(github_repo_name) }.to(
         raise_error(InvalidProviderError)
       )
     end
@@ -69,26 +88,20 @@ describe KeyManager do
 
   describe '.config_from' do
     it 'creates a config object' do
-      config = KeyManager.config_from(project_name, repo_name)
+      config = KeyManager.config_from(project_name, github_repo_name)
       expect(config).to be_a(Txgh::Config)
     end
 
     it 'creates a config object that contains both project and repo configs' do
-      config = KeyManager.config_from(project_name, repo_name)
+      config = KeyManager.config_from(project_name, github_repo_name)
       expect(config.project_config).to eq(project_config)
-      expect(config.repo_config).to eq(repo_config)
+      expect(config.repo_config).to eq(github_config)
     end
   end
 
   describe '#project_names' do
     it "gets an array of all the configured project's names" do
       expect(KeyManager.project_names).to eq([project_name])
-    end
-  end
-
-  describe '#repo_names' do
-    it "gets an array of all the configured repo's names" do
-      expect(KeyManager.repo_names).to eq([repo_name])
     end
   end
 end

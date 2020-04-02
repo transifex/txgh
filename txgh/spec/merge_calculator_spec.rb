@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-include Txgh
-
-describe MergeCalculator do
+describe Txgh::MergeCalculator do
   def phrase(key, string)
     { 'key' => key, 'string' => string }
   end
@@ -15,11 +13,11 @@ describe MergeCalculator do
   end
 
   let(:head_contents) do
-    ResourceContents.from_phrase_list(resource, head_phrases)
+    Txgh::ResourceContents.from_phrase_list(resource, head_phrases)
   end
 
   let(:diff_point_contents) do
-    ResourceContents.from_phrase_list(resource, diff_point_phrases)
+    Txgh::ResourceContents.from_phrase_list(resource, diff_point_phrases)
   end
 
   let(:diff_hash) do
@@ -27,7 +25,7 @@ describe MergeCalculator do
   end
 
   let(:merge_result) do
-    MergeCalculator.merge(head_contents, diff_point_contents, diff_hash)
+    described_class.merge(head_contents, diff_point_contents, diff_hash)
   end
 
   context 'with phrases added to HEAD' do

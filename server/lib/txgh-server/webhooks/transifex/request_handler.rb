@@ -29,7 +29,7 @@ module TxghServer
           handle_safely do
             handler = TxghServer::Webhooks::Transifex::HookHandler.new(
               project: config.transifex_project,
-              repo: config.github_repo,
+              repo: config.git_repo,
               resource_slug: payload[:resource],
               language: payload[:language],
               logger: logger

@@ -1,16 +1,14 @@
 require 'spec_helper'
 require 'helpers/standard_txgh_setup'
 
-include Txgh
-
-describe ResourceDeleter do
+describe Txgh::ResourceDeleter do
   include StandardTxghSetup
 
   # process all branches
   let(:branch) { 'heads/master' }
 
   let(:deleter) do
-    ResourceDeleter.new(transifex_project, github_repo, branch)
+    described_class.new(transifex_project, github_repo, branch)
   end
 
   let(:resource_api_response) do
@@ -45,7 +43,7 @@ describe ResourceDeleter do
   end
 
   it "does not delete resources that don't have a matching branch" do
-    deleter = ResourceDeleter.new(transifex_project, github_repo, 'heads/fake')
+    deleter = described_class.new(transifex_project, github_repo, 'heads/fake')
     expect(transifex_api).to(
       receive(:get_resources).and_return(resource_api_response)
     )

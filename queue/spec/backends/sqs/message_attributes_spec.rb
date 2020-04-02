@@ -2,10 +2,7 @@ require 'spec_helper'
 require 'helpers/sqs/sqs_test_message'
 require 'json'
 
-include TxghQueue
-include TxghQueue::Backends
-
-describe Sqs::MessageAttributes do
+describe TxghQueue::Backends::Sqs::MessageAttributes do
   let(:message) { SqsTestMessage.new('abc123', '{}', attributes_hash) }
   let(:attributes_hash) do
     {
@@ -20,7 +17,7 @@ describe Sqs::MessageAttributes do
   describe '.from_message' do
     it 'extracts the history sequence from the message attributes' do
       attributes = described_class.from_message(message)
-      expect(attributes.history_sequence).to be_a(Sqs::HistorySequence)
+      expect(attributes.history_sequence).to be_a(TxghQueue::Backends::Sqs::HistorySequence)
       expect(attributes.history_sequence.sequence.first[:status]).to(
         eq('retry_without_delay')
       )
@@ -30,7 +27,7 @@ describe Sqs::MessageAttributes do
   describe '.from_h' do
     it 'creates the history sequence from the hash elements' do
       attributes = described_class.from_h(attributes_hash)
-      expect(attributes.history_sequence).to be_a(Sqs::HistorySequence)
+      expect(attributes.history_sequence).to be_a(TxghQueue::Backends::Sqs::HistorySequence)
       expect(attributes.history_sequence.sequence.first[:status]).to(
         eq('retry_without_delay')
       )

@@ -8,10 +8,12 @@ module Txgh
         @repo_config = repo_config
       end
 
-      def github_repo
-        @github_repo ||= Txgh::GithubRepo.new(
-          repo_config, github_api
-        )
+      def git_repo
+        @git_repo ||= if @repo_config['git_repo_source'] == 'gitlab'
+                        Txgh::GitlabRepo.new(repo_config, gitlab_api)
+                      else
+                        Txgh::GithubRepo.new(repo_config, github_api)
+                      end
       end
 
       def transifex_project
@@ -29,6 +31,12 @@ module Txgh
       def github_api
         @github_api ||= Txgh::GithubApi.create_from_credentials(
           repo_config['api_username'], repo_config['api_token'], repo_config['name']
+        )
+      end
+
+      def gitlab_api
+        @gitlab_api ||= Txgh::GitlabApi.create_from_credentials(
+          nil, repo_config['api_token'], repo_config['name']
         )
       end
     end

@@ -1,0 +1,34 @@
+---
+id: txgh-config
+github:
+  repos:
+    lumoslabs/clerk:
+      api_username: txgh-user
+      api_token: api_token
+      push_source_to: clerk
+      branch: all
+      webhook_secret: webhook_secret
+      diff_point: heads/master
+      commit_message: "[skip ci] Updating %{language} translations in %{file_name}"
+gitlab:
+  repos:
+    idanci/txgl-test:
+      api_token: api_token
+      push_source_to: txgl-test
+      branch: all
+      webhook_secret: '123456789'
+      diff_point: heads/master
+      commit_message: "[skip ci] Updating %{language} translations in %{file_name}"
+transifex:
+  projects:
+    txgl-test:
+      organization: lumos-labs
+      tx_config: git://tx.config
+      api_username: txgh.user
+      api_password: txgh.user password
+      push_translations_to: idanci/txgl-test
+      protected_branches: heads/master
+      webhook_secret: '123456789'
+      auto_delete_resources: 'true'
+      languages:
+      - de

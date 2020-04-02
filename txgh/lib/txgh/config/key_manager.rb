@@ -29,10 +29,6 @@ module Txgh
           base_config['transifex']['projects'].keys
         end
 
-        def repo_names
-          base_config['github']['repos'].keys
-        end
-
         private
 
         def raw_config
@@ -63,8 +59,10 @@ module Txgh
         end
 
         def repo_config_for(repo_name)
-          if config = base_config['github']['repos'][repo_name]
-            config.merge('name' => repo_name)
+          if config = base_config.dig('github', 'repos', repo_name)
+            config.merge('name' => repo_name, 'git_repo_source' => 'github')
+          elsif config = base_config.dig('gitlab', 'repos', repo_name)
+            config.merge('name' => repo_name, 'git_repo_source' => 'gitlab')
           else
             raise Txgh::RepoConfigNotFoundError,
               "Couldn't find any configuration for the '#{repo_name}' repo."

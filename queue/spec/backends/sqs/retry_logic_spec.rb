@@ -1,16 +1,13 @@
 require 'spec_helper'
 require 'helpers/sqs/sqs_test_message'
 
-include TxghQueue
-include TxghQueue::Backends
-
-describe Sqs::RetryLogic do
+describe TxghQueue::Backends::Sqs::RetryLogic do
   context 'with overall retries exceeded' do
     let(:logic) { described_class.new(message_attributes, current_status) }
-    let(:current_status) { Status.retry_without_delay }
+    let(:current_status) { TxghQueue::Status.retry_without_delay }
     let(:message) { SqsTestMessage.new('abc123', '{}', message_attributes.to_h) }
     let(:message_attributes) do
-      Sqs::MessageAttributes.from_h(
+      TxghQueue::Backends::Sqs::MessageAttributes.from_h(
         history_sequence: {
           string_value: described_class::OVERALL_MAX_RETRIES.times.map do
             { status: 'retry_without_delay' }
@@ -33,23 +30,23 @@ describe Sqs::RetryLogic do
 
     describe '#next_delay_seconds' do
       it 'raises an error' do
-        expect { logic.next_delay_seconds }.to raise_error(Sqs::RetriesExceededError)
+        expect { logic.next_delay_seconds }.to raise_error(TxghQueue::Backends::Sqs::RetriesExceededError)
       end
     end
 
     describe '#sqs_retry_params' do
       it 'raises an error' do
-        expect { logic.sqs_retry_params }.to raise_error(Sqs::RetriesExceededError)
+        expect { logic.sqs_retry_params }.to raise_error(TxghQueue::Backends::Sqs::RetriesExceededError)
       end
     end
   end
 
   context 'with a run of no-delay retries' do
     let(:logic) { described_class.new(message_attributes, current_status) }
-    let(:current_status) { Status.retry_without_delay }
+    let(:current_status) { TxghQueue::Status.retry_without_delay }
     let(:message) { SqsTestMessage.new('abc123', '{}', message_attributes.to_h) }
     let(:message_attributes) do
-      Sqs::MessageAttributes.from_h(
+      TxghQueue::Backends::Sqs::MessageAttributes.from_h(
         history_sequence: {
           string_value: [
             { status: 'retry_without_delay' },
@@ -87,7 +84,7 @@ describe Sqs::RetryLogic do
     end
 
     context 'and a delayed current status' do
-      let(:current_status) { Status.retry_with_delay }
+      let(:current_status) { TxghQueue::Status.retry_with_delay }
 
       describe '#next_delay_seconds' do
         it 'indicates a first-stage delay' do
@@ -101,10 +98,10 @@ describe Sqs::RetryLogic do
 
   context 'with a run of delayed retries' do
     let(:logic) { described_class.new(message_attributes, current_status) }
-    let(:current_status) { Status.retry_with_delay }
+    let(:current_status) { TxghQueue::Status.retry_with_delay }
     let(:message) { SqsTestMessage.new('abc123', '{}', message_attributes.to_h) }
     let(:message_attributes) do
-      Sqs::MessageAttributes.from_h(
+      TxghQueue::Backends::Sqs::MessageAttributes.from_h(
         history_sequence: {
           string_value: [
             { status: 'retry_with_delay' },
@@ -145,7 +142,7 @@ describe Sqs::RetryLogic do
     end
 
     context 'and a non-delayed current status' do
-      let(:current_status) { Status.retry_without_delay }
+      let(:current_status) { TxghQueue::Status.retry_without_delay }
 
       describe '#next_delay_seconds' do
         it 'indicates no delay' do

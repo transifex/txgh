@@ -4,9 +4,7 @@ require 'helpers/nil_logger'
 require 'helpers/standard_txgh_setup'
 require 'helpers/test_request'
 
-include TxghQueue::Webhooks
-
-describe Github::RequestHandler, auto_configure: true do
+describe TxghQueue::Webhooks::Github::RequestHandler, auto_configure: true do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
@@ -18,7 +16,7 @@ describe Github::RequestHandler, auto_configure: true do
 
   describe '#handle_request' do
     let(:queue_config) { {} }
-    let(:payload) { { repository: { full_name: repo_name } } }
+    let(:payload) { { repository: { full_name: github_repo_name } } }
     let(:event) { 'push' }
 
     it "responds with an error when a queue backend isn't configured" do
@@ -47,7 +45,7 @@ describe Github::RequestHandler, auto_configure: true do
 
       context 'push event' do
         let(:event) { 'push' }
-        let(:payload) { GithubPayloadBuilder.push_payload(repo_name, ref).tap { |p| p.add_commit } }
+        let(:payload) { GithubPayloadBuilder.push_payload(github_repo_name, ref).tap { |p| p.add_commit } }
 
         it 'does not enqueue if unauthorized' do
           expect { handler.handle_request }.to_not(
@@ -78,7 +76,7 @@ describe Github::RequestHandler, auto_configure: true do
               event: 'push',
               txgh_event: 'github.push',
               ref: "refs/#{ref}",
-              repo_name: repo_name
+              repo_name: github_repo_name
             )
           end
 
@@ -91,7 +89,7 @@ describe Github::RequestHandler, auto_configure: true do
 
       context 'delete event' do
         let(:event) { 'delete' }
-        let(:payload) { GithubPayloadBuilder.delete_payload(repo_name, ref) }
+        let(:payload) { GithubPayloadBuilder.delete_payload(github_repo_name, ref) }
 
         it 'does not enqueue if unauthorized' do
           expect { handler.handle_request }.to_not change { producer.enqueued_jobs.size }
@@ -120,7 +118,7 @@ describe Github::RequestHandler, auto_configure: true do
               event: 'delete',
               txgh_event: 'github.delete',
               ref: "refs/#{ref}",
-              repo_name: repo_name
+              repo_name: github_repo_name
             )
           end
 

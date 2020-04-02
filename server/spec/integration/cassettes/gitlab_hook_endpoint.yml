@@ -1,0 +1,446 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/repository/files/config%2Flocales%2Fen.yml?ref=test_hook
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - GITLAB_TOKEN
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 26 Mar 2020 17:18:41 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '624'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"e1ac536e3864cf5aafd56c71c1b9b227"
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Gitlab-Blob-Id:
+      - 000fd9156a0f5c8518a34ab5117654d70ba01752
+      X-Gitlab-Commit-Id:
+      - 3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6
+      X-Gitlab-Content-Sha256:
+      - f4c639c3d033e282387f0a2c2cdacad7c503ea74484735240fbd84198d48d6bc
+      X-Gitlab-Encoding:
+      - base64
+      X-Gitlab-File-Name:
+      - en.yml
+      X-Gitlab-File-Path:
+      - config/locales/en.yml
+      X-Gitlab-Last-Commit-Id:
+      - 3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6
+      X-Gitlab-Ref:
+      - test_hook
+      X-Gitlab-Size:
+      - '188'
+      X-Request-Id:
+      - r1ybeUijJB4
+      X-Runtime:
+      - '0.049508'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '1'
+      Ratelimit-Remaining:
+      - '599'
+      Ratelimit-Reset:
+      - '1585243181'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 17:19:41 GMT
+      Gitlab-Lb:
+      - fe-08-lb-gprd
+      Gitlab-Sv:
+      - localhost
+    body:
+      encoding: UTF-8
+      string: '{"file_name":"en.yml","file_path":"config/locales/en.yml","size":188,"encoding":"base64","content_sha256":"f4c639c3d033e282387f0a2c2cdacad7c503ea74484735240fbd84198d48d6bc","ref":"test_hook","blob_id":"000fd9156a0f5c8518a34ab5117654d70ba01752","commit_id":"3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6","last_commit_id":"3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6","content":"ZW46CiAgdGVzdDogdGVzdAogIHRlc3QyOiB0ZXN0MgogIHRlc3QzOiB0ZXN0MwogIHRlc3Q0OiB0ZXN0NAogIHRlc3Q1OiB0ZXN0NQogIHRlc3Q2OiB0ZXN0NgogIHRlc3Q3OiB0ZXN0NwogIHRlc3Q4OiB0ZXN0OAogIHRlc3Q5OiB0ZXN0OQogIHRlc3QxMDogdGVzdDEwCiAgdGVzdDExOiB0ZXN0MTEKICB0ZXN0MTI6IHRlc3QxMgo="}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:42 GMT
+- request:
+    method: get
+    uri: https://www.transifex.com/api/2/project/txgl-test/resource/enyml-heads_test_hook/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic AUTH
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - text/plain
+      Date:
+      - Thu, 26 Mar 2020 17:18:42 GMT
+      Expires:
+      - Thu, 26 Mar 2020 17:18:42 GMT
+      Content-Language:
+      - en
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=371E5B112B2394FA3017E8BE0809059C; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '9'
+    body:
+      encoding: UTF-8
+      string: Not Found
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:43 GMT
+- request:
+    method: post
+    uri: https://www.transifex.com/api/2/project/txgl-test/resources/
+    body:
+      encoding: UTF-8
+      string: "-------------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd\r\nContent-Disposition:
+        form-data; name=\"slug\"\r\n\r\nenyml-heads_test_hook\r\n-------------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd\r\nContent-Disposition:
+        form-data; name=\"name\"\r\n\r\nconfig/locales/en.yml (heads/test_hook)\r\n-------------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd\r\nContent-Disposition:
+        form-data; name=\"i18n_type\"\r\n\r\nYML\r\n-------------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd\r\nContent-Disposition:
+        form-data; name=\"categories\"\r\n\r\nauthor:Ivan_Danci branch:heads/test_hook\r\n-------------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd\r\nContent-Disposition:
+        form-data; name=\"content\"; filename=\"en.yml\"\r\nContent-Length: 188\r\nContent-Type:
+        application/octet-stream\r\nContent-Transfer-Encoding: binary\r\n\r\nen:\n
+        \ test: test\n  test2: test2\n  test3: test3\n  test4: test4\n  test5: test5\n
+        \ test6: test6\n  test7: test7\n  test8: test8\n  test9: test9\n  test10:
+        test10\n  test11: test11\n  test12: test12\n\r\n-------------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd--\r\n"
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic AUTH
+      Accept:
+      - application/json
+      Content-Type:
+      - multipart/form-data; boundary=-----------RubyMultipartPost-87145cb29ab8ab8b5cb748ea0ec95cdd
+      Content-Length:
+      - '1057'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 26 Mar 2020 17:18:44 GMT
+      Expires:
+      - Thu, 26 Mar 2020 17:18:44 GMT
+      Content-Language:
+      - en
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=300CA58EE011BC6BC0E393EE4F2B31F6; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '10'
+    body:
+      encoding: UTF-8
+      string: "[12, 0, 0]"
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:44 GMT
+- request:
+    method: get
+    uri: https://www.transifex.com/api/2/project/txgl-test/resources/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic AUTH
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 26 Mar 2020 17:18:45 GMT
+      Expires:
+      - Thu, 26 Mar 2020 17:18:45 GMT
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      X-Content-Type-Options:
+      - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=371E5B112B2394FA3017E8BE0809059C; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: "[\n    {\n        \"source_language_code\": \"en\", \n        \"name\":
+        \"config/locales/en.yml (heads/master)\", \n        \"i18n_type\": \"YAML_GENERIC\",
+        \n        \"priority\": \"0\", \n        \"slug\": \"enyml-heads_master\",
+        \n        \"categories\": [\n            \"branch:heads/master\", \n            \"author:Ivan_Danci\"\n
+        \       ], \n        \"metadata\": []\n    }, \n    {\n        \"source_language_code\":
+        \"en\", \n        \"name\": \"config/locales/en.yml (heads/test_hook)\", \n
+        \       \"i18n_type\": \"YML\", \n        \"priority\": \"1\", \n        \"slug\":
+        \"enyml-heads_test_hook\", \n        \"categories\": [\n            \"author:Ivan_Danci
+        branch:heads/test_hook\"\n        ], \n        \"metadata\": []\n    }\n]"
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:45 GMT
+- request:
+    method: get
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/repository/commits/test_hook
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - GITLAB_TOKEN
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 26 Mar 2020 17:18:46 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '636'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"e31b8cbd9e69b70652fc4d5ab91c71e9"
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - kKqrmM19JN2
+      X-Runtime:
+      - '0.054249'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '2'
+      Ratelimit-Remaining:
+      - '598'
+      Ratelimit-Reset:
+      - '1585243186'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 17:19:46 GMT
+      Gitlab-Lb:
+      - fe-03-lb-gprd
+      Gitlab-Sv:
+      - localhost
+    body:
+      encoding: UTF-8
+      string: '{"id":"3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6","short_id":"3cb2cae6","created_at":"2020-03-26T18:39:57.000+02:00","parent_ids":["f5e0d6b6541e1fcded6b0a751b5a511523768109"],"title":"Test","message":"Test\n","author_name":"Ivan
+        Danci","author_email":"bah4uk@gmail.com","authored_date":"2020-03-26T18:39:57.000+02:00","committer_name":"Ivan
+        Danci","committer_email":"bah4uk@gmail.com","committed_date":"2020-03-26T18:39:57.000+02:00","web_url":"https://gitlab.com/idanci/txgl-test/-/commit/3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6","stats":{"additions":1,"deletions":0,"total":1},"status":null,"project_id":17514841,"last_pipeline":null}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:46 GMT
+- request:
+    method: get
+    uri: https://www.transifex.com/api/2/project/txgl-test/resource/enyml-heads_test_hook/stats/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic AUTH
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 26 Mar 2020 17:18:46 GMT
+      Expires:
+      - Thu, 26 Mar 2020 17:18:46 GMT
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      X-Content-Type-Options:
+      - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=100E7CB61F7D5C274279F09EADF920A3; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: "{\n    \"de\": {\n        \"proofread\": 0, \n        \"proofread_percentage\":
+        \"0%\", \n        \"reviewed_percentage\": \"0%\", \n        \"completed\":
+        \"0%\", \n        \"untranslated_words\": 12, \n        \"last_commiter\":
+        \"txgh.user\", \n        \"reviewed\": 0, \n        \"translated_entities\":
+        0, \n        \"translated_words\": 0, \n        \"last_update\": \"2020-03-26
+        17:18:43\", \n        \"untranslated_entities\": 12\n    }, \n    \"en\":
+        {\n        \"proofread\": 0, \n        \"proofread_percentage\": \"0%\", \n
+        \       \"reviewed_percentage\": \"0%\", \n        \"completed\": \"100%\",
+        \n        \"untranslated_words\": 0, \n        \"last_commiter\": \"txgh.user\",
+        \n        \"reviewed\": 0, \n        \"translated_entities\": 12, \n        \"translated_words\":
+        12, \n        \"last_update\": \"2020-03-26 17:18:43\", \n        \"untranslated_entities\":
+        0\n    }\n}"
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:46 GMT
+- request:
+    method: post
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/statuses/3cb2cae6?context=continuous-localization/txgh&description=12/24%20translations%20complete.&state=pending&target_url=https://www.transifex.com/lumos-labs/txgl-test/content
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - GITLAB_TOKEN
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 26 Mar 2020 17:18:48 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '593'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"7afbf8aec65349a3c64cf3b78e44c03e"
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - XxeNSIHmZ89
+      X-Runtime:
+      - '0.267418'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '2'
+      Ratelimit-Remaining:
+      - '598'
+      Ratelimit-Reset:
+      - '1585243188'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 17:19:48 GMT
+      Gitlab-Lb:
+      - fe-21-lb-gprd
+      Gitlab-Sv:
+      - localhost
+    body:
+      encoding: UTF-8
+      string: '{"id":487202387,"sha":"3cb2cae6db2f31fa91061a0e04cc2cbcc26502d6","ref":"test_hook","status":"pending","name":"continuous-localization/txgh","target_url":"https://www.transifex.com/lumos-labs/txgl-test/content","description":"12/24
+        translations complete.","created_at":"2020-03-26T17:18:48.294Z","started_at":null,"finished_at":null,"allow_failure":false,"coverage":null,"author":{"id":745271,"name":"Ivan
+        Danci","username":"idanci","state":"active","avatar_url":"https://secure.gravatar.com/avatar/dbda838e9b7bca615829ac151e01f3c0?s=80\u0026d=identicon","web_url":"https://gitlab.com/idanci"}}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 17:18:48 GMT
+recorded_with: VCR 3.0.3

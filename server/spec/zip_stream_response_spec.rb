@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'tempfile'
 
-include TxghServer
-
-describe ZipStreamResponse do
+describe TxghServer::ZipStreamResponse do
   def read_zip_from(file)
     contents = {}
 
@@ -26,7 +24,7 @@ describe ZipStreamResponse do
   end
 
   let(:response) do
-    ZipStreamResponse.new(attachment, enum)
+    described_class.new(attachment, enum)
   end
 
   describe '#write_to' do

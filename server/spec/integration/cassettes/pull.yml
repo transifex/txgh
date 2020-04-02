@@ -2,154 +2,15 @@
 http_interactions:
 - request:
     method: get
-    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resources/
+    uri: https://www.transifex.com/api/2/project/txgl-test/resource/enyml-heads_master/translation/de/
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.9.2
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - nginx
-      Date:
-      - Tue, 04 Oct 2016 21:42:30 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Vary:
-      - Accept-Encoding
-      - Authorization, Host, Accept-Language, Cookie
-      Content-Language:
-      - en
-      Expires:
-      - Tue, 04 Oct 2016 21:42:30 GMT
-      Last-Modified:
-      - Tue, 04 Oct 2016 21:42:30 GMT
-      Cache-Control:
-      - max-age=0
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-Content-Type-Options:
-      - nosniff
-    body:
-      encoding: UTF-8
-      string: "[\n    {\n        \"source_language_code\": \"en\", \n        \"name\":
-        \"sample.po\", \n        \"i18n_type\": \"PO\", \n        \"priority\": \"1\",
-        \n        \"slug\": \"samplepo-heads_master\", \n        \"categories\": [\n
-        \           \"\"\n        ]\n    }, \n    {\n        \"source_language_code\":
-        \"en\", \n        \"name\": \"sample.po\", \n        \"i18n_type\": \"PO\",
-        \n        \"priority\": \"0\", \n        \"slug\": \"samplepo\", \n        \"categories\":
-        [\n            \"branch:refs/tags/L10N\", \n            \"author:Txgh Bot\"\n
-        \       ]\n    }, \n    {\n        \"source_language_code\": \"en\", \n        \"name\":
-        \"test.yml\", \n        \"i18n_type\": \"YML\", \n        \"priority\": \"1\",
-        \n        \"slug\": \"testyml-heads_change_some_shizz\", \n        \"categories\":
-        [\n            \"author:Cameron_Dutro branch:heads/change_some_shizz\"\n        ]\n
-        \   }, \n    {\n        \"source_language_code\": \"en\", \n        \"name\":
-        \"test.yml\", \n        \"i18n_type\": \"YML\", \n        \"priority\": \"0\",
-        \n        \"slug\": \"testyml-heads_master\", \n        \"categories\": [\n
-        \           \"branch:heads/master\"\n        ]\n    }\n]"
-    http_version: 
-  recorded_at: Tue, 04 Oct 2016 21:42:30 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.3.0
-      Content-Type:
-      - application/json
+      - Faraday v0.17.3
       Authorization:
-      - token <GITHUB_TOKEN>
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Tue, 04 Oct 2016 21:42:30 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4999'
-      X-Ratelimit-Reset:
-      - '1475620950'
-      Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
-      Etag:
-      - W/"a5fe675407899fa4460005cce07b9fe2"
-      Last-Modified:
-      - Mon, 11 Jan 2016 23:45:43 GMT
-      X-Poll-Interval:
-      - '300'
-      X-Oauth-Scopes:
-      - public_repo
-      X-Accepted-Oauth-Scopes:
-      - ''
-      X-Github-Media-Type:
-      - github.v3; format=json
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
-        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-      Access-Control-Allow-Origin:
-      - "*"
-      Content-Security-Policy:
-      - default-src 'none'
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - deny
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Served-By:
-      - 9000e9eef7bb1e89f22030c676da140e
-      X-Github-Request-Id:
-      - 04358C36:6823:3A08A0E:57F42246
-    body:
-      encoding: UTF-8
-      string: '{"ref":"refs/heads/master","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/refs/heads/master","object":{"sha":"f3edb21f027b70974750649ba29b0090e410ecde","type":"commit","url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/git/commits/f3edb21f027b70974750649ba29b0090e410ecde"}}'
-    http_version: 
-  recorded_at: Tue, 04 Oct 2016 21:42:30 GMT
-- request:
-    method: get
-    uri: https://txgh.bot:<TRANSIFEX_PASSWORD>@www.transifex.com/api/2/project/test-project-88/resource/samplepo/stats/
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.9.2
+      - Basic AUTH
       Accept:
       - application/json
       Accept-Encoding:
@@ -161,124 +22,436 @@ http_interactions:
     headers:
       Server:
       - nginx
-      Date:
-      - Tue, 04 Oct 2016 21:42:31 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
       Vary:
       - Accept-Encoding
       - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 26 Mar 2020 18:06:24 GMT
+      Expires:
+      - Thu, 26 Mar 2020 18:06:24 GMT
+      Transfer-Encoding:
+      - chunked
       Content-Language:
       - en
-      Expires:
-      - Tue, 04 Oct 2016 21:42:31 GMT
-      Last-Modified:
-      - Tue, 04 Oct 2016 21:42:31 GMT
-      Cache-Control:
-      - max-age=0
-      X-Frame-Options:
-      - SAMEORIGIN
       X-Content-Type-Options:
       - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=978A30C321AEE9D0F95E25198189AC99; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"content": "en:\n  test: test\n  test2: test2\n  test3: test3\n  test4:
+        test4\n  test5: test5\n  test6: test6\n  test7: test7\n  test8: test8\n  test9:
+        test9\n  test10: test10\n  test11: \"\"\n", "mimetype": "text/plain"}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:24 GMT
+- request:
+    method: get
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/repository/files/config%2Flocales%2Fde.yml?ref=master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - "<GITHUB_TOKEN>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 26 Mar 2020 18:06:25 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '629'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"e84d1b5f33f395004d2907482fb6dc4a"
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Gitlab-Blob-Id:
+      - 40ee703622d33b3d3e9cf0a6bfccf343ef6803d9
+      X-Gitlab-Commit-Id:
+      - 749c760c4d7b630d28e32f9fc1e021a70bfd4779
+      X-Gitlab-Content-Sha256:
+      - f93c177a9eacf7f2d3d4a33f353d9d94dbd884fd68897a7a24893ce5a24f5721
+      X-Gitlab-Encoding:
+      - base64
+      X-Gitlab-File-Name:
+      - de.yml
+      X-Gitlab-File-Path:
+      - config/locales/de.yml
+      X-Gitlab-Last-Commit-Id:
+      - 04151b55df42794241ec36b772e8de4c2f944a97
+      X-Gitlab-Ref:
+      - master
+      X-Gitlab-Size:
+      - '193'
+      X-Request-Id:
+      - 1Q5Ny2E6Te4
+      X-Runtime:
+      - '0.057997'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '1'
+      Ratelimit-Remaining:
+      - '599'
+      Ratelimit-Reset:
+      - '1585246045'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 18:07:25 GMT
+      Gitlab-Lb:
+      - fe-18-lb-gprd
+      Gitlab-Sv:
+      - localhost
     body:
       encoding: UTF-8
-      string: "{\n    \"el_GR\": {\n        \"reviewed_percentage\": \"0%\", \n        \"completed\":
-        \"0%\", \n        \"untranslated_words\": 10, \n        \"last_commiter\":
-        \"\", \n        \"reviewed\": 0, \n        \"translated_entities\": 0, \n
-        \       \"translated_words\": 0, \n        \"last_update\": \"2016-01-19 19:08:25\",
-        \n        \"untranslated_entities\": 10\n    }, \n    \"ru\": {\n        \"reviewed_percentage\":
-        \"0%\", \n        \"completed\": \"0%\", \n        \"untranslated_words\":
-        10, \n        \"last_commiter\": \"txgh.bot\", \n        \"reviewed\": 0,
-        \n        \"translated_entities\": 0, \n        \"translated_words\": 0, \n
-        \       \"last_update\": \"2016-04-01 05:36:37\", \n        \"untranslated_entities\":
-        10\n    }, \n    \"en\": {\n        \"reviewed_percentage\": \"0%\", \n        \"completed\":
-        \"100%\", \n        \"untranslated_words\": 0, \n        \"last_commiter\":
-        \"txgh.bot\", \n        \"reviewed\": 0, \n        \"translated_entities\":
-        10, \n        \"translated_words\": 10, \n        \"last_update\": \"2016-01-19
-        19:08:25\", \n        \"untranslated_entities\": 0\n    }\n}"
-    http_version: 
-  recorded_at: Tue, 04 Oct 2016 21:42:31 GMT
+      string: '{"file_name":"de.yml","file_path":"config/locales/de.yml","size":193,"encoding":"base64","content_sha256":"f93c177a9eacf7f2d3d4a33f353d9d94dbd884fd68897a7a24893ce5a24f5721","ref":"master","blob_id":"40ee703622d33b3d3e9cf0a6bfccf343ef6803d9","commit_id":"749c760c4d7b630d28e32f9fc1e021a70bfd4779","last_commit_id":"04151b55df42794241ec36b772e8de4c2f944a97","content":"ZGU6CiAgdGVzdDogInRlc3QiCiAgdGVzdDI6ICJ0ZXN0MiIKICB0ZXN0MzogInRlc3QzIgogIHRlc3Q0OiAidGVzdDQiCiAgdGVzdDU6ICJ0ZXN0NSIKICB0ZXN0NjogInRlc3Q2IgogIHRlc3Q3OiAidGVzdDciCiAgdGVzdDg6ICJ0ZXN0OCIKICB0ZXN0OTogInRlc3Q5IgogIHRlc3QxMDogInRlc3QxMCIKICB0ZXN0MTE6ICJ0ZXN0MTEiCg=="}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:25 GMT
+- request:
+    method: put
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/repository/files/config%2Flocales%2Fde.yml
+    body:
+      encoding: UTF-8
+      string: branch=master&commit_message=Updating%20de%20translations%20in%20config%2Flocales%2Fde.yml&encoding=base64&content=ZW46CiAgdGVzdDogdGVzdAogIHRlc3QyOiB0ZXN0MgogIHRlc3QzOiB0ZXN0%0AMwogIHRlc3Q0OiB0ZXN0NAogIHRlc3Q1OiB0ZXN0NQogIHRlc3Q2OiB0ZXN0%0ANgogIHRlc3Q3OiB0ZXN0NwogIHRlc3Q4OiB0ZXN0OAogIHRlc3Q5OiB0ZXN0%0AOQogIHRlc3QxMDogdGVzdDEwCiAgdGVzdDExOiAiIgo%3D%0A
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - "<GITHUB_TOKEN>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 26 Mar 2020 18:06:26 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '55'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"9f4100ecd3edaafd2ee9db28801b5446"
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - kFMPEyEv6wa
+      X-Runtime:
+      - '1.096195'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '2'
+      Ratelimit-Remaining:
+      - '598'
+      Ratelimit-Reset:
+      - '1585246046'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 18:07:26 GMT
+      Gitlab-Lb:
+      - fe-07-lb-gprd
+      Gitlab-Sv:
+      - localhost
+    body:
+      encoding: UTF-8
+      string: '{"file_path":"config/locales/de.yml","branch":"master"}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:26 GMT
+- request:
+    method: get
+    uri: https://www.transifex.com/api/2/project/txgl-test/resources/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic AUTH
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 26 Mar 2020 18:06:27 GMT
+      Expires:
+      - Thu, 26 Mar 2020 18:06:27 GMT
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      X-Content-Type-Options:
+      - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=100E7CB61F7D5C274279F09EADF920A3; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: "[\n    {\n        \"source_language_code\": \"en\", \n        \"name\":
+        \"config/locales/en.yml (heads/master)\", \n        \"i18n_type\": \"YAML_GENERIC\",
+        \n        \"priority\": \"0\", \n        \"slug\": \"enyml-heads_master\",
+        \n        \"categories\": [\n            \"branch:heads/master\", \n            \"author:Ivan_Danci\"\n
+        \       ], \n        \"metadata\": []\n    }, \n    {\n        \"source_language_code\":
+        \"en\", \n        \"name\": \"config/locales/en.yml (heads/test_hook)\", \n
+        \       \"i18n_type\": \"YML\", \n        \"priority\": \"1\", \n        \"slug\":
+        \"enyml-heads_test_hook\", \n        \"categories\": [\n            \"author:Ivan_Danci
+        branch:heads/test_hook\"\n        ], \n        \"metadata\": []\n    }\n]"
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:27 GMT
+- request:
+    method: get
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/repository/commits/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - "<GITHUB_TOKEN>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 26 Mar 2020 18:06:28 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '735'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"d7500016242ad2a97736263ec121e2db"
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - N8h22W66YE
+      X-Runtime:
+      - '0.077138'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '4'
+      Ratelimit-Remaining:
+      - '596'
+      Ratelimit-Reset:
+      - '1585246048'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 18:07:28 GMT
+      Gitlab-Lb:
+      - fe-12-lb-gprd
+      Gitlab-Sv:
+      - localhost
+    body:
+      encoding: UTF-8
+      string: '{"id":"b85b0a277fcf7818d880f3fe67afc8fea04572c2","short_id":"b85b0a27","created_at":"2020-03-26T18:06:25.000+00:00","parent_ids":["749c760c4d7b630d28e32f9fc1e021a70bfd4779"],"title":"Updating
+        de translations in config/locales/de.yml","message":"Updating de translations
+        in config/locales/de.yml","author_name":"Ivan Danci","author_email":"danci.ivan@gmail.com","authored_date":"2020-03-26T18:06:25.000+00:00","committer_name":"Ivan
+        Danci","committer_email":"danci.ivan@gmail.com","committed_date":"2020-03-26T18:06:25.000+00:00","web_url":"https://gitlab.com/idanci/txgl-test/-/commit/b85b0a277fcf7818d880f3fe67afc8fea04572c2","stats":{"additions":12,"deletions":12,"total":24},"status":null,"project_id":17514841,"last_pipeline":null}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:28 GMT
+- request:
+    method: get
+    uri: https://www.transifex.com/api/2/project/txgl-test/resource/enyml-heads_master/stats/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Authorization:
+      - Basic AUTH
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      - Authorization, Host, Accept-Language, Cookie
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, max-age=0
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 26 Mar 2020 18:06:29 GMT
+      Expires:
+      - Thu, 26 Mar 2020 18:06:29 GMT
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      X-Content-Type-Options:
+      - nosniff
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - X-Mapping-fjhppofk=978A30C321AEE9D0F95E25198189AC99; path=/
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: "{\n    \"de\": {\n        \"proofread\": 0, \n        \"proofread_percentage\":
+        \"0%\", \n        \"reviewed_percentage\": \"90%\", \n        \"completed\":
+        \"90%\", \n        \"untranslated_words\": 1, \n        \"last_commiter\":
+        \"txgh.user\", \n        \"reviewed\": 10, \n        \"translated_entities\":
+        10, \n        \"translated_words\": 10, \n        \"last_update\": \"2020-03-23
+        13:49:42\", \n        \"untranslated_entities\": 1\n    }, \n    \"en\": {\n
+        \       \"proofread\": 0, \n        \"proofread_percentage\": \"0%\", \n        \"reviewed_percentage\":
+        \"0%\", \n        \"completed\": \"100%\", \n        \"untranslated_words\":
+        0, \n        \"last_commiter\": \"txgh.user\", \n        \"reviewed\": 0,
+        \n        \"translated_entities\": 11, \n        \"translated_words\": 11,
+        \n        \"last_update\": \"2020-03-23 13:49:42\", \n        \"untranslated_entities\":
+        0\n    }\n}"
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:29 GMT
 - request:
     method: post
-    uri: https://api.github.com/repos/txgh-bot/txgh-test-resources/statuses/f3edb21f027b70974750649ba29b0090e410ecde
+    uri: https://gitlab.com/api/v4/projects/idanci%2Ftxgl-test/statuses/b85b0a27?context=continuous-localization/txgh&description=21/22%20translations%20complete.&state=pending&target_url=https://www.transifex.com/lumos-labs/txgl-test/content
     body:
       encoding: UTF-8
-      string: '{"context":"continuous-localization/txgh","target_url":"https://www.transifex.com//test-project-88/content","description":"10/30
-        translations complete.","state":"pending"}'
+      string: ''
     headers:
       Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.3.0
-      Content-Type:
       - application/json
-      Authorization:
-      - token <GITHUB_TOKEN>
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.14.1
+      Private-Token:
+      - "<GITHUB_TOKEN>"
   response:
     status:
       code: 201
       message: Created
     headers:
       Server:
-      - GitHub.com
+      - nginx
       Date:
-      - Tue, 04 Oct 2016 21:42:31 GMT
+      - Thu, 26 Mar 2020 18:06:30 GMT
       Content-Type:
-      - application/json; charset=utf-8
+      - application/json
       Content-Length:
-      - '1259'
-      Status:
-      - 201 Created
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4998'
-      X-Ratelimit-Reset:
-      - '1475620950'
+      - '590'
       Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
+      - max-age=0, private, must-revalidate
       Etag:
-      - '"592996d2e58de58405c11218b79e486a"'
-      X-Oauth-Scopes:
-      - public_repo
-      X-Accepted-Oauth-Scopes:
-      - ''
-      Location:
-      - https://api.github.com/repos/txgh-bot/txgh-test-resources/statuses/f3edb21f027b70974750649ba29b0090e410ecde
-      X-Github-Media-Type:
-      - github.v3; format=json
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
-        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-      Access-Control-Allow-Origin:
-      - "*"
-      Content-Security-Policy:
-      - default-src 'none'
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
+      - W/"dbb9133b984a0b7616d3e7c97bb11d2e"
+      Vary:
+      - Origin
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
-      - deny
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Served-By:
-      - cee4c0729c8e9147e7abcb45b9d69689
-      X-Github-Request-Id:
-      - 04358C36:6817:11C8B83:57F42247
+      - SAMEORIGIN
+      X-Request-Id:
+      - UGIuZhONZZ2
+      X-Runtime:
+      - '0.195368'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Ratelimit-Limit:
+      - '600'
+      Ratelimit-Observed:
+      - '6'
+      Ratelimit-Remaining:
+      - '594'
+      Ratelimit-Reset:
+      - '1585246050'
+      Ratelimit-Resettime:
+      - Thu, 26 Mar 2020 18:07:30 GMT
+      Gitlab-Lb:
+      - fe-22-lb-gprd
+      Gitlab-Sv:
+      - localhost
     body:
       encoding: UTF-8
-      string: '{"url":"https://api.github.com/repos/txgh-bot/txgh-test-resources/statuses/f3edb21f027b70974750649ba29b0090e410ecde","id":785751432,"state":"pending","description":"10/30
-        translations complete.","target_url":"https://www.transifex.com//test-project-88/content","context":"continuous-localization/txgh","created_at":"2016-10-04T21:42:31Z","updated_at":"2016-10-04T21:42:31Z","creator":{"login":"txgh-bot","id":16723366,"avatar_url":"https://avatars.githubusercontent.com/u/16723366?v=3","gravatar_id":"","url":"https://api.github.com/users/txgh-bot","html_url":"https://github.com/txgh-bot","followers_url":"https://api.github.com/users/txgh-bot/followers","following_url":"https://api.github.com/users/txgh-bot/following{/other_user}","gists_url":"https://api.github.com/users/txgh-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/txgh-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/txgh-bot/subscriptions","organizations_url":"https://api.github.com/users/txgh-bot/orgs","repos_url":"https://api.github.com/users/txgh-bot/repos","events_url":"https://api.github.com/users/txgh-bot/events{/privacy}","received_events_url":"https://api.github.com/users/txgh-bot/received_events","type":"User","site_admin":false}}'
-    http_version: 
-  recorded_at: Tue, 04 Oct 2016 21:42:31 GMT
+      string: '{"id":487277484,"sha":"b85b0a277fcf7818d880f3fe67afc8fea04572c2","ref":"master","status":"pending","name":"continuous-localization/txgh","target_url":"https://www.transifex.com/lumos-labs/txgl-test/content","description":"21/22
+        translations complete.","created_at":"2020-03-26T18:06:30.056Z","started_at":null,"finished_at":null,"allow_failure":false,"coverage":null,"author":{"id":745271,"name":"Ivan
+        Danci","username":"idanci","state":"active","avatar_url":"https://secure.gravatar.com/avatar/dbda838e9b7bca615829ac151e01f3c0?s=80\u0026d=identicon","web_url":"https://gitlab.com/idanci"}}'
+    http_version:
+  recorded_at: Thu, 26 Mar 2020 18:06:30 GMT
 recorded_with: VCR 3.0.3

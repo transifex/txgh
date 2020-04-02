@@ -11,13 +11,12 @@ Gem::Specification.new do |s|
   s.description = s.summary = 'An HTTP server for interacting with txgh.'
 
   s.platform = Gem::Platform::RUBY
-  s.has_rdoc = true
 
   s.add_dependency 'mime-types', '~> 2.0'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
   s.add_dependency 'rubyzip', '>= 1.0', '<= 1.1.2'
-  s.add_dependency 'txgh', '~> 6.1'
+  s.add_dependency 'txgh', '>= 7.0.2'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'README.md', 'txgh-server.gemspec', 'LICENSE']

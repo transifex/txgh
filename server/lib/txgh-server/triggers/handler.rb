@@ -1,3 +1,6 @@
+require 'octokit'
+require 'gitlab'
+
 module TxghServer
   module Triggers
     class Handler
@@ -27,7 +30,7 @@ module TxghServer
         def handler_for(config, request, logger)
           new(
             project: config.transifex_project,
-            repo: config.github_repo,
+            repo: config.git_repo,
             branch: request.params.fetch('branch'),
             resource_slug: request.params.fetch('resource_slug'),
             logger: logger
@@ -45,6 +48,23 @@ module TxghServer
         @logger = options[:logger]
       end
 
+      private
+
+      def update_github_status
+        Txgh::GithubStatus.update(project, repo, branch)
+      rescue Octokit::UnprocessableEntity
+        # raised because we've tried to create too many statuses for the commit
+      rescue Txgh::TransifexNotFoundError
+        # raised if transifex resource can't be found
+      end
+
+      def update_gitlab_status
+        Txgh::GitlabStatus.update(project, repo, branch)
+      rescue ::Gitlab::Error::Unprocessable
+        # raised because we've tried to create too many statuses for the commit
+      rescue Txgh::TransifexNotFoundError
+        # raised if transifex resource can't be found
+      end
     end
   end
 end

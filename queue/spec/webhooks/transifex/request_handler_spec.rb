@@ -4,9 +4,7 @@ require 'helpers/standard_txgh_setup'
 require 'helpers/test_request'
 require 'helpers/test_backend'
 
-include TxghQueue::Webhooks
-
-describe Transifex::RequestHandler, auto_configure: true do
+describe TxghQueue::Webhooks::Transifex::RequestHandler, auto_configure: true do
   include StandardTxghSetup
 
   let(:logger) { NilLogger.new }
