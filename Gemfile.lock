@@ -13,7 +13,7 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     hashdiff (0.3.7)
-    json (2.1.0)
+    json (2.3.0)
     method_source (0.8.2)
     multi_json (1.13.1)
     multipart-post (2.0.0)
