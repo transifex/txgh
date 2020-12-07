@@ -6,7 +6,7 @@ describe Txgh::GitlabStatus do
 
   let(:status) { described_class.new(transifex_project, gitlab_repo, branch) }
   let(:resource) { tx_config.resource(resource_slug) }
-  let(:branch) { 'heads/master' }
+  let(:branch) { 'heads/feature/JIRA-task' }
   let(:sha) { 'abc123shashasha' }
 
   before(:each) do

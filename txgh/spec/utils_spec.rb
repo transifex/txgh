@@ -47,6 +47,20 @@ describe Txgh::Utils do
     end
   end
 
+  describe '.url_safe_relative_branch' do
+    it 'removes tags/ if present' do
+      expect(described_class.url_safe_relative_branch('tags/feature/foobar')).to eq('feature%2Ffoobar')
+    end
+
+    it 'removes heads/ if present' do
+      expect(described_class.url_safe_relative_branch('heads/foobar')).to eq('foobar')
+    end
+
+    it 'does nothing if no prefix can be removed' do
+      expect(described_class.url_safe_relative_branch('feature/JIRA-abcdef')).to eq('feature%2FJIRA-abcdef')
+    end
+  end
+
   describe '.is_tag?' do
     it 'returns true if given a tag' do
       expect(described_class.is_tag?('tags/foo')).to eq(true)

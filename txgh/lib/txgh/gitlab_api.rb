@@ -16,7 +16,7 @@ module Txgh
       content_list.each do |file_params|
         path = file_params.fetch(:path)
         new_contents = file_params.fetch(:contents)
-        branch = Utils.relative_branch(branch)
+        branch = Utils.url_safe_relative_branch(branch)
 
         file_sha = file_params.fetch(:sha) do
           begin

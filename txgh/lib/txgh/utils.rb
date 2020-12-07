@@ -24,6 +24,10 @@ module Txgh
       branch.strip.sub(/\A(heads|tags)\//, '')
     end
 
+    def url_safe_relative_branch(branch)
+      CGI.escape(relative_branch(branch))
+    end
+
     def branches_equal?(first, second)
       absolute_branch(first) == absolute_branch(second)
     end
